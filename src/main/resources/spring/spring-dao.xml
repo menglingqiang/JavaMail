@@ -61,10 +61,10 @@
 	</bean>
 	
 	<!-- redis配置 -->
-	<bean class="main.java.com.seckill.dao.cache.RedisDao">
+	<!-- <bean class="main.java.com.seckill.dao.cache.RedisDao">
 		 <constructor-arg name="ip" value="localhost" />
          <constructor-arg name="port" value="6379" />
-	</bean>
+	</bean> -->
 	
 </beans>
 

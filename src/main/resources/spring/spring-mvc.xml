@@ -31,7 +31,7 @@
 		<property name="suffix" value=".jsp" />
 		</bean>
 		
-		<context:component-scan base-package="main.java.com.seckill.web"></context:component-scan>
+		<context:component-scan base-package="main.java.com.seckill.webcontroller"></context:component-scan>
 		
 		
 		
