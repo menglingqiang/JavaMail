@@ -54,7 +54,7 @@ public class SendUtil {
 			msg.setContent("<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>", 
 					"text/html;charset=UTF-8");
 			// 设置发件人  
-			msg.setFrom(new InternetAddress("1820026438@qq.com"));//从我的邮箱  
+			msg.setFrom(new InternetAddress("1820026438@qq.com"));//从我的邮箱  ,服务器邮箱
 			msg.setRecipient(RecipientType.TO, new InternetAddress(to));//目的邮箱
 			Transport.send(msg);
 			// 关闭连接  

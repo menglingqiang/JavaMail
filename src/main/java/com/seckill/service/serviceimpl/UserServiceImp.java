@@ -32,4 +32,19 @@ public class UserServiceImp implements UserService{
 		return temp;
 	}
 
+	@Override
+	public User queryByPassword(User user) {
+		
+		return userDao.queryByPassword(user);
+	}
+
+	@Override
+	public boolean isRegister(User user) {
+		User userTemp = userDao.queryByEmail(user);
+		if(userTemp==null)//数据库中没有查到数据
+			return false;
+		else
+			return true;
+	}
+
 }

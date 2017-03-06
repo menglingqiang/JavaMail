@@ -12,4 +12,8 @@ public interface UserService {
 	public User queryByCode(String code);
 	//更新注册码信息
 	public int UpdateUserCode(String code);
+	//用户和密码是否匹配
+	public User queryByPassword(User user);
+	//邮箱是否注册
+	public boolean isRegister(User user);
 }

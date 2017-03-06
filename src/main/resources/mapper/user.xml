@@ -8,6 +8,16 @@
     	select user_id,name,password,email,code,status,create_time
     	from user where code=#{code}
     </select>
+    
+    <select id="queryByPassword" parameterType="main.java.com.seckill.entity.User" resultType="main.java.com.seckill.entity.User">
+    	select user_id,name,password,email,code,status,create_time
+    	from user where email = #{email} and password = #{password}
+    </select>
+    
+     <select id="queryByEmail" parameterType="main.java.com.seckill.entity.User" resultType="main.java.com.seckill.entity.User">
+    	select user_id,name,password,email,code,status,create_time
+    	from user where email = #{email}
+    </select>
 	
 	<insert id="register" parameterType="main.java.com.seckill.entity.User" >
 	
