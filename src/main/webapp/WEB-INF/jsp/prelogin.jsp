@@ -29,9 +29,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             dataType: "text",
             success: function (data) {
                 if(inputCode==data)
-                	alert("yes");//画个√号
+                	document.getElementById("checkImage").src="<%=basePath %>resources/img/right.jpg";
                 else
-                	alert("no"); //画个×号
+                	document.getElementById("checkImage").src="<%=basePath %>resources/img/wrong.jpg";
             }
         }); 
   		var picCode = "${picCode}";//可能是浏览器觉得这个数值是一样的所以就不在从后台取值
@@ -68,6 +68,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<tr>
 				<!-- input只可以输入4位 -->
 				<td><input id="inputCode" name="inputCode" type="text"  oninput="javascript:checkInputCode()" placeholder="请输入4位验证码"/></td>
+				
+				<td><img id="checkImage" src="" style="width:20px;height:20px;"/></td>
+				
 				<!-- image  alt 没有显示 -->
 				<td><img id="imageCode" alt="请输入验证码" src=""/></td>
 				<td><a href="javascript:reloadImageCode()">看不清楚</a></td>
