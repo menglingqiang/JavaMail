@@ -10,7 +10,12 @@
        <welcome-file>index.jsp</welcome-file>
 
     </welcome-file-list>
-    
+    <!-- 添加监听，springmvc可以得到request和response -->
+    <listener>    
+        <listener-class>    
+            org.springframework.web.context.request.RequestContextListener    
+        </listener-class>    
+	</listener> 
     <servlet>
     	<servlet-name>mail_dispatcher</servlet-name>
     	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
