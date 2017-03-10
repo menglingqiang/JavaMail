@@ -14,6 +14,10 @@ public interface UserService {
 	public int UpdateUserCode(String code);
 	//用户和密码是否匹配
 	public User queryByPassword(User user);
+	//用户和密码是否匹配
+	public User queryByEmail(User user);
 	//邮箱是否注册
 	public boolean isRegister(User user);
+	//更改用户的的信息
+	public int updateUser(User user);
 }

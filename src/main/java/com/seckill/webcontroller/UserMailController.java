@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -16,12 +17,9 @@ import main.java.com.seckill.util.SendUtil;
 import main.java.com.seckill.util.UUIDUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,13 +68,14 @@ public class UserMailController {
 		//1 注册成功，等待验证
 		{
 			//发送激活邮件给用户
-			SendUtil.send(email, code);
+			SendUtil.send(email, 
+			"<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?flag=true&code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>");
 			return "register-precode";
 		}
 	}
-	//进入注册状态页面
+	//进入激活状态页面
 	@RequestMapping(value="/activation",method=RequestMethod.GET)
-	public String activation(String  code)
+	public String activation(String  code,boolean flag)//true表示第一次注册
 	{
 		if(code==null)
 			return "activition-error";
@@ -85,6 +84,9 @@ public class UserMailController {
 			return "activition-error";
 		else
 		{
+			if(!flag)//不是第一次注册，激活
+				SendUtil.send(user.getEmail(), 
+						"<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?flag=false&code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>");
 			userService.UpdateUserCode(code);
 			return "activition-success";
 		}
@@ -154,19 +156,64 @@ public class UserMailController {
 		boolean flag = picCode.equals(inputCode);
 		return flag;
 	}
-	//返回RequsetBody
-//	@RequestMapping(value="/getPicCode",method=RequestMethod.GET)
-//	public ResponseEntity<String> getPicCode(HttpServletRequest request)
-//	{
-//		String picCode = (String)request.getAttribute("picCode");
-//		return new ResponseEntity<String>(picCode,HttpStatus.OK);
-//	}
+
 	@RequestMapping(value="/getPicCode",method=RequestMethod.GET)
 	public  @ResponseBody String getPicCode(HttpServletRequest request)
 	{
 		String picCode = (String)request.getSession().getAttribute("picCode");
 		return picCode;
 	}
+	//进入忘记密码界面
+	@RequestMapping(value="/preForgetPassword",method=RequestMethod.GET)
+	public String preForgetPassword()
+	{
+		return "preForgetPassword";
+	}
+	
+	//忘记密码逻辑,通过邮箱查找用户
+	@RequestMapping(value="/forgetPassword",method=RequestMethod.POST)
+	public void forgetPassword(User user)//前台会自动的将email注入到user中
+	{
+		//先判断这个用户是否已经注册，注册了再发邮件如果没有注册的话，提示进入注册界面
+		
+		if(userService.isRegister(user))
+		{
+			User temp = userService.queryByEmail(user);
+			//TODO 修改信息，进入修改界面
+			String msg = "<h1>点击链接修改密码</h1><h3><a href='http://localhost:8080/JavaMail/user/preModifyPassword?email="+temp.getEmail()+"'>http://localhost:8080/JavaMail/user/preModifyPassword?email="+temp.getEmail()+"</a></h3>";
+			//发送邮件
+			SendUtil.send(user.getEmail(),msg);//点击连接，进入修改界面传入邮箱
+		}
+		else
+		{
+			//应该返回一个信息给前台，当前用户没有注册，
+		}
+	}
+	//进入用户信息修改界面
+	@RequestMapping(value="/preModifyPassword",method=RequestMethod.GET)
+	public String preModifyPassword(HttpServletRequest request,String email)//修改用户的信息
+	{
+		request.getSession().setAttribute("email", email);
+		return "preModifyPassword";
+	}
+	//进入用户信息修改界面
+	@RequestMapping(value="/modifyPassword",method=RequestMethod.GET)
+	public String modifyPassword(Model model,User user)//修改用户的信息,就不用激活了，保持原来账户的信息
+	{
+		user.setCreateTime(new Date());//更新更改时间
+		int flag = userService.updateUser(user);
+		//TODO  动态sql写的有问题
+		if(flag!=1)
+			return "login-error";//界面直接登录
+		else 
+		{
+			user = userService.queryByEmail(user);
+			//request.getSession().setAttribute("user",user); 是历史记录中的数据？
+			model.addAttribute("user", user);
+			return "login-success";
+		}
+	}
+	
 }
 
 

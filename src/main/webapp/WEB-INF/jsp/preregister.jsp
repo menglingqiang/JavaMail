@@ -13,18 +13,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<form action="<%=basePath %>user/register" method="post">
 		<table>
 			<tr>
-				<td><input type="text" id="name" name="name"/>用户昵称</td>
+				<td>用户昵称 <input type="text" id="name" name="name"/></td>
 			</tr>
 			
 			<tr>
-				<td><input type="password" id="password" name="password"/>用户密码</td>
+				<td>用户密码 <input type="password" id="password" name="password"/></td>
 			</tr>
 			
 			<tr>
-				<td><input type="email" id="email" name="email"/>邮件地址</td>
+				<td>邮件地址 <input type="email" id="email" name="email"/></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="注册"/></td>
+				<td><a href="<%=basePath %>user/preLogin"/>有账号，去登陆？ </td>
 			</tr>
 		</table>
 	</form>

@@ -1,13 +1,12 @@
 package main.java.com.seckill.service.serviceimpl;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import main.java.com.seckill.dao.UserDao;
 import main.java.com.seckill.entity.User;
 import main.java.com.seckill.service.UserService;
+
 @Service
 public class UserServiceImp implements UserService{
 
@@ -47,4 +46,15 @@ public class UserServiceImp implements UserService{
 			return true;
 	}
 
+	@Override
+	public User queryByEmail(User user) {
+		
+		return userDao.queryByEmail(user);
+	}
+
+	@Override
+	public int updateUser(User user) {
+		return userDao.updateUser(user);
+	}
+	
 }

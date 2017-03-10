@@ -9,4 +9,5 @@ public interface UserDao {
 	public int UpdateUserByCode(String code);//更新用户信息
 	public User queryByPassword(User user);//通过用户名和密码，查询用户信息
 	public User queryByEmail(User user);//通过email查询用户
+	public int updateUser(User user);//更新用户信息
 }
