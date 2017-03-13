@@ -53,7 +53,7 @@ public class UserMailController {
 	//进入注册状态页面
 	@Transactional
 	@RequestMapping(value="/register",method=RequestMethod.POST)
-	public String register(User user)
+	public String register(Model model,User user)
 	{
 		if(userService.isRegister(user))//判断是否已经有注册信息
 			return "prelogin";//用户已经注册成功，返回登录界面
@@ -65,17 +65,21 @@ public class UserMailController {
 		if(temp==0)
 			return "register-error"; 
 		else
-		//1 注册成功，等待验证
+		//1 注册成功，等待验证,跳到登录界面
 		{
 			//发送激活邮件给用户
 			SendUtil.send(email, 
 			"<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?flag=true&code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>");
-			return "register-precode";
+			model.addAttribute("user",user);
+			return "login-success";
 		}
 	}
+	/*
+	 * 如果是第一次注册
+	 */
 	//进入激活状态页面
 	@RequestMapping(value="/activation",method=RequestMethod.GET)
-	public String activation(String  code,boolean flag)//true表示第一次注册
+	public String activation(Model model ,String  code,boolean flag)//true表示第一次注册
 	{
 		if(code==null)
 			return "activition-error";
@@ -86,9 +90,15 @@ public class UserMailController {
 		{
 			if(!flag)//不是第一次注册，激活
 				SendUtil.send(user.getEmail(), 
-						"<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?flag=false&code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>");
-			userService.UpdateUserCode(code);
-			return "activition-success";
+					"<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?flag=true&code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>");
+			else
+			{
+				userService.UpdateUserCode(code);
+				user.setStatus(1);
+			}
+			model.addAttribute("user", user);
+			//TODO跳转界面，发送成功请到邮箱激活
+			return "login-success";
 		}
 	}
 	//进入登录界面

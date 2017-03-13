@@ -31,6 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                		//恢复按钮点击功能
                		$("#submit").removeAttr("disabled");
                	}
+                //退回的时候按键的状态是可以点击的，相当于绕过了前台的验证
                 else
                 	document.getElementById("checkImage").src="<%=basePath %>resources/img/wrong.jpg";
             }
@@ -48,6 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	}
   	window.onload = function(){
   		reloadImageCode();
+  		checkInputCode();
   	}
   	
   </script>

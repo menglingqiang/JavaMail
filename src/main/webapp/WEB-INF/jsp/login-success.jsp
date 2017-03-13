@@ -8,13 +8,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 <head>
   <title>用户注册页面</title>
+  <script src="<%= basePath %>resources/script/jquery-1.8.0.min.js"></script>
+  <script >
+  	function activa(code)
+  	{
+  		alert("sdfdsfdsfds");
+  		/* $.ajax({
+            type: "get",
+            url: "activation?flag=false&code="+code,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+            }
+        }); */ 
+  		//document.getElementById("showWord").innerHTML = "请到您的邮箱激活账户";
+  	}
+  </script>
 </head>
 <body>
 	<h2>${user.name}你好</h2>
 	<!-- user.status==0 没有激活提示激活，-->
-	<c:if test="${user.status==0}">
-		<h1>点击激活账户</h1>
-		<h3><a href='activation?code=${user.code}'>http://localhost:8080/JavaMail/user/activation?code=${user.code}</a></h3>
+	<c:if test="${user.status!=1}">
+		<h1>您还没有激活点击发送邮件激活</h1>
+		<%-- <h3><a id = "alertWord" href='activation?flag=false&code=${user.code}' >我要激活</a></h3> --%>
+		<input id="alertWord" name="alertWord" type="button" onclick="activa(${user.code});" value="激活账户">
+		<div id="showWord"></div>
 	</c:if>
 	<c:if test="${user.status==1}">
 		<h1>我还没想好激活之后干什么。。。。</h1>
