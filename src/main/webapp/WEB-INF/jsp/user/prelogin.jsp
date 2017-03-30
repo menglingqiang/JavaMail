@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<!-- 设置按钮不可点击 -->
 				<td><input id="submit" type="submit" value="登录" disabled/></td>
 				<td><a href="<%=basePath %>user/preRegister"/>还没有账号？ </td>
-				<td><a href="<%=basePath %>user/preForgetPassword"/>忘记密码 </td>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<%=basePath %>user/preForgetPassword"/>忘记密码 </td>
 			</tr>
 			
 		</table>

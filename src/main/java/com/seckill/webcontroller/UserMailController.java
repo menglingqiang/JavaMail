@@ -41,14 +41,14 @@ public class UserMailController {
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	public String welcome()
 	{
-		return "prelogin";//欢迎界面
+		return "user/prelogin";//欢迎界面
 	}
 	
 	//进入注册页面
 	@RequestMapping(value="/preRegister",method=RequestMethod.GET)
 	public String preRegister()
 	{
-		return "preregister";
+		return "user/preregister";
 	}
 	//进入注册状态页面
 	@Transactional
@@ -63,7 +63,7 @@ public class UserMailController {
 		int temp = userService.register(user);
 		//0 注册失败
 		if(temp==0)
-			return "register-error"; 
+			return "user/register-error"; 
 		else
 		//1 注册成功，等待验证,跳到登录界面
 		{
@@ -71,7 +71,7 @@ public class UserMailController {
 			SendUtil.send(email, 
 			"<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?flag=true&code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>");
 			model.addAttribute("user",user);
-			return "login-success";
+			return "user/login-success";
 		}
 	}
 	/*
@@ -82,10 +82,10 @@ public class UserMailController {
 	public String activation(Model model ,String  code,boolean flag)//true表示第一次注册
 	{
 		if(code==null)
-			return "activition-error";
+			return "user/activition-error";
 		User user = userService.queryByCode(code);
 		if(user==null)
-			return "activition-error";
+			return "user/activition-error";
 		else
 		{
 			if(!flag)//不是第一次注册，激活
@@ -98,14 +98,14 @@ public class UserMailController {
 			}
 			model.addAttribute("user", user);
 			//TODO跳转界面，发送成功请到邮箱激活
-			return "login-success";
+			return "user/login-success";
 		}
 	}
 	//进入登录界面
 	@RequestMapping(value="/preLogin",method=RequestMethod.GET)
 	public String preLogIn()
 	{
-		return "prelogin";//登录界面
+		return "user/prelogin";//登录界面
 	}
 	//执行登录逻辑
 	@RequestMapping(value="/login",method=RequestMethod.POST)
@@ -119,15 +119,15 @@ public class UserMailController {
 			//查询用户和密码是否正确，后期可以加密
 			User userTemp = userService.queryByPassword(user);
 			if(userTemp==null)
-				return "login-error";//登录失败，后期可以显示是没有用户还是用户的密码错误
+				return "user/login-error";//登录失败，后期可以显示是没有用户还是用户的密码错误
 			else 
 			{
 	//System.out.println(user.toString());
 				model.addAttribute("user", userTemp);//传递用户的信息
-				return "login-success";//TODO 判断是否激活，如果激活显示聊天的链接，否则提示激活，或者重新发送激活邮件
+				return "user/login-success";//TODO 判断是否激活，如果激活显示聊天的链接，否则提示激活，或者重新发送激活邮件
 			}
 		}
-		return "login-error";
+		return "user/login-error";
 	}
 	//生成验证码
 	@RequestMapping(value="/validate",method=RequestMethod.GET)
@@ -177,34 +177,37 @@ public class UserMailController {
 	@RequestMapping(value="/preForgetPassword",method=RequestMethod.GET)
 	public String preForgetPassword()
 	{
-		return "preForgetPassword";
+		return "user/preForgetPassword";
 	}
 	
 	//忘记密码逻辑,通过邮箱查找用户
 	@RequestMapping(value="/forgetPassword",method=RequestMethod.POST)
-	public void forgetPassword(User user)//前台会自动的将email注入到user中
+	public String forgetPassword(User user,HttpServletRequest request)//前台会自动的将email注入到user中
 	{
-		//先判断这个用户是否已经注册，注册了再发邮件如果没有注册的话，提示进入注册界面
-		
-		if(userService.isRegister(user))
-		{
-			User temp = userService.queryByEmail(user);
-			//TODO 修改信息，进入修改界面
-			String msg = "<h1>点击链接修改密码</h1><h3><a href='http://localhost:8080/JavaMail/user/preModifyPassword?email="+temp.getEmail()+"'>http://localhost:8080/JavaMail/user/preModifyPassword?email="+temp.getEmail()+"</a></h3>";
-			//发送邮件
-			SendUtil.send(user.getEmail(),msg);//点击连接，进入修改界面传入邮箱
-		}
-		else
-		{
-			//应该返回一个信息给前台，当前用户没有注册，
-		}
+		String email = (String)request.getParameter("email");
+		//TODO 修改信息，进入修改界面
+		String msg = "<h1>点击链接修改密码</h1><h3><a href='http://localhost:8080/JavaMail/user/preModifyPassword?email="+email+"'>http://localhost:8080/JavaMail/user/preModifyPassword?email="+email+"</a></h3>";
+		//发送邮件
+		SendUtil.send(email,msg);//点击连接，进入修改界面传入邮箱
+		request.getSession().setAttribute("msg", "邮件已经发送到您的邮箱，请查收");
+		return "user/confrimForgetPassword";
+	}
+	@RequestMapping(value="/isRegister",method=RequestMethod.GET)
+	public @ResponseBody String isRegister(HttpServletRequest request)//前台会自动的将email注入到user中
+	{
+		String email = (String)request.getParameter("email");
+		User user = new User();
+		user.setEmail(email);
+		//通过email，判断这个用户是否已经注册
+		String flag =  Boolean.toString(userService.isRegister(user));
+		return flag;
 	}
 	//进入用户信息修改界面
 	@RequestMapping(value="/preModifyPassword",method=RequestMethod.GET)
 	public String preModifyPassword(HttpServletRequest request,String email)//修改用户的信息
 	{
 		request.getSession().setAttribute("email", email);
-		return "preModifyPassword";
+		return "user/preModifyPassword";
 	}
 	//进入用户信息修改界面
 	@RequestMapping(value="/modifyPassword",method=RequestMethod.GET)
@@ -214,13 +217,13 @@ public class UserMailController {
 		int flag = userService.updateUser(user);
 		//TODO  动态sql写的有问题
 		if(flag!=1)
-			return "login-error";//界面直接登录
+			return "user/login-error";//界面直接登录
 		else 
 		{
 			user = userService.queryByEmail(user);
 			//request.getSession().setAttribute("user",user); 是历史记录中的数据？
 			model.addAttribute("user", user);
-			return "login-success";
+			return "user/login-success";
 		}
 	}
 	

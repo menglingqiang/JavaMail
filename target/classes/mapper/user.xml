@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="main.java.com.seckill.dao.UserDao">
+
+    <select id="queryByCode" parameterType="string" resultType="main.java.com.seckill.entity.User">
+    	select user_id,name,password,email,code,status,create_time
+    	from user where code=#{code}
+    </select>
+    
+    <select id="queryByPassword" parameterType="main.java.com.seckill.entity.User" resultType="main.java.com.seckill.entity.User">
+    	select user_id,name,password,email,code,status,create_time
+    	from user where email = #{email} and password = #{password}
+    </select>
+    
+     <select id="queryByEmail" parameterType="main.java.com.seckill.entity.User" resultType="main.java.com.seckill.entity.User">
+    	select user_id,name,password,email,code,status,create_time
+    	from user where email = #{email}
+    </select>
+	
+	<insert id="register" parameterType="main.java.com.seckill.entity.User" >
+	
+		INSERT INTO user(name, password, email, code, status, create_time) 
+		VALUES(#{name}, #{password}, #{email}, #{code}, 0, #{createTime})
+	</insert>
+	
+	<update id="UpdateUserByCode" parameterType="string">
+		UPDATE user 
+		SET  status=1
+		,code = null
+		where code = #{code}
+	</update>
+	
+	<update id="updateUser" parameterType="main.java.com.seckill.entity.User">
+		UPDATE user 
+		<!-- <set>
+			<if test="name!=null">
+				name=#{name}
+			</if>
+			<if test="password!=null">
+				password=#{password}
+			</if>
+			<if test="email!=null">
+				email=#{email}
+			</if>
+			<if test="code!=null">
+				code=#{code}
+			</if>
+			
+			<if test="status!=null">
+				status=#{status}
+			</if>
+		</set> -->
+		set password = #{password}
+		
+		where email = #{email}
+	</update>
+</mapper>
+

@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="showWord"></div>
 	</c:if>
 	<c:if test="${user.status==1}">
-		<h1>我还没想好激活之后干什么。。。。</h1>
+		<!-- 3秒后自动跳转到打卡界面 -->
 	</c:if>
 	<!-- <!-- user.status==1 已经激活提示进入聊天界面 -->
 </body>
