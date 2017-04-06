@@ -5,13 +5,16 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import main.java.com.seckill.entity.Project;
 import main.java.com.seckill.entity.User;
+import main.java.com.seckill.service.ProjectService;
 import main.java.com.seckill.service.UserService;
 import main.java.com.seckill.util.SendUtil;
 import main.java.com.seckill.util.UUIDUtil;
@@ -30,6 +33,8 @@ public class UserMailController {
 
 	@Autowired
 	UserService userService;
+	@Autowired
+	ProjectService projectService;
 //	
 //    @Autowired  
 //     HttpServletRequest request;  
@@ -93,8 +98,13 @@ public class UserMailController {
 					"<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?flag=true&code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>");
 			else
 			{
-				userService.UpdateUserCode(code);
+				userService.UpdateUserCode(code);//根据激活码更新用户的状态
+				Project p = UUIDUtil.genProject(user.getEmail());
+				projectService.insertProjectByUser(user, p);//激活用户系统自动添加一项任务
 				user.setStatus(1);
+				List<Project> projectList = projectService.queryProjectByEmail(user.getEmail());
+				model.addAttribute("projectList", projectList);//激活成功跳转到projectList界面
+				return "fucktime/projectList"; 
 			}
 			model.addAttribute("user", user);
 			//TODO跳转界面，发送成功请到邮箱激活
@@ -111,7 +121,7 @@ public class UserMailController {
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public String logIn(User user,Model model,HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
-		//验证验证码是否输入正确
+		//验证验证码是否输入正确	
 		boolean codeFlag = validateCode(request, response);
 		
 		if(codeFlag)
@@ -122,9 +132,15 @@ public class UserMailController {
 				return "user/login-error";//登录失败，后期可以显示是没有用户还是用户的密码错误
 			else 
 			{
-	//System.out.println(user.toString());
 				model.addAttribute("user", userTemp);//传递用户的信息
-				return "user/login-success";//TODO 判断是否激活，如果激活显示聊天的链接，否则提示激活，或者重新发送激活邮件
+				if(userTemp.getStatus()==0)//没有激活
+					return "user/login-success";
+				else
+				{
+					List<Project> projectList = projectService.queryProjectByEmail(userTemp.getEmail());
+					model.addAttribute("projectList", projectList);
+					return "fucktime/projectList";
+				}
 			}
 		}
 		return "user/login-error";

@@ -8,6 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
   <title>用户登录页面</title>
   <script src="<%= basePath %>resources/script/jquery-1.8.0.min.js"></script>
+  <script src="<%= basePath %>resources/script/date.js"></script>
   <script type="text/javascript">
   	function reloadImageCode()
   	{
@@ -81,7 +82,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<!-- 设置按钮不可点击 -->
 				<td><input id="submit" type="submit" value="登录" disabled/></td>
 				<td><a href="<%=basePath %>user/preRegister"/>还没有账号？ </td>
-				<td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<%=basePath %>user/preForgetPassword"/>忘记密码 </td>
+				<td>&nbsp;&nbsp;&nbsp;<a href="<%=basePath %>user/preForgetPassword"/>忘记密码 </td>
 			</tr>
 			
 		</table>

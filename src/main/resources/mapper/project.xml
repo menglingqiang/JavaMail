@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="main.java.com.seckill.dao.ProjectDao">
+
+	<select id="queryProjectByEmail" parameterType="string" resultType="main.java.com.seckill.entity.Project">
+		select project_id,email,project_name,start_time,end_time,modify
+		from user_info
+		where email=#{email}
+	</select>
+	
+	<insert id="insertProjectByUser" >
+	
+		INSERT INTO user_info
+		(email, project_name, start_time, end_time) 
+			VALUES
+		(#{user.email}, #{project.projectName}, #{project.startTime}, #{project.endTime})
+	</insert>
+	<insert id="insertProjectByEmail" >
+	
+		INSERT INTO user_info
+		(email, project_name, start_time, end_time) 
+			VALUES
+		(#{project.email}, #{project.projectName}, #{project.startTime}, #{project.endTime})
+	</insert>
+	
+	<update id="modifyProject" parameterType="main.java.com.seckill.entity.Project">
+		update user_info
+		set project_name=#{projectName},
+		start_time=#{startTime},end_time=#{endTime},
+		modify = modify+1
+		where project_id=#{projectId}
+	</update>
+	
+	<delete id="deleteProject" parameterType="java.lang.Long" >  
+		delete from user_info
+		where project_id=#{projectId}
+	</delete>
+</mapper>
+

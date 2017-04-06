@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <html>
 <head>
-  <title>用户登录页面</title>
+  <title>用户修改信息页面</title>
   <script src="<%= basePath %>resources/script/jquery-1.8.0.min.js"></script>
   
 </head>

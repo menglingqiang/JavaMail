@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <html>
 <head>
-  <title>用户注册页面</title>
+  <title>激活成功页面</title>
   
 </head>
 <body >

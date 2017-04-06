@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <html>
 <head>
-  <title>用户注册页面</title>
+  <title>用户注册成功过度页面</title>
   <script>
 	var cnt = 2;
 	function lod(){
