@@ -4,24 +4,32 @@ import java.util.Date;
 
 public class DetailProject {
 
-	private long projectDetailId;
-	private long projectId;
-	private String projectDetailName;
-	private Date startTime;
-	private Date endTime;
-	private int modify;
 	
-	public long getProjectDetailId() {
-		return projectDetailId;
-	}
-	public void setProjectDetailId(long projectDetailId) {
-		this.projectDetailId = projectDetailId;
-	}
+	private long projectDetailId;
+	private String projectDetailName;
+	private Date detailStartTime;
+	private Date detailEndTime;
+	private int detailModify;
+	private long projectId;
+	private Project project;//分项目所述的总项目
+	
 	public long getProjectId() {
 		return projectId;
 	}
 	public void setProjectId(long projectId) {
 		this.projectId = projectId;
+	}
+	public Project getProject() {
+		return project;
+	}
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	public long getProjectDetailId() {
+		return projectDetailId;
+	}
+	public void setProjectDetailId(long projectDetailId) {
+		this.projectDetailId = projectDetailId;
 	}
 	public String getProjectDetailName() {
 		return projectDetailName;
@@ -29,23 +37,33 @@ public class DetailProject {
 	public void setProjectDetailName(String projectDetailName) {
 		this.projectDetailName = projectDetailName;
 	}
-	public Date getStartTime() {
-		return startTime;
+	
+	public Date getDetailStartTime() {
+		return detailStartTime;
 	}
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+	public void setDetailStartTime(Date detailStartTime) {
+		this.detailStartTime = detailStartTime;
 	}
-	public Date getEndTime() {
-		return endTime;
+	public Date getDetailEndTime() {
+		return detailEndTime;
 	}
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	public void setDetailEndTime(Date detailEndTime) {
+		this.detailEndTime = detailEndTime;
 	}
-	public int getModify() {
-		return modify;
+	public int getDetailModify() {
+		return detailModify;
 	}
-	public void setModify(int modify) {
-		this.modify = modify;
+	public void setDetailModify(int detailModify) {
+		this.detailModify = detailModify;
 	}
+	@Override
+	public String toString() {
+		return "DetailProject [projectDetailId=" + projectDetailId
+				+ ", projectDetailName=" + projectDetailName
+				+ ", detailStartTime=" + detailStartTime + ", detailEndTime="
+				+ detailEndTime + ", detailModify=" + detailModify
+				+ ", projectId=" + projectId + ", project=" + project + "]";
+	}
+	
 	
 }

@@ -56,11 +56,11 @@
 function ShowDiv(show_div,bg_div,para,type,secPara){
  if(type=="modify")
  	{
-  document.getElementById("modifyProjectId").value= para;
+  document.getElementById("modifyDetailProjectId").value= para;
   document.getElementById("beforeProjectName").value=secPara;
 }
  else
- 	document.getElementById("addEmail").value= para;
+ 	document.getElementById("projectId").value= para;
  document.getElementById(show_div).style.display='block';
  document.getElementById(bg_div).style.display='block' ;
  var bgdiv = document.getElementById(bg_div);
@@ -88,56 +88,55 @@ function checkDate()
 }
 function addProject()
 {
- var email = document.getElementById("email").value;
+ var name = document.getElementById("name").value;//总任务名称
+
+ var projectId = document.getElementById("projectId").value;
  var projectName = document.getElementById("addProjectName").value;
  var startTime = document.getElementById("addStartTime").value;
  var endTime = document.getElementById("addEndTime").value;
  var form = document.getElementById("mainForm");
- form.action = "<%=basePath%>project/operation?type=add&email="+email+"&projectName="+projectName+"&startTime="+startTime+"&endTime="+endTime;
+ form.action = "<%=basePath%>project/detailOperation?type=add&projectDetailName="+projectName+"&detailStartTime="+startTime+"&detailEndTime="+endTime+"&projectId="+projectId+"&name="+name;
  form.submit();
 }
 function modifyProject()
 {
- var email = document.getElementById("email").value;
- var projectId = document.getElementById("modifyProjectId").value;
+ var name = document.getElementById("name").value;//总任务名称
+ var detailProjectId = document.getElementById("modifyDetailProjectId").value;
+ var projectId = document.getElementById("projectId").value;
  var projectName = document.getElementById("modifyProjectName").value;
  var startTime = document.getElementById("modifyStartTime").value;
  var endTime = document.getElementById("modifyEndTime").value;
- 
+ //alert(name+":"+projectId+":"+projectName+":"+startTime+":"+endTime);
  var form = document.getElementById("mainForm");
- form.action = "<%=basePath%>project/operation?type=modify&projectId="+projectId+"&projectName="+projectName+"&startTime="+startTime+"&endTime="+endTime+"&email="+email;
+ form.action = "<%=basePath%>project/detailOperation?type=modify&projectDetailId="+detailProjectId+"&projectDetailName="+projectName+"&detailStartTime="+startTime+"&detailEndTime="+endTime+"&name"+name+"&projectId="+projectId;
  form.submit();
 }
-function deleteProject(projectId)
+function deleteProject(projectDetailId)
 {
+ var name = document.getElementById("name").value;//总任务名称
+ var projectId = document.getElementById("projectId").value;
+ //alert(projectId);
  var con=confirm("确定删除?"); //在页面上弹出对话框
  if(con==true)
  {
-  var email = document.getElementById("email").value;
   var form = document.getElementById("mainForm");
-  form.action = "<%=basePath%>project/operation?type=delete&projectId="+projectId+"&email="+email;
+  form.action = "<%=basePath%>project/detailOperation?type=delete&projectDetailId="+projectDetailId+"&name"+name+"&projectId="+projectId;
   form.submit();
  }
 
 }
-function showDetail(tr,projectName)
-{
-	var projectId = tr.id;//得到总项目的id
-	var form = document.getElementById("mainForm");
-	form.action = "<%=basePath%>project/showDetail?projectId="+projectId+"&projectName="+projectName;
-	form.submit();
-}
 </script>
 </head>
 <body >
-	<input type="hidden" id="email" name="email" value="${user.email}">
-	<h1>总任务列表界面展示:${user.name}</h1>
+	<h1>${projectName}:分任务展示界面</h1>
+	<input id="name" name="name" value='${projectName}' type="hidden"/>
+	<input id="projectId" name="projectId" value='${projectId}' type="hidden"/> 
 	<body style="background: #e1e9eb;">
 		<form action="#" id="mainForm" method="post">
 			<div class="right">
 				<!-- <div class="current">当前位置：<a href="javascript:void(0)" style="color:#6E6E6E;">内容管理</a> &gt; 内容列表</div> -->
 				<div class="rightCont">
-					<p class="g_title fix">总任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${user.email}','add','')">增加</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn03" href="javascript:deleteBatch();">删 除</a></p>
+					<p class="g_title fix">分任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${projectId}','add','')">增加</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn03" href="javascript:deleteBatch();">删 除</a></p>
 					<table class="tab1">
 						<tbody>
 							<tr>
@@ -165,18 +164,18 @@ function showDetail(tr,projectName)
 								    <th>修改次数</th>
 								    <th>选项</th>
 								</tr>
-								<c:forEach items="${projectList}" var="project" varStatus="status">
-									<tr id="${project.projectId}"  onclick="javascript:showDetail(this,'${project.projectName}')" <c:if test="${status.index % 2 != 0}">style='background-color:#ECF6EE;'</c:if>>
+								<c:forEach items="${detailProjectList}" var="detailProject" varStatus="status">
+									<tr <c:if test="${status.index % 2 != 0}">style='background-color:#ECF6EE;'</c:if>>
 										<%-- <td><input type="checkbox"  name="ids" value="${project.projectId}"/></td> --%>
 										<%-- <input type="hidden" name="projectId" id="projectId" value="${project.projectId}"> --%>
 										<td>${status.index + 1}</td>
-										<td>${project.projectName}</td>
-										<td>${project.startTime}</td>
-										<td>${project.endTime}</td>
-										<td>${project.modify}</td>
+										<td>${detailProject.projectDetailName}</td>
+										<td>${detailProject.detailStartTime}</td>
+										<td>${detailProject.detailEndTime}</td>
+										<td>${detailProject.detailModify}</td>
 										<td>
-											<a href="javascript:ShowDiv('MyModifyDiv','fade','${project.projectId}','modify','${project.projectName}')">修改</a>&nbsp;&nbsp;&nbsp;
-											<a href="javascript:deleteProject('${project.projectId}')">删除</a>
+											<a href="javascript:ShowDiv('MyModifyDiv','fade','${detailProject.projectDetailId}','modify','${detailProject.projectDetailName}')">修改</a>&nbsp;&nbsp;&nbsp;
+											<a href="javascript:deleteProject('${detailProject.projectDetailId}')">删除</a>
 										</td>
 									</tr>
 								</c:forEach>
@@ -194,8 +193,8 @@ function showDetail(tr,projectName)
 			<div style="text-align: right; cursor: default; height: 40px;">
 			<span style="font-size: 16px;" onclick="CloseDiv('MyModifyDiv','fade')">关闭</span>
 			</div>
-			<h1>${user.name}:任务修改界面</h1>
-			<input type="hidden" id="modifyProjectId" name="modifyProjectId">
+			<h1>${projectName}:分任务修改界面</h1>
+			<input type="hidden" id="modifyDetailProjectId" name="modifyDetailProjectId">
 			<table class="tab2" width="100%" id="fm2_table">
 				<tr style='background-color:#ECF6EE;'>
 					<td>原项目名称</td>
@@ -227,7 +226,7 @@ function showDetail(tr,projectName)
 			<div style="text-align: right; cursor: default; height: 40px;">
 			<span style="font-size: 16px;" onclick="CloseDiv('MyAddDiv','fade')">关闭</span>
 			</div>
-			<h1>${user.name}:任务添加界面</h1>
+			<h1>${projectName}:分任务添加界面</h1>
 			<input type="hidden" id="addEmail" name="addEmail">
 			<table class="tab2" width="100%" id="fm2_table">
 				<tr style='background-color:#ECF6EE;'>

@@ -17,4 +17,5 @@ public interface ProjectService {
 	public List<Project> queryProjectByEmail(String email);
 	public int modifyProject(Project project);
 	public int deleteProject(long id);
+	public List<DetailProject> queryDetailProjectById (long projectId);
 }

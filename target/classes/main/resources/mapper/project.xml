@@ -4,10 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="main.java.com.seckill.dao.ProjectDao">
 
-	<select id="queryProjectByEmail" parameterType="string" resultType="main.java.com.seckill.entity.Project">
+	<resultMap type="main.java.com.seckill.entity.Project" id="projectResultMap">  
+        <id column="project_id" property="projectId"/>  
+        <result column="project_name" property="projectName"/>  
+        <result column="start_time" property="startTime"/>  
+        <result column="end_time" property="endTime"/>  
+        <result column="modify" property="modify"/>  
+        <collection property="detailProjects" ofType="main.java.com.seckill.entity.DetailProject">  
+            <id column="project_detail_id" property="projectDetailId"/>  
+	        <result column="project_detail_name" property="projectDetailName"/>  
+	        <result column="detail_start_time" property="detailStartTime"/>  
+	        <result column="detail_end_time" property="detailEndTime"/>  
+	        <result column="detail_modify" property="detailModify"/>  
+        </collection>  
+          
+    </resultMap> 
+    
+	<select id="queryProjectByEmail" parameterType="string" resultMap="projectResultMap">
 		select project_id,email,project_name,start_time,end_time,modify
 		from user_info
 		where email=#{email}
+	</select>
+	
+	<select id="queryDetailProjectById" parameterType="java.lang.Long" resultMap="projectResultMap">
+		select u.*,d.*
+		from user_info as u ,user_detail_info as d
+		where u.project_id = d.project_id
+		and u.project_id=#{projectId}
 	</select>
 	
 	<insert id="insertProjectByUser" >
@@ -37,5 +60,6 @@
 		delete from user_info
 		where project_id=#{projectId}
 	</delete>
+
 </mapper>
 

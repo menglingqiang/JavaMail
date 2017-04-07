@@ -16,4 +16,5 @@ public interface ProjectDao {
 	public List<Project> queryProjectByEmail(@Param(value="email")String email);//通过email查询，project方法
 	public int modifyProject(Project project);
 	public int deleteProject(long projectId);
+	public Project queryDetailProjectById(long projectId);
 }

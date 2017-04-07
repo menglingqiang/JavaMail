@@ -45,9 +45,14 @@ public class ProjectServiceImp implements ProjectService{
 
 	@Override
 	public int insertProjectByEmail(Project project) {
-		projectDao.insertProjectByEmail(project);
-		return 0;
+		
+		return projectDao.insertProjectByEmail(project);
 	}
-	
+
+	@Override
+	public List<DetailProject> queryDetailProjectById(long projectId) {
+		Project project = projectDao.queryDetailProjectById(projectId);
+		return project.getDetailProjects();
+	}
 	
 }

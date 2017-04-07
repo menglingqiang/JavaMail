@@ -32,9 +32,9 @@ CREATE TABLE user_detail_info(
 project_detail_id bigint NOT NULL AUTO_INCREMENT COMMENT '分项目id',
 project_id bigint NOT NULL  COMMENT '分项目所属总项目id',
 project_detail_name VARCHAR(120) NOT NULL COMMENT '项目名称',
-start_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '项目开始时间',
-end_time TIMESTAMP NOT NULL  COMMENT'项目结束时间',
-modify int default 0 COMMENT'项目修改次数',
+detail_start_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '项目开始时间',
+detail_end_time TIMESTAMP NOT NULL  COMMENT'项目结束时间',
+detail_modify int default 0 COMMENT'项目修改次数',
 PRIMARY KEY (porject_detail_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='用户分项目表'
 
