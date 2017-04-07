@@ -82,12 +82,83 @@ function checkInputCode(id)
   document.getElementById(id).value=document.getElementById(id).value+"-";
 }
 //检查时间
-function checkDate()
+function checkDate(type)
 {
- 
+ if(type=="modify")
+ {
+ 	var startTime = document.getElementById("modifyStratTime");
+ 	var endTime = document.getElementById("modifyEndTime");
+ 	return checkTime(startTime,endTime);
+ }
+ else if(type=="add")
+ {
+ 	var startTime = document.getElementById("addStartTime");
+ 	var endTime = document.getElementById("addEndTime");
+ 	return checkTime(startTime,endTime);
+ }
+ else {
+	 return false;
+	 alert("error");
+ }
 }
+function checkTime(startTime,endTime)//2014-09-09
+{
+    //获取当前时间
+    //parseInt("11")
+	var now = getNowFormatDate();
+	for(var i=0;i<startTime.length;i++)
+	{
+		if(i!=4&&i!=7)
+		{
+			//开始时间不可以超过结束时间
+			if(parseInt(startTime.charAt(i))>parseInt(endTime.charAt(i)))
+			{
+				alert("时光不可以倒流，开始时间不可以大于结束时间");
+				return false;
+			}
+			//结束时间不可以小于当前时间
+			if(parseInt(now.charAt(i))>parseInt(endTime.charAt(i)))
+			{
+				alert("这是一个网站，不是时光机，结束时间不可以小于当前的时间");
+				return false;
+			}
+			//开始时间和结束时间都应该在一年以内
+			if(i<4)
+			{
+				if( ( parseInt(startTime.charAt(i))-parseInt(now.charAt(i)) )>1||
+					( parseInt(endTime.charAt(i))-parseInt(now.charAt(i)) )>1)
+				{
+					alert("先定一个一年以内的小目标，限定时间不可以超过当前时间一年");
+					return false;
+				}
+			}
+		}
+		
+	}
+	return true;
+}
+//获取当前的日期时间 格式“yyyy-MM-dd HH:MM:SS”
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+    return currentdate;
+} 
 function addProject()
 {
+ if(!checkDate("add"))
+	 return ;
  var email = document.getElementById("email").value;
  var projectName = document.getElementById("addProjectName").value;
  var startTime = document.getElementById("addStartTime").value;
@@ -98,6 +169,8 @@ function addProject()
 }
 function modifyProject()
 {
+ if(!checkDate("modify"))
+	 return ;
  var email = document.getElementById("email").value;
  var projectId = document.getElementById("modifyProjectId").value;
  var projectName = document.getElementById("modifyProjectName").value;
