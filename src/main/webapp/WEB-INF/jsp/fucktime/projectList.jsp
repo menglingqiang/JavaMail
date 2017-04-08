@@ -86,25 +86,24 @@ function checkDate(type)
 {
  if(type=="modify")
  {
- 	var startTime = document.getElementById("modifyStratTime");
- 	var endTime = document.getElementById("modifyEndTime");
+ 	var startTime = document.getElementById("modifyStratTime").value;
+ 	var endTime = document.getElementById("modifyEndTime").value;
  	return checkTime(startTime,endTime);
  }
  else if(type=="add")
  {
- 	var startTime = document.getElementById("addStartTime");
- 	var endTime = document.getElementById("addEndTime");
+ 	var startTime = document.getElementById("addStartTime").value;
+ 	var endTime = document.getElementById("addEndTime").value;
  	return checkTime(startTime,endTime);
  }
  else {
-	 return false;
 	 alert("error");
+	 return false;
  }
 }
 function checkTime(startTime,endTime)//2014-09-09
 {
     //获取当前时间
-    //parseInt("11")
 	var now = getNowFormatDate();
 	for(var i=0;i<startTime.length;i++)
 	{
@@ -125,8 +124,7 @@ function checkTime(startTime,endTime)//2014-09-09
 			//开始时间和结束时间都应该在一年以内
 			if(i<4)
 			{
-				if( ( parseInt(startTime.charAt(i))-parseInt(now.charAt(i)) )>1||
-					( parseInt(endTime.charAt(i))-parseInt(now.charAt(i)) )>1)
+				if( ( parseInt(endTime.charAt(i))-parseInt(now.charAt(i)) )>1 )
 				{
 					alert("先定一个一年以内的小目标，限定时间不可以超过当前时间一年");
 					return false;
