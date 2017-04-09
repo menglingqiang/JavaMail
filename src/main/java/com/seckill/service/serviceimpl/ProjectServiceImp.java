@@ -52,6 +52,8 @@ public class ProjectServiceImp implements ProjectService{
 	@Override
 	public List<DetailProject> queryDetailProjectById(long projectId) {
 		Project project = projectDao.queryDetailProjectById(projectId);
+		if(project==null)
+			return null;
 		return project.getDetailProjects();
 	}
 	

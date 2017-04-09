@@ -191,12 +191,15 @@ function deleteProject(projectId)
  }
 
 }
-function showDetail(tr,projectName)
+function showDetail(projectId,projectName)
 {
-	var projectId = tr.id;//得到总项目的id
 	var form = document.getElementById("mainForm");
 	form.action = "<%=basePath%>project/showDetail?projectId="+projectId+"&projectName="+projectName;
 	form.submit();
+}
+function caozuo(projectId)
+{
+	alert(projectId);	
 }
 </script>
 </head>
@@ -237,14 +240,14 @@ function showDetail(tr,projectName)
 								    <th>选项</th>
 								</tr>
 								<c:forEach items="${projectList}" var="project" varStatus="status">
-									<tr id="${project.projectId}"  onclick="javascript:showDetail(this,'${project.projectName}')" <c:if test="${status.index % 2 != 0}">style='background-color:#ECF6EE;'</c:if>>
+									<tr <c:if test="${status.index % 2 != 0}">style='background-color:#ECF6EE;'</c:if>>
 										<%-- <td><input type="checkbox"  name="ids" value="${project.projectId}"/></td> --%>
 										<%-- <input type="hidden" name="projectId" id="projectId" value="${project.projectId}"> --%>
-										<td>${status.index + 1}</td>
-										<td>${project.projectName}</td>
-										<td>${project.startTime}</td>
-										<td>${project.endTime}</td>
-										<td>${project.modify}</td>
+										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${status.index + 1}</td>
+										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.projectName}</td>
+										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.startTime}</td>
+										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.endTime}</td>
+										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.modify}</td>
 										<td>
 											<a href="javascript:ShowDiv('MyModifyDiv','fade','${project.projectId}','modify','${project.projectName}')">修改</a>&nbsp;&nbsp;&nbsp;
 											<a href="javascript:deleteProject('${project.projectId}')">删除</a>
