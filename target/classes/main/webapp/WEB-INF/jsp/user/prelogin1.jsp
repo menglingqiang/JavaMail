@@ -4,10 +4,10 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-<html lang="en">
+<html>
 <head>
 	<meta charset="UTF-8">
-	<title>注册界面</title>
+	<title>登录界面</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
     <link href="<%=basePath%>resources/css/login.css" rel="stylesheet" type="text/css" />
     <script src="<%= basePath %>resources/script/jquery-1.8.0.min.js"></script>
@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 else
                 	document.getElementById("checkImage").src="<%=basePath %>resources/img/wrong.jpg";
             }
-        }); 
+        });
   		checkInputCode();
   	}
   	function checkInputCode()
@@ -57,39 +57,65 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	}
   	
   </script>
-
 </head>
 <body class="login_bj" >
-
 <div class="zhuce_body">
-    <div class="zhuce_kong">
+    <div class="zhuce_kong login_kuang">
     	<div class="zc">
         	<div class="bj_bai">
-            <h3>欢迎注册</h3>
-       	  	  <form action="<%=basePath %>user/register" method="post">
-                <input id="name" name="name" type="text" class="kuang_txt" placeholder="用户名">
-                <input id="email" name="email" type="text" class="kuang_txt email" placeholder="邮箱">
-                <input id="password" name="password" type="text" class="kuang_txt possword" placeholder="密码">
-                <div>
-                	<div class="hui_kuang"><input name="inputCode" id="inputCode" oninput="javascript:checkInputCode()" type="text" class="kuang_txt yanzm" placeholder="验证码"></div>
-                	<div class="shuaxin"><img id="checkImage" src="" style="width:20px;height:20px;" /></div>
-                </div>
-                <div>
-               		<div class="hui_kuang"><img id="imageCode" src="" width="92" height="31"></div>
-               		<div class="shuaxin"><img onclick="javascript:reloadImageCode()" src="<%= basePath %>resources/img/zc_25.jpg" width="13" height="14"></div>
-                </div>
-               <input type="submit" value="注册" class="btn_zhuce" disabled />
+            <h3>登录</h3>
+              <form action="<%=basePath %>user/login" method="post">
+		<table>
+		
+			<tr>
+				<td><input type="email" id="email" name="email" class="kuang_txt" placeholder="邮 箱"/></td>
+			</tr>
+			
+			<tr>
+				<td><input type="password" id="password" name="password" class="kuang_txt" placeholder="密码"/></td>
+			</tr>
+							
+			<tr>
+				<!-- input只可以输入4位 -->
+				<td><input name="inputCode" id="inputCode" type="text"  oninput="javascript:checkInputCode()" class="kuang_txt yanzm" placeholder="验证码"></td>
+			    <td><img id="checkImage" src="" style="width:20px;height:20px;" /></td>
+			</tr>
                 
-                </form>
+			<tr>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img id="imageCode" src="" width="92" height="31"></td>
+				<td><img onclick="javascript:reloadImageCode()" src="<%= basePath %>resources/img/zc_25.jpg" width="13" height="14"></td>
+			</tr>
+			<tr>
+				<!-- 设置按钮不可点击 -->
+				<td><input id="submit" type="submit" value="登录" class="btn_zhuce" disabled /></td>
+				
+			</tr>
+			<tr>
+				<td>
+					<a href="<%=basePath %>user/preRegister"/>还没有账号？ 
+					<a href="<%=basePath %>user/preForgetPassword"/>忘记密码 
+				</td>
+			</tr>
+		</table>
+	</form>
+       	  	  <!-- <form action="" method="get">
+                <input name="" type="text" class="kuang_txt" placeholder="手机号">
+                <input name="" type="text" class="kuang_txt" placeholder="密码">
+                <div>
+               		<a href="#">忘记密码？</a><input name="" type="checkbox" value="" checked><span>记住我</span> 
+                </div>
+                <input name="登录" type="button" class="btn_zhuce" value="登录">
+                
+                </form> -->
             </div>
-        	<div class="bj_right">
+        	<%-- <div class="bj_right">
             	<p>使用以下账号直接登录</p>
                 <a href="#" class="zhuce_qq">QQ注册</a>
                 <a href="#" class="zhuce_wb">微博注册</a>
                 <a href="#" class="zhuce_wx">微信注册</a>
-                <p>已有账号？<a href="login.html">立即登录</a></p>
+                <p>已有账号？<a href="<%=basePath %>user/preRegister">立即注册</a></p>
             
-            </div>
+            </div> --%>
         </div>
     </div>
 

@@ -54,6 +54,7 @@ public class UserMailController {
 	public String preRegister()
 	{
 		return "user/preregister";
+		//return "user/index";
 	}
 	//进入注册状态页面
 	@Transactional
@@ -116,6 +117,8 @@ public class UserMailController {
 	public String preLogIn()
 	{
 		return "user/prelogin";//登录界面
+//		return "user/login";//登录界面
+//		return "user/prelogin1";//登录界面
 	}
 	//执行登录逻辑
 	@RequestMapping(value="/login",method=RequestMethod.POST)
@@ -154,7 +157,7 @@ public class UserMailController {
 		Graphics g = bi.getGraphics();
 		Color c = new Color(200,156,255);
 		g.setColor(c);
-		g.fillRect(0, 0, 100, 30);
+		g.fillRect(0, 0, 92, 31);
 		//验证码里面的信息
 		char[] ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();//全是大写
 		Random random = new Random();
