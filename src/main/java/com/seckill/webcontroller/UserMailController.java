@@ -53,8 +53,8 @@ public class UserMailController {
 	@RequestMapping(value="/preRegister",method=RequestMethod.GET)
 	public String preRegister()
 	{
-		return "user/preregister";
-		//return "user/index";
+		//return "user/preregister";
+		return "user/preRegister1";
 	}
 	//进入注册状态页面
 	@Transactional
@@ -116,7 +116,7 @@ public class UserMailController {
 	@RequestMapping(value="/preLogin",method=RequestMethod.GET)
 	public String preLogIn()
 	{
-		return "user/prelogin";//登录界面
+		return "user/prelogin1";//登录界面
 //		return "user/login";//登录界面
 //		return "user/prelogin1";//登录界面
 	}
