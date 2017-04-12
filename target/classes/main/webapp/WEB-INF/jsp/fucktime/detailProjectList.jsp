@@ -195,6 +195,35 @@ function deleteProject(projectDetailId)
  }
 
 }
+function back()
+{
+	//window.history.go(-1);
+	 var form = document.getElementById("mainForm");
+	 var projectId = document.getElementById("projectId").value;
+	 form.action = "<%=basePath%>project/getProjectByEmail?projectId="+projectId;
+	 form.submit();
+}
+function done(detailProjectId)
+{
+	var con=confirm("确定完成了，没骗我?"); //在页面上弹出对话框
+	 if(con==true)
+	 {
+		 /* $.ajax({
+		        type: "Post",
+		        url: "doneDetailProject?detailProjectId="+detailProjectId+"&projectId="+projectId,
+		        contentType: "application/json; charset=utf-8",
+		        dataType: "text",
+		        success: function (data) {
+		        }
+		    });  */
+		 var projectId = document.getElementById("projectId").value;
+		 var name = document.getElementById("name").value;//总任务名称
+		 var form = document.getElementById("mainForm");
+		 form.action = "<%=basePath%>project/doneDetailProject?detailProjectId="+detailProjectId+"&projectId="+projectId+"&name"+name;
+		 form.submit();
+	 }
+		
+}
 </script>
 </head>
 <body >
@@ -231,7 +260,7 @@ function deleteProject(projectDetailId)
 								    <th>项目名称</th>
 								    <th>开始日期</th>
 								    <th>结束日期</th>
-								    <th>修改次数</th>
+								    <th>是否完成</th>
 								    <th>选项</th>
 								</tr>
 								<c:forEach items="${detailProjectList}" var="detailProject" varStatus="status">
@@ -242,7 +271,9 @@ function deleteProject(projectDetailId)
 										<td>${detailProject.projectDetailName}</td>
 										<td>${detailProject.detailStartTime}</td>
 										<td>${detailProject.detailEndTime}</td>
-										<td>${detailProject.detailModify}</td>
+										<td><c:if test="${detailProject.done==0}"><a href="javascript:done('${detailProject.projectDetailId}')">已完成？</a></c:if>
+											<c:if test="${detailProject.done==1}">完成</c:if>
+										</td>
 										<td>
 											<a href="javascript:ShowDiv('MyModifyDiv','fade','${detailProject.projectDetailId}','modify','${detailProject.projectDetailName}')">修改</a>&nbsp;&nbsp;&nbsp;
 											<a href="javascript:deleteProject('${detailProject.projectDetailId}')">删除</a>
@@ -251,6 +282,7 @@ function deleteProject(projectDetailId)
 								</c:forEach>
 							</tbody>
 						</table>
+						<input class="btn03" type="button" onclick="javascript:back()" value="返回总任务界面"/>
 					</div>
 				</div>
 			</div>

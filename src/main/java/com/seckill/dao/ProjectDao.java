@@ -1,6 +1,7 @@
 package main.java.com.seckill.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
@@ -17,4 +18,5 @@ public interface ProjectDao {
 	public int modifyProject(Project project);
 	public int deleteProject(long projectId);
 	public Project queryDetailProjectById(long projectId);
+	public List<Project> queryEverything(Map map);
 }

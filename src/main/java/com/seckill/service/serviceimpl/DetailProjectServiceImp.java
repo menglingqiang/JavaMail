@@ -37,6 +37,12 @@ public class DetailProjectServiceImp implements DetailProjectService{
 		return detailProjectDao.addDetailProject(detailProject);
 	}
 
+	@Override
+	public int modifyDetailProjectForDone(long projectDetailId) {
+		
+		return detailProjectDao.modifyDetailProjectForDone(projectDetailId);
+	}
+
 	
 	
 }

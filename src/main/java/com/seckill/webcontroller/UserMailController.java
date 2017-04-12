@@ -46,7 +46,7 @@ public class UserMailController {
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	public String welcome()
 	{
-		return "user/prelogin";//欢迎界面
+		return "user/preLogin";//欢迎界面
 	}
 	
 	//进入注册页面
@@ -61,7 +61,7 @@ public class UserMailController {
 	public String register(Model model,User user)
 	{
 		if(userService.isRegister(user))//判断是否已经有注册信息
-			return "prelogin";//用户已经注册成功，返回登录界面
+			return "user/preLogin";//用户已经注册成功，返回登录界面
 		String code = UUIDUtil.getUUID();
 		user.setCode(code);//生成动态激活码
 		String email = user.getEmail();//得到用户的email地址
@@ -108,7 +108,7 @@ public class UserMailController {
 			}
 			model.addAttribute("user", user);
 			//TODO跳转界面，发送成功请到邮箱激活
-			return "user/login-success";
+			return "user/register-precode";
 		}
 	}
 	//进入登录界面
@@ -121,6 +121,11 @@ public class UserMailController {
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public String logIn(User user,Model model,HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
+		/*String flag = request.getParameter("flag");
+		if(flag.trim()=="true")//已经登录了
+		{
+			return "user/login-success";
+		}*/
 		//验证验证码是否输入正确	
 		boolean codeFlag = validateCode(request, response);
 		
@@ -237,9 +242,15 @@ public class UserMailController {
 		else 
 		{
 			user = userService.queryByEmail(user);
-			//request.getSession().setAttribute("user",user); 是历史记录中的数据？
-			model.addAttribute("user", user);
-			return "user/login-success";
+			model.addAttribute("user", user);//传递用户的信息
+			if(user.getStatus()==0)//没有激活
+				return "user/login-success";
+			else
+			{
+				List<Project> projectList = projectService.queryProjectByEmail(user.getEmail());
+				model.addAttribute("projectList", projectList);
+				return "fucktime/projectList";
+			}
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package main.java.com.seckill.service.serviceimpl;
 
 import java.util.List;
+import java.util.Map;
 
 import main.java.com.seckill.dao.ProjectDao;
 import main.java.com.seckill.entity.DetailProject;
@@ -55,6 +56,12 @@ public class ProjectServiceImp implements ProjectService{
 		if(project==null)
 			return null;
 		return project.getDetailProjects();
+	}
+
+	@Override
+	public List<Project> queryEverything(Map map) {
+		
+		return projectDao.queryEverything(map);
 	}
 	
 }

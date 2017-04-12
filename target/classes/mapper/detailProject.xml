@@ -10,6 +10,7 @@
         <result column="detail_start_time" property="startTime"/>  
         <result column="detail_end_time" property="endTime"/>  
         <result column="detail_modify" property="modify"/>  
+        <result column="done" property="done"/>  
         <association property="project" javaType="main.java.com.seckill.entity.Project">  
             <id column="project_id" property="projectId"/>  
 	        <result column="project_name" property="projectName"/>  
@@ -27,13 +28,20 @@
     
     <delete id="deteleDetailProject" parameterType="java.lang.Long">
     	delete from user_detail_info
-    	where project_detail_id=#{projectDetailId}
+    	where project_dedtail_id=#{projectDetailId}
     </delete>
     
+    <!-- 后期换成动态sql -->
     <update id="modifyDetailProject" parameterType="main.java.com.seckill.entity.DetailProject">
     	update user_detail_info
     	set project_detail_name=#{projectDetailName},detail_start_time=#{detailStartTime},
     	detail_end_time=#{detailEndTime},detail_modify = detail_modify+1
+    	where project_detail_id=#{projectDetailId}
+    </update>
+    
+    <update id="modifyDetailProjectForDone" parameterType="java.lang.Long">
+    	update user_detail_info
+    	set done=1
     	where project_detail_id=#{projectDetailId}
     </update>
     

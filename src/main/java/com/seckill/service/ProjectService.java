@@ -1,6 +1,7 @@
 package main.java.com.seckill.service;
 
 import java.util.List;
+import java.util.Map;
 
 import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
@@ -18,4 +19,5 @@ public interface ProjectService {
 	public int modifyProject(Project project);
 	public int deleteProject(long id);
 	public List<DetailProject> queryDetailProjectById (long projectId);
+	public List<Project> queryEverything(Map map);
 }

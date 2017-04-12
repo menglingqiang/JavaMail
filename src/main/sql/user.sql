@@ -35,6 +35,7 @@ project_detail_name VARCHAR(120) NOT NULL COMMENT '项目名称',
 detail_start_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '项目开始时间',
 detail_end_time TIMESTAMP NOT NULL  COMMENT'项目结束时间',
 detail_modify int default 0 COMMENT'项目修改次数',
+done int default 0 COMMENT '是否完成任务，0没有，1完成',
 PRIMARY KEY (porject_detail_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='用户分项目表'
 

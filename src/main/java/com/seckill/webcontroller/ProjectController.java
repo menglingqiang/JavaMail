@@ -1,6 +1,8 @@
 package main.java.com.seckill.webcontroller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -80,12 +82,7 @@ public class ProjectController {
     {
     	String projectId = request.getParameter("projectId");
     	String projectName = request.getParameter("projectName");
-    	List <DetailProject> detailProjectList = 
-    			projectService.queryDetailProjectById(Long.parseLong(projectId));
-    	model.addAttribute("detailProjectList",detailProjectList);
-    	model.addAttribute("projectName",projectName);
-    	model.addAttribute("projectId",projectId);
-    	return "fucktime/detailProjectList";
+    	return showInfo(projectId,projectName,model);
     }
     @RequestMapping(value="detailOperation",method=RequestMethod.POST)
 	public String detailOperation(HttpServletRequest request,Model model)
@@ -126,13 +123,38 @@ public class ProjectController {
     		String id = request.getParameter("projectDetailId");
         	detailProjectService.deteleDetailProject(Long.parseLong(id));
 		}
+    	return showInfo(projectId,name,model);
+	}
+    @RequestMapping(value="doneDetailProject",method=RequestMethod.POST)
+    public String doneDetailProject(HttpServletRequest request,Model model)
+    {
+    	String detailProjectId = request.getParameter("detailProjectId");
+    	String projectId = request.getParameter("projectId");
+    	String name = request.getParameter("name");
+    	detailProjectService.modifyDetailProjectForDone(Long.parseLong(detailProjectId));//更新数据库
+    	return showInfo(projectId,name,model);
+    }
+    //通过总任务id得到每一个分任务,并跳转到明细页面
+    public String showInfo(String projectId,String projectName,Model model)
+    {
     	List <DetailProject> detailProjectList = 
     			projectService.queryDetailProjectById(Long.parseLong(projectId));
     	model.addAttribute("detailProjectList",detailProjectList);
-    	model.addAttribute("projectName",name);
+    	model.addAttribute("projectId",projectId);
+    	model.addAttribute("projectName",projectName);
     	return "fucktime/detailProjectList";
-	}
-    
+    }
+    @RequestMapping(value="getProjectByEmail",method=RequestMethod.POST)
+    public String getDetailProject(HttpServletRequest request,Model model)
+    {
+    	String projectId = request.getParameter("projectId");
+    	Map map = new HashMap();
+    	map.put("projectId", projectId);
+    	List<Project> projectList = projectService.queryEverything(map); 
+    	model.addAttribute("projectList", projectList);//重新查询list
+    	//重新查一次数据放入页面中
+    	return "fucktime/projectList";
+    }
 }
 
 

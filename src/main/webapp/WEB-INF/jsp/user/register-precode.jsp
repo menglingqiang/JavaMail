@@ -11,7 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var cnt = 2;
 	function lod(){
 	if(cnt < 0){
-	window.location.href = 'login?user=${user}';//两秒后跳转到登录界面
+	window.location.href = 'login?email=${user.email}&flag=true';//两秒后跳转到登录完成界面
 	}else{
 	document.getElementById("showTime").innerHTML = "页面<font color=red>" + cnt + "</font>秒后跳转";
 	cnt--;
@@ -22,9 +22,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 </head>
 
-<body onload="lod()">
-	激活账号已经发送的您的邮箱请查收
-	<div id="showTime"></div>
+<body >    <!-- onload="lod()" -->
+	激活邮件已经发送的您的邮箱请查收
+	<!-- <div id="showTime"></div> -->
 </body>
 
 </html>

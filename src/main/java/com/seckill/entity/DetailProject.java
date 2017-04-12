@@ -12,7 +12,7 @@ public class DetailProject {
 	private int detailModify;
 	private long projectId;
 	private Project project;//分项目所述的总项目
-	
+	private int done; //是否完成
 	public long getProjectId() {
 		return projectId;
 	}
@@ -55,6 +55,13 @@ public class DetailProject {
 	}
 	public void setDetailModify(int detailModify) {
 		this.detailModify = detailModify;
+	}
+	
+	public int getDone() {
+		return done;
+	}
+	public void setDone(int done) {
+		this.done = done;
 	}
 	@Override
 	public String toString() {

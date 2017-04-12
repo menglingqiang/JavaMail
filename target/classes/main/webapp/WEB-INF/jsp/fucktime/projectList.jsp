@@ -236,7 +236,7 @@ function caozuo(projectId)
 								    <th>项目名称</th>
 								    <th>开始日期</th>
 								    <th>结束日期</th>
-								    <th>修改次数</th>
+								    <th>项目进度</th>
 								    <th>选项</th>
 								</tr>
 								<c:forEach items="${projectList}" var="project" varStatus="status">
