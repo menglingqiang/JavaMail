@@ -1,5 +1,6 @@
 package main.java.com.seckill.webcontroller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
+import main.java.com.seckill.entity.User;
 import main.java.com.seckill.service.DetailProjectService;
 import main.java.com.seckill.service.ProjectService;
 import main.java.com.seckill.service.UserService;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
@@ -150,10 +153,35 @@ public class ProjectController {
     	String projectId = request.getParameter("projectId");
     	Map map = new HashMap();
     	map.put("projectId", projectId);
-    	List<Project> projectList = projectService.queryEverything(map); 
+    	List<Project> temp = projectService.queryEverything(map);
+    	String email = null;
+    	if(temp.size()>0)
+    		email = temp.get(0).getEmail();
+    	List<Project> projectList = projectService.queryProjectByEmail(email);
+    	//为了和前面的页面获取额email一致
+    	User user = new User();
+    	user.setEmail(email);
+    	model.addAttribute("user", user);
     	model.addAttribute("projectList", projectList);//重新查询list
     	//重新查一次数据放入页面中
     	return "fucktime/projectList";
+    }
+    //得到完成的百分比
+    @RequestMapping(value="getHaveDone",method=RequestMethod.GET)
+    public HashMap<Long,Float> getHaveDone(HttpServletRequest request)
+    {
+    	HashMap<Long,Float> map = new HashMap<Long,Float>();//key是项目的id,value是项目的完成百分比
+    	String email = request.getParameter("email");
+    	List<Project> projectList = projectService.queryProjectByEmail(email);//通过我email查到用户的所有总任务
+    	
+    	for(int i=0;i<projectList.size();i++)
+		{
+    		long tempProjectId = projectList.get(i).getProjectId();
+    		float f = projectService.haveDone(tempProjectId);
+    		map.put(tempProjectId, f);//没有子项目会报异常
+		}
+    	
+    	return map;
     }
 }
 

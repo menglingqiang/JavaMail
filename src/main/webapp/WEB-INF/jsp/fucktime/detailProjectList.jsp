@@ -197,7 +197,6 @@ function deleteProject(projectDetailId)
 }
 function back()
 {
-	//window.history.go(-1);
 	 var form = document.getElementById("mainForm");
 	 var projectId = document.getElementById("projectId").value;
 	 form.action = "<%=basePath%>project/getProjectByEmail?projectId="+projectId;

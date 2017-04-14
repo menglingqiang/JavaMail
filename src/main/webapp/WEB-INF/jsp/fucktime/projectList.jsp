@@ -13,6 +13,7 @@
   <link href="<%=basePath%>resources/css/all.css" rel="stylesheet" type="text/css" />
   <script src="<%=basePath%>resources/script/jquery-1.8.0.min.js"></script>
   <style>
+<!-- 表格的样式-->
 .black_overlay{
 	display: none;
 	position: absolute;
@@ -50,6 +51,81 @@
 	z-index:1002;
 	overflow: auto;
 }
+<!-- 进度条的样式-->
+body
+        {
+            font-family: Thoma, Microsoft YaHei, 'Lato', Calibri, Arial, sans-serif;
+        }
+
+        #content
+        {
+            margin: 120px auto;
+            width: 80%;
+        }
+
+        .loadBar
+        {
+            width: 200px;
+            height: 10px;
+            border: 3px solid #212121;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .loadBar div
+        {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .loadBar div span, .loadBar div i
+        {
+            box-shadow: inset 0 -2px 6px rgba(0, 0, 0, .4);
+            width: 0%;
+            display: block;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 20px;
+        }
+
+        .loadBar div i
+        {
+            width: 100%;
+            -webkit-animation: move .8s linear infinite;
+            background: -webkit-linear-gradient(left top, #7ed047 0%, #7ed047 25%, #4ea018 25%, #4ea018 50%, #7ed047 50%, #7ed047 75%, #4ea018 75%, #4ea018 100%);
+            background-size: 40px 40px;
+        }
+
+        .loadBar .percentNum
+        {
+            position: absolute;
+            top: 100%;
+            right: 10%;
+            padding: 1px 15px;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            border: 1px solid #222;
+            background-color: #222;
+            color: #fff;
+
+        }
+
+        @-webkit-keyframes move
+        {
+            0%
+            {
+                background-position: 0 0;
+            }
+            100%
+            {
+                background-position: 40px 0;
+            }
+        }
 </style>
 <script type="text/javascript">
 //弹出隐藏层
@@ -131,7 +207,6 @@ function checkTime(startTime,endTime)//2014-09-09
 				}
 			}
 		}
-		
 	}
 	return true;
 }
@@ -197,10 +272,68 @@ function showDetail(projectId,projectName)
 	form.action = "<%=basePath%>project/showDetail?projectId="+projectId+"&projectName="+projectName;
 	form.submit();
 }
-function caozuo(projectId)
+
+//计算项目的进度比例
+function finish()
 {
-	alert(projectId);	
+	var email = document.getElementById("email").value;
+	$.ajax({
+        type: "Get",
+        url: "getHaveDone?email="+email,
+        contentType: "application/json; charset=utf-8",
+        dataType: "",
+        success: function (data) {
+        	
+        }
+    });
 }
+window.onload = finish;//加载函数，获得比例	
+//进度条的js
+ function LoadingBar(id)
+{
+    this.loadbar = $("#" + id);
+    this.percentEle = $(".percent", this.loadbar);
+    this.percentNumEle = $(".percentNum", this.loadbar);
+    this.max = 100;
+    this.currentProgress = 0;
+}
+LoadingBar.prototype = {
+    constructor: LoadingBar,
+    setMax: function (maxVal)
+    {
+        this.max = maxVal;
+    },
+    setProgress: function (val)
+    {
+        if (val >= this.max)
+        {
+            val = this.max;
+        }
+        this.currentProgress = parseInt((val / this.max) * 100) + "%";
+        this.percentEle.width(this.currentProgress);
+        this.percentNumEle.text(this.currentProgress);
+    }
+};
+
+$(function ()
+{
+
+    var loadbar = new LoadingBar("loadBar01");
+    var max = 1000;
+    loadbar.setMax(max);
+    var i = 0;
+    var time = setInterval(function ()
+    {
+        loadbar.setProgress(i);
+        if (i == max)
+        {
+            clearInterval(time);
+            return;
+        }
+        i += 10;
+    }, 40);
+});
+
 </script>
 </head>
 <body >
@@ -243,11 +376,20 @@ function caozuo(projectId)
 									<tr <c:if test="${status.index % 2 != 0}">style='background-color:#ECF6EE;'</c:if>>
 										<%-- <td><input type="checkbox"  name="ids" value="${project.projectId}"/></td> --%>
 										<%-- <input type="hidden" name="projectId" id="projectId" value="${project.projectId}"> --%>
-										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${status.index + 1}</td>
-										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.projectName}</td>
-										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.startTime}</td>
-										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.endTime}</td>
-										<td onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.modify}</td>
+										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${status.index + 1}</td>
+										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.projectName}</td>
+										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.startTime}</td>
+										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.endTime}</td>
+										<td  style="text-align:center;" onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">
+											<div id="loadBar01" class="loadBar">
+										        <div>
+										             <span class="percent">
+										                <i></i>
+										             </span>
+										        </div>
+										        <span class="percentNum">0%</span>
+										    </div>
+										</td><!-- 进来展现进度，然后放在进度条上显示比例 -->
 										<td>
 											<a href="javascript:ShowDiv('MyModifyDiv','fade','${project.projectId}','modify','${project.projectName}')">修改</a>&nbsp;&nbsp;&nbsp;
 											<a href="javascript:deleteProject('${project.projectId}')">删除</a>

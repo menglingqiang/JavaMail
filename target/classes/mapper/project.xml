@@ -20,23 +20,23 @@
         </collection>  
           
     </resultMap> 
-    <select id="queryEverything" parameterMap="java.util.HashMap" resultMap="projectResultMap">
-    	<![CDATA[
+    
+    <select id="queryEverything" parameterType="java.util.HashMap" resultMap="projectResultMap">
     	select * from user_info
-    	where 1=1 
-    	 <dynamic>  
-           <isNotNull prepend=" and " property="projectId"> 
-                ( project_id=#{projectId})  
-            </isNotNull>  
-            <isNotNull prepend=" and " property="projectName"> 
-                ( project_name=#{projectName})  
-            </isNotNull> 
-            <isNotNull prepend=" and " property="email"> 
-                ( email=#{email})  
-            </isNotNull> 
-          </dynamic>  
-    	]]>
+    	where 1=1
+    	<choose>
+			<when test="projectId!=null and projectId!=''">
+				and project_id = #{projectId}
+			</when>
+			<when test="projectName!=null and projectName!=''">
+				and project_name = #{projectName}
+			</when>
+			<when test="email!=null and email!=''">
+				and email = #{email}
+			</when>
+		</choose>
     </select>
+    
 	<select id="queryProjectByEmail" parameterType="string" resultMap="projectResultMap">
 		select project_id,email,project_name,start_time,end_time,modify
 		from user_info
@@ -77,6 +77,25 @@
 		delete from user_info
 		where project_id=#{projectId}
 	</delete>
-
+	<select id="haveDone" parameterType="java.lang.Long" resultType="java.lang.Float">
+		SELECT
+		TRUNCATE(b.finished/a.allProject,2) from 
+		(	SELECT
+				COUNT(*) AS allProject
+			FROM
+				user_detail_info AS d ,
+				user_info         AS u 
+			WHERE
+				u.project_id = d.project_id AND
+				u.project_id=#{projectId})as a
+		,
+		(	SELECT
+				COUNT(*) as finished 
+			FROM
+				user_detail_info 
+			WHERE
+				project_id=#{projectId} AND
+				done=1) as  b
+	</select>
 </mapper>
 

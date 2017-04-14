@@ -63,5 +63,11 @@ public class ProjectServiceImp implements ProjectService{
 		
 		return projectDao.queryEverything(map);
 	}
+
+	@Override
+	public float haveDone(long projectId) {
+		
+		return projectDao.haveDone(projectId);
+	}
 	
 }
