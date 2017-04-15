@@ -2,6 +2,8 @@ package main.java.com.seckill.dao;
 
 import main.java.com.seckill.entity.User;
 
+import org.springframework.stereotype.Repository;
+@Repository
 public interface UserDao {
 
 	public int register(User user);//注册用户

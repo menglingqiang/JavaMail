@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
 import main.java.com.seckill.entity.User;
 import main.java.com.seckill.service.ProjectService;

@@ -8,7 +8,8 @@ import main.java.com.seckill.entity.Project;
 import main.java.com.seckill.entity.User;
 
 import org.apache.ibatis.annotations.Param;
-
+import org.springframework.stereotype.Repository;
+@Repository
 public interface ProjectDao {
 
 	public int insertProjectByUser(@Param(value = "user") User user,@Param(value = "project")Project project);//给指定的用户，添加一条总任务
@@ -20,4 +21,5 @@ public interface ProjectDao {
 	public Project queryDetailProjectById(long projectId);
 	public List<Project> queryEverything(Map map);
 	public float haveDone(long projectId);//该任务已经完成的百分比（截取两位小数）
+	public List<Project> queryAllProject();//得到所有的project
 }

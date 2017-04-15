@@ -12,4 +12,5 @@ public interface DetailProjectService {
 	public int deteleDetailProject(long projectDetailId);
 	public int addDetailProject(DetailProject detailProject);
 	public int modifyDetailProjectForDone(long projectDetailId);
+	public List<DetailProject> queryAllDetailProject();
 }

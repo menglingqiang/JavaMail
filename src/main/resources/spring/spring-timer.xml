@@ -49,13 +49,90 @@
 			</list>
 		</property>
 	</bean>  -->
-	<context:annotation-config />  
+	<!-- 配置数据库相关的参数 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	<!-- spring注解 -->
+	<context:annotation-config></context:annotation-config>
+	<!-- 数据库的连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${url}" />
+        <property name="username" value="${username}" />
+        <property name="password" value="${password}" />
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="1" />
+        <property name="minIdle" value="1" />
+        <property name="maxActive" value="20" />
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000" />
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+    </bean> 
+	
+	<!-- 配置sqlsessionfactorty -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据库连接池 -->
+		<property name="dataSource" ref="dataSource"></property>
+		
+		<!-- 配置mybaits配置文件 -->
+		<property name="configLocation" value="classpath:main/resources/mybatis-config.xml"></property>
+		
+		<!-- 扫描entity包  使用别名，只写类名不用再全包名-->
+		<property name="typeAliasesPackage" value="main.java.com.seckill.entity"></property>
+		
+		<!-- 扫描sql配置文件 mapper需要的xml文件-->
+		<property name="mapperLocations" value="classpath:main/resources/mapper/*.xml"></property>
+		
+	</bean>
+	
+	<!-- 配置扫描dao接口的包 动态实现dao接口  注入到spring容器中-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 注入sqlsessionfactory -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<!-- 给出扫描的dao包 --> 
+		<property name="basePackage" value="main.java.com.seckill.dao"></property>
+	</bean>
+	
+	<!-- redis配置 -->
+	<!-- <bean class="main.java.com.seckill.dao.cache.RedisDao">
+		 <constructor-arg name="ip" value="localhost" />
+         <constructor-arg name="port" value="6379" />
+	</bean> -->
+	<context:component-scan base-package="main.java.com.seckill.service"/>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
     <!-- spring扫描注解的配置   -->
 	<context:component-scan base-package="main.java.com.seckill.timer" />  
 	<!--开启这个配置，spring才能识别@Scheduled注解   -->
 	<task:annotation-driven scheduler="qbScheduler"
 		mode="proxy" />
-	<task:scheduler id="qbScheduler" pool-size="10" />  
+	<task:scheduler id="qbScheduler" pool-size="10" />
+	<!-- 1．秒（0–59）
+	2．分钟（0–59）
+	3．小时（0–23）
+	4．月份中的日期（1–31）
+	5．月份（1–12或JAN–DEC）
+	6．星期中的日期（1–7或SUN–SAT）
+	7．年份（1970–2099）
+	秒 0-59 , - * /
+	分 0-59 , - * /
+	小时 0-23 , - * /
+	日期 1-31 , - * ? / L W C
+	月份 1-12 或者 JAN-DEC , - * /
+	星期 1-7 或者 SUN-SAT , - * ? / L C #
+	年（可选）留空, 1970-2099 , - * /
+	表达式意义
+	"0 0 12 * * ?" 每天中午12点触发  -->
 </beans>
 
 

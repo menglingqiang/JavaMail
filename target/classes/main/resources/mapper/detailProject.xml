@@ -7,9 +7,9 @@
 	<resultMap type="main.java.com.seckill.entity.DetailProject" id="detailProjectResultMap">  
         <id column="project_detail_id" property="projectDetailId"/>  
         <result column="project_detail_name" property="projectDetailName"/>  
-        <result column="detail_start_time" property="startTime"/>  
-        <result column="detail_end_time" property="endTime"/>  
-        <result column="detail_modify" property="modify"/>  
+        <result column="detail_start_time" property="detailStartTime"/>  
+        <result column="detail_end_time" property="detailEndTime"/>  
+        <result column="detail_modify" property="detailModify"/>  
         <result column="done" property="done"/>  
         <association property="project" javaType="main.java.com.seckill.entity.Project">  
             <id column="project_id" property="projectId"/>  
@@ -17,9 +17,14 @@
 	        <result column="start_time" property="startTime"/>  
 	        <result column="end_time" property="endTime"/>  
 	        <result column="modify" property="modify"/>    
-        </association>  
+        </association> 
     </resultMap> 
-     
+    
+    <select id="queryAllDetailProject" resultMap="detailProjectResultMap">
+    	select *
+    	from user_detail_info
+    </select>
+    
     <insert id="addDetailProject" parameterType="main.java.com.seckill.entity.DetailProject">
     	INSERT INTO user_detail_info
     	(project_id, project_detail_name, detail_start_time, detail_end_time) 

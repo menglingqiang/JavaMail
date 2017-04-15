@@ -183,6 +183,12 @@ public class ProjectController {
     	
     	return map;
     }
+    @RequestMapping(value="/test",method=RequestMethod.GET)
+	public void test()
+	{
+		List<DetailProject> detailProjectList = detailProjectService.queryAllDetailProject();
+		System.out.println(detailProjectList);
+	}
 }
 
 

@@ -43,6 +43,12 @@ public class DetailProjectServiceImp implements DetailProjectService{
 		return detailProjectDao.modifyDetailProjectForDone(projectDetailId);
 	}
 
+	@Override
+	public List<DetailProject> queryAllDetailProject() {
+		
+		return detailProjectDao.queryAllDetailProject();
+	}
+
 	
 	
 }

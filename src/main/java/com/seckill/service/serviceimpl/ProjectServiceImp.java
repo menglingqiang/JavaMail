@@ -69,5 +69,10 @@ public class ProjectServiceImp implements ProjectService{
 		
 		return projectDao.haveDone(projectId);
 	}
+
+	@Override
+	public List<Project> queryAllProject() {
+		return projectDao.queryAllProject();
+	}
 	
 }

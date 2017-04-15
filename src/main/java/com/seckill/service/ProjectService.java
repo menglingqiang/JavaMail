@@ -21,4 +21,5 @@ public interface ProjectService {
 	public List<DetailProject> queryDetailProjectById (long projectId);
 	public List<Project> queryEverything(Map map);
 	public float haveDone(long projectId);//该任务已经完成的百分比（截取两位小数）
+	public List<Project> queryAllProject();
 }

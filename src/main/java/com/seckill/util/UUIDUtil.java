@@ -1,5 +1,6 @@
 package main.java.com.seckill.util;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,5 +41,30 @@ public class UUIDUtil {
 			e.printStackTrace();
 		} 
 		return date;
+	}
+	//两个日期的比较,前面的大返回true
+	public static boolean compareDate(Date date1,Date date2)
+	{
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(date1);
+		
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(date2);
+		
+		int day1 = cal1.get(Calendar.DATE);
+		int month1 = cal1.get(Calendar.MONTH) + 1;
+		int year1 = cal1.get(Calendar.YEAR);
+		
+		int day2 = cal2.get(Calendar.DATE);
+		int month2 = cal2.get(Calendar.MONTH) + 1;
+		int year2 = cal2.get(Calendar.YEAR);
+		
+		if(year1>year2)
+			return true;
+		else if(month1>month2)
+			return true;
+		else if(day1>=day2)
+			return true;
+		return false;
 	}
 }
