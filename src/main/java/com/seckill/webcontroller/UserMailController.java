@@ -35,12 +35,6 @@ public class UserMailController {
 	UserService userService;
 	@Autowired
 	ProjectService projectService;
-//	
-//    @Autowired  
-//     HttpServletRequest request;  
-//    
-//    @Autowired  
-//    HttpServletResponse response;  
     
 	//欢迎页面
 	@RequestMapping(value="/",method=RequestMethod.GET)

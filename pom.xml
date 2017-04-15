@@ -124,7 +124,13 @@
       <artifactId>spring-context</artifactId>
       <version>4.2.4.RELEASE</version>
     </dependency>
-
+    
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context-support</artifactId>
+		<version>4.2.4.RELEASE</version>
+	</dependency>
+	
     <!--5.2spring DAO层的依赖-->
     <dependency>
       <groupId>org.springframework</groupId>
