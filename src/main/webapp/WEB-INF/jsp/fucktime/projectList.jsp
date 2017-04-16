@@ -273,21 +273,7 @@ function showDetail(projectId,projectName)
 	form.submit();
 }
 
-//计算项目的进度比例
-function finish()
-{
-	var email = document.getElementById("email").value;
-	$.ajax({
-        type: "Get",
-        url: "getHaveDone?email="+email,
-        contentType: "application/json; charset=utf-8",
-        dataType: "",
-        success: function (data) {
-        	
-        }
-    });
-}
-window.onload = finish;//加载函数，获得比例	
+
 //进度条的js
  function LoadingBar(id)
 {
@@ -314,30 +300,60 @@ LoadingBar.prototype = {
         this.percentNumEle.text(this.currentProgress);
     }
 };
-
-$(function ()
+function loadBars()
 {
-
-    var loadbar = new LoadingBar("loadBar01");
+	var email = document.getElementById("email").value;
+	//先计算比例值
+	$.ajax({
+        type: "GET",
+        url: "<%=basePath%>project/getHaveDone?email="+email,
+        contentType: "application/json; charset=utf-8",
+        dataType: "text",
+        success: function (data) {
+        	//alert(data);
+        }
+	});
+	for(var i=0;i<'${projectList.size()}';i++)
+	{
+		var projectId = '${projectList.get(i).getProjectId()}';
+		//alert(projectId);
+		var loadBarName = "loadBar"+projectId;
+		//alert(i+":"+loadBarName);
+		loadBar(loadBarName);
+	}
+   
+}
+function loadBar(loadBarName)
+{
+	var loadbar = new LoadingBar(loadBarName);
+	var projectId = loadBarName.substr(7); 
+	var test = 'percentMap'+projectId;
+	alert(test);
+	var percent =  '${test}';
+	//alert("projectId:"+projectId+"percent:"+percent);
     var max = 1000;
     loadbar.setMax(max);
     var i = 0;
+    var currentPercent = 1000*percent;//获得当前比例
     var time = setInterval(function ()
     {
         loadbar.setProgress(i);
-        if (i == max)
+        if (i == currentPercent)
         {
             clearInterval(time);
             return;
         }
         i += 10;
     }, 40);
-});
-
+   
+}
+window.onload=loadBars;
 </script>
 </head>
 <body >
 	<input type="hidden" id="email" name="email" value="${user.email}">
+	<input type="hidden" id="percentMap" name="percentMap" >
+	<input onclick="javascript:loadBars()" value="bar2" type="button">
 	<h1>总任务列表界面展示:${user.name}</h1>
 	<body style="background: #e1e9eb;">
 		<form action="#" id="mainForm" method="post">
@@ -381,7 +397,7 @@ $(function ()
 										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.startTime}</td>
 										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.endTime}</td>
 										<td  style="text-align:center;" onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">
-											<div id="loadBar01" class="loadBar">
+											<div id='loadBar${project.projectId}' class="loadBar">
 										        <div>
 										             <span class="percent">
 										                <i></i>

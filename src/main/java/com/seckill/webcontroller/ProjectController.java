@@ -1,11 +1,11 @@
 package main.java.com.seckill.webcontroller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
@@ -36,7 +36,7 @@ public class ProjectController {
 	@Autowired
 	DetailProjectService detailProjectService;
 	
-    @RequestMapping(value="operation",method=RequestMethod.POST)
+    @RequestMapping(value="/operation",method=RequestMethod.POST)
 	public String operation(HttpServletRequest request,Model model)
 	{
     	String type = request.getParameter("type").trim();
@@ -56,7 +56,7 @@ public class ProjectController {
     		projectService.modifyProject(project);
     	}
     		
-    	else if(type.equals("add"))//需要email
+    	else if(type.equals("/add"))//需要email
 		{
     		String projectName = request.getParameter("projectName");
     		String startTime = request.getParameter("startTime");
@@ -70,7 +70,7 @@ public class ProjectController {
     		project.setEndTime(UUIDUtil.string2Date(endTime));
     		projectService.insertProjectByEmail(project);
 		}
-    	else if(type.equals("delete"))//
+    	else if(type.equals("/delete"))//
 		{
     		String id = request.getParameter("projectId");
         	projectService.deleteProject(Integer.parseInt(id));
@@ -87,7 +87,7 @@ public class ProjectController {
     	String projectName = request.getParameter("projectName");
     	return showInfo(projectId,projectName,model);
     }
-    @RequestMapping(value="detailOperation",method=RequestMethod.POST)
+    @RequestMapping(value="/detailOperation",method=RequestMethod.POST)
 	public String detailOperation(HttpServletRequest request,Model model)
 	{
     	String type = request.getParameter("type").trim();
@@ -128,7 +128,7 @@ public class ProjectController {
 		}
     	return showInfo(projectId,name,model);
 	}
-    @RequestMapping(value="doneDetailProject",method=RequestMethod.POST)
+    @RequestMapping(value="/doneDetailProject",method=RequestMethod.POST)
     public String doneDetailProject(HttpServletRequest request,Model model)
     {
     	String detailProjectId = request.getParameter("detailProjectId");
@@ -147,7 +147,7 @@ public class ProjectController {
     	model.addAttribute("projectName",projectName);
     	return "fucktime/detailProjectList";
     }
-    @RequestMapping(value="getProjectByEmail",method=RequestMethod.POST)
+    @RequestMapping(value="/getProjectByEmail",method=RequestMethod.POST)
     public String getDetailProject(HttpServletRequest request,Model model)
     {
     	String projectId = request.getParameter("projectId");
@@ -167,10 +167,10 @@ public class ProjectController {
     	return "fucktime/projectList";
     }
     //得到完成的百分比
-    @RequestMapping(value="getHaveDone",method=RequestMethod.GET)
-    public HashMap<Long,Float> getHaveDone(HttpServletRequest request)
+    @RequestMapping(value="/getHaveDone",method=RequestMethod.GET)
+    public  @ResponseBody String getHaveDone(HttpServletRequest request,HttpServletResponse response)
     {
-    	HashMap<Long,Float> map = new HashMap<Long,Float>();//key是项目的id,value是项目的完成百分比
+    	HashMap<String,Float> map = new HashMap<String,Float>();//key是项目的id,value是项目的完成百分比
     	String email = request.getParameter("email");
     	List<Project> projectList = projectService.queryProjectByEmail(email);//通过我email查到用户的所有总任务
     	
@@ -178,10 +178,12 @@ public class ProjectController {
 		{
     		long tempProjectId = projectList.get(i).getProjectId();
     		float f = projectService.haveDone(tempProjectId);
-    		map.put(tempProjectId, f);//没有子项目会报异常
+    		request.getSession().setAttribute("percentMap"+tempProjectId, f); 
+    		map.put(String.valueOf(tempProjectId), f);//没有子项目会报异常
 		}
-    	
-    	return map;
+    	//request.getSession().setAttribute("percentMap", map); 
+    	//return map;
+    	return "success";
     }
     @RequestMapping(value="/test",method=RequestMethod.GET)
 	public void test()
