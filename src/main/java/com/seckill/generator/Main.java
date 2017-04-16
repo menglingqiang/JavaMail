@@ -1,4 +1,4 @@
-package main.java.com;
+package main.java.com.seckill.generator;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,7 +19,7 @@ public class Main {
 		List<String> warnings = new ArrayList<String>();  
 		  boolean overwrite = true; 
 		  try{
-			  File configFile = new File("E:\\SpringMVC\\JavaMail\\src\\main\\java\\com\\generator.xml");  
+			  File configFile = new File("E:\\SpringMVC\\JavaMail\\src\\main\\java\\com\\seckill\\generator\\generator.xml");  
 			  ConfigurationParser cp = new ConfigurationParser(warnings);  
 			  Configuration config = cp.parseConfiguration(configFile);  
 			  DefaultShellCallback callback = new DefaultShellCallback(overwrite);  
