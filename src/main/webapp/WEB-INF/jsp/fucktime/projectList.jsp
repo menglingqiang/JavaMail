@@ -313,13 +313,15 @@ function loadBars()
         	//alert(data);
         }
 	});
+	
 	for(var i=0;i<'${projectList.size()}';i++)
 	{
-		var projectId = '${projectList.get(i).getProjectId()}';
-		//alert(projectId);
+		var projectId = '${projectList.get(i).projectId}';//只可以拿到第一个值??
+		alert("我的Id:+"+i+"---"+projectId);
 		var loadBarName = "loadBar"+projectId;
 		//alert(i+":"+loadBarName);
 		loadBar(loadBarName);
+		projectId=0;
 	}
    
 }
@@ -327,14 +329,12 @@ function loadBar(loadBarName)
 {
 	var loadbar = new LoadingBar(loadBarName);
 	var projectId = loadBarName.substr(7); 
-	var test = 'percentMap'+projectId;
-	alert(test);
-	var percent =  '${test}';
-	//alert("projectId:"+projectId+"percent:"+percent);
+	var percent = getPercent(projectId);
     var max = 1000;
     loadbar.setMax(max);
     var i = 0;
-    var currentPercent = 1000*percent;//获得当前比例
+    var currentPercent =1000*percent;//获得当前比例
+    alert("percent:"+percent+",currentPercent:"+currentPercent);
     var time = setInterval(function ()
     {
         loadbar.setProgress(i);
@@ -347,13 +347,32 @@ function loadBar(loadBarName)
     }, 40);
    
 }
+function getPercent(key)
+{
+	var percentMap = '${percentMap}';
+	percentMap=percentMap.substr(1,percentMap.length-2);
+	//alert("percentMap:"+percentMap);
+	//var strs= new Array(); //定义一数组
+	var strs=percentMap.split(","); //字符分割 
+	for(var i=0;i<strs.length;i++)
+	{
+		var temp= strs[i];
+		var tempStrs = temp.split("=");
+		//alert("key:"+tempStrs[0]+",value:"+tempStrs[1]);
+		if($.trim(tempStrs[0])==$.trim(key))
+		{
+			return tempStrs[1];
+			//alert("return:"+"key:"+tempStrs[0]+",value:"+tempStrs[1]);
+		}
+	}
+}
 window.onload=loadBars;
 </script>
 </head>
 <body >
 	<input type="hidden" id="email" name="email" value="${user.email}">
 	<input type="hidden" id="percentMap" name="percentMap" >
-	<input onclick="javascript:loadBars()" value="bar2" type="button">
+	<input onclick="javascript:getPercent(1)" value="bar2" type="button">
 	<h1>总任务列表界面展示:${user.name}</h1>
 	<body style="background: #e1e9eb;">
 		<form action="#" id="mainForm" method="post">

@@ -83,7 +83,7 @@
 		SELECT
 		TRUNCATE(b.finished/a.allProject,2) from 
 		(	SELECT
-				case COUNT(*) when 0 then 1 end as allProject
+				case COUNT(*) when 0 then 1 else COUNT(*) end as allProject
 			FROM
 				user_detail_info AS d ,
 				user_info         AS u 
