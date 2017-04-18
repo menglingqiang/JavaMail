@@ -178,19 +178,12 @@ public class ProjectController {
 		{
     		long tempProjectId = projectList.get(i).getProjectId();
     		float f = projectService.haveDone(tempProjectId);
-    		request.getSession().setAttribute("percentMapasdf"+tempProjectId, f); 
     		map.put(String.valueOf(tempProjectId), f);//没有子项目会报异常
 		}
     	request.getSession().setAttribute("percentMap", map); 
     	return map;
     	//return "success";
     }
-    @RequestMapping(value="/test",method=RequestMethod.GET)
-	public void test()
-	{
-		List<DetailProject> detailProjectList = detailProjectService.queryAllDetailProject();
-		System.out.println(detailProjectList);
-	}
 }
 
 

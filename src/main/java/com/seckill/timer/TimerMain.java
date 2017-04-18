@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
   
-  
+/*定时任务主函数*/
 public class TimerMain { 
 	
     public static void main(String[] args) {  

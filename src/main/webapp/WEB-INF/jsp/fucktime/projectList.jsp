@@ -56,7 +56,6 @@ body
         {
             font-family: Thoma, Microsoft YaHei, 'Lato', Calibri, Arial, sans-serif;
         }
-
         #content
         {
             margin: 120px auto;
@@ -303,27 +302,36 @@ LoadingBar.prototype = {
 function loadBars()
 {
 	var email = document.getElementById("email").value;
+	var date = new Date();
 	//先计算比例值
 	$.ajax({
         type: "GET",
-        url: "<%=basePath%>project/getHaveDone?email="+email,
+        url: "<%=basePath%>project/getHaveDone?email="+email+"&date="+date,
         contentType: "application/json; charset=utf-8",
         dataType: "text",
         success: function (data) {
         	//alert(data);
         }
 	});
-	
-	for(var i=0;i<'${projectList.size()}';i++)
+	//alert('${projectList}');
+	for(var i=0;i<${projectList.size()};i++)
 	{
-		var projectId = '${projectList.get(i).projectId}';//只可以拿到第一个值??
-		alert("我的Id:+"+i+"---"+projectId);
-		var loadBarName = "loadBar"+projectId;
+		/* var projectId = ${projectList.get(i).projectId};//只可以拿到第一个值??
+		alert("我的Id:"+i+"---"+projectId);
+		var loadBarName = "loadBar"+projectId; */
 		//alert(i+":"+loadBarName);
+		var loadBarName = getloadBarNameFromProjectList(i);
 		loadBar(loadBarName);
-		projectId=0;
 	}
    
+}
+function getloadBarNameFromProjectList(i)
+{
+	//var projectId = "${projectList.get(i).getProjectId()}";//只可以拿到第一个值??
+	//alert("projectId"+i);
+	var projectId  = document.getElementById("projectId"+i).value; 
+	var loadBarName = "loadBar"+projectId;
+	return loadBarName;
 }
 function loadBar(loadBarName)
 {
@@ -334,7 +342,7 @@ function loadBar(loadBarName)
     loadbar.setMax(max);
     var i = 0;
     var currentPercent =1000*percent;//获得当前比例
-    alert("percent:"+percent+",currentPercent:"+currentPercent);
+    //alert("percent:"+percent+",currentPercent:"+currentPercent);
     var time = setInterval(function ()
     {
         loadbar.setProgress(i);
@@ -351,7 +359,7 @@ function getPercent(key)
 {
 	var percentMap = '${percentMap}';
 	percentMap=percentMap.substr(1,percentMap.length-2);
-	//alert("percentMap:"+percentMap);
+	alert("percentMap:"+percentMap);
 	//var strs= new Array(); //定义一数组
 	var strs=percentMap.split(","); //字符分割 
 	for(var i=0;i<strs.length;i++)
@@ -366,13 +374,17 @@ function getPercent(key)
 		}
 	}
 }
-window.onload=loadBars;
+$(document).ready(function(){  
+	   
+	loadBars();  
+   
+});
 </script>
 </head>
 <body >
 	<input type="hidden" id="email" name="email" value="${user.email}">
 	<input type="hidden" id="percentMap" name="percentMap" >
-	<input onclick="javascript:getPercent(1)" value="bar2" type="button">
+	<input onclick="javascript:getPercent(1)" value="bar2" type="hidden">
 	<h1>总任务列表界面展示:${user.name}</h1>
 	<body style="background: #e1e9eb;">
 		<form action="#" id="mainForm" method="post">
@@ -415,7 +427,7 @@ window.onload=loadBars;
 										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.projectName}</td>
 										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.startTime}</td>
 										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.endTime}</td>
-										<td  style="text-align:center;" onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">
+										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">
 											<div id='loadBar${project.projectId}' class="loadBar">
 										        <div>
 										             <span class="percent">
@@ -426,6 +438,7 @@ window.onload=loadBars;
 										    </div>
 										</td><!-- 进来展现进度，然后放在进度条上显示比例 -->
 										<td>
+											<input id='projectId${status.index}'  value='${project.projectId}' type="hidden">
 											<a href="javascript:ShowDiv('MyModifyDiv','fade','${project.projectId}','modify','${project.projectName}')">修改</a>&nbsp;&nbsp;&nbsp;
 											<a href="javascript:deleteProject('${project.projectId}')">删除</a>
 										</td>
