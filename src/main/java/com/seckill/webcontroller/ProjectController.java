@@ -56,7 +56,7 @@ public class ProjectController {
     		projectService.modifyProject(project);
     	}
     		
-    	else if(type.equals("/add"))//需要email
+    	else if(type.equals("add"))//需要email
 		{
     		String projectName = request.getParameter("projectName");
     		String startTime = request.getParameter("startTime");
@@ -70,7 +70,7 @@ public class ProjectController {
     		project.setEndTime(UUIDUtil.string2Date(endTime));
     		projectService.insertProjectByEmail(project);
 		}
-    	else if(type.equals("/delete"))//
+    	else if(type.equals("delete"))//
 		{
     		String id = request.getParameter("projectId");
         	projectService.deleteProject(Integer.parseInt(id));
@@ -168,7 +168,7 @@ public class ProjectController {
     }
     //得到完成的百分比
     @RequestMapping(value="/getHaveDone",method=RequestMethod.GET)
-    public  @ResponseBody HashMap<String,Float> getHaveDone(HttpServletRequest request,HttpServletResponse response)
+    public  void getHaveDone(HttpServletRequest request,HttpServletResponse response)
     {
     	HashMap<String,Float> map = new HashMap<String,Float>();//key是项目的id,value是项目的完成百分比
     	String email = request.getParameter("email");
@@ -181,8 +181,12 @@ public class ProjectController {
     		map.put(String.valueOf(tempProjectId), f);//没有子项目会报异常
 		}
     	request.getSession().setAttribute("percentMap", map); 
-    	return map;
     	//return "success";
+    }
+    @RequestMapping(value="/test",method=RequestMethod.GET)
+    public  String test()
+    {
+    	return "fucktime/test";
     }
 }
 

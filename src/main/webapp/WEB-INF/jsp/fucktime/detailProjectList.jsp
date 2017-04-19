@@ -11,7 +11,12 @@
 <head>
   <title>用户总任务列表页面</title>
   <link href="<%=basePath%>resources/css/all.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/datedropper.css">
+  <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/timedropper.min.css">
+  
   <script src="<%=basePath%>resources/script/jquery-1.8.0.min.js"></script>
+  <script src="<%=basePath%>resources/script/datedropper.min.js"></script>
+  <script src="<%=basePath%>resources/script/timedropper.min.js"></script>
   <style>
 .black_overlay{
 	display: none;
@@ -85,14 +90,26 @@ function checkDate(type)
 {
  if(type=="modify")
  {
- 	var startTime = document.getElementById("modifyStratTime").value;
+ 	var startTime = document.getElementById("modifyStartTime").value;
  	var endTime = document.getElementById("modifyEndTime").value;
+ 	var projecctId = document.getElementById("modifyProjectName").value;
+ 	if(projecctId=="")
+ 	{	
+ 		alert("请输入新添加的项目名称");
+ 		return ;
+ 	}
  	return checkTime(startTime,endTime);
  }
  else if(type=="add")
  {
  	var startTime = document.getElementById("addStartTime").value;
  	var endTime = document.getElementById("addEndTime").value;
+ 	var projecctId = document.getElementById("addProjectName").value;
+ 	if(projecctId=="")
+ 	{	
+ 		alert("请输入修改后的项目名称");
+ 		return ;
+ 	}
  	return checkTime(startTime,endTime);
  }
  else {
@@ -102,37 +119,28 @@ function checkDate(type)
 }
 function checkTime(startTime,endTime)//2014-09-09
 {
-    //获取当前时间
-	var now = getNowFormatDate();
-	for(var i=0;i<startTime.length;i++)
+	 //获取当前时间
+	var nowStr = getNowFormatDate().substr(0,10);
+	var now = new Date(nowStr);
+	var start = new Date(startTime); 
+	var end = new Date(endTime);
+	if(startTime==""||endTime=="")
 	{
-		if(i!=4&&i!=7)
-		{
-			//开始时间不可以超过结束时间
-			if(parseInt(startTime.charAt(i))>parseInt(endTime.charAt(i)))
-			{
-				alert("时光不可以倒流，开始时间不可以大于结束时间");
-				return false;
-			}
-			//结束时间不可以小于当前时间
-			if(parseInt(now.charAt(i))>parseInt(endTime.charAt(i)))
-			{
-				alert("这是一个网站，不是时光机，结束时间不可以小于当前的时间");
-				return false;
-			}
-			//开始时间和结束时间都应该在一年以内
-			if(i<4)
-			{
-				if( ( parseInt(endTime.charAt(i))-parseInt(now.charAt(i)) )>1 )
-				{
-					alert("先定一个一年以内的小目标，限定时间不可以超过当前时间一年");
-					return false;
-				}
-			}
-		}
-		
+		alert("你从哪里要要到哪里去，开始时间和结束时间都不为空");
+		return false;
+	}
+	if(start > end) 
+	{ 
+		alert("时光不可以倒流，开始时间不可以大于结束时间");
+		return false; 
+	}
+	if(now > end) 
+	{ 
+		alert("这是一个网站，不是时光机，结束时间不可以小于当前的时间");
+		return false; 
 	}
 	return true;
+	
 }
 //获取当前的日期时间 格式“yyyy-MM-dd HH:MM:SS”
 function getNowFormatDate() {
@@ -307,20 +315,25 @@ function done(detailProjectId)
 				</tr>
 				<tr style='background-color:#ECF6EE;'>
 					<td>开始时间</td>
-					<td><input name="modifyStartTime" id="modifyStartTime" type="text" class="allInput"  oninput="javascript:checkInputCode(this.id)" maxlength="10"/ onkeyup="value=value.replace(/[^\d-]/g,'')" placeholder="请输入数字"></td>
+					<td>
+						<div class="demo">
+							<input type="text" class="allInput" id="modifyStartTime" />
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td>结束时间</td>
-					<td><input name="modifyEndTime" id="modifyEndTime" type="text" class="allInput" oninput="javascript:checkInputCode(this.id)" maxlength="10" onkeyup="value=value.replace(/[^\d-]/g,'')" placeholder="请输入数字"/></td>
+					<td>
+						<div class="demo">
+							<input type="text" class="allInput" id="modifyEndTime" />
+						</div>
+					</td>
 				</tr>
 			</table>
 			</br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input class="btn03" type="button" onclick="javascript:modifyProject()" value="修改"/>
+			<div style="height:30px; line-height:30px;text-align:center;">
+				<input class="btn03" type="button" onclick="javascript:modifyProject()" value="修改"/>
+			</div>
 		</div>
 		<!-- 增加弹出层 -->
 		<div id="MyAddDiv" class="white_content">
@@ -336,21 +349,50 @@ function done(detailProjectId)
 				</tr>
 				<tr>
 					<td>开始时间</td>
-					<td><input name="addStartTime" id="addStartTime" type="text" class="allInput" oninput="javascript:checkInputCode(this.id)" maxlength="10"/ onkeyup="value=value.replace(/[^\d-]/g,'')" placeholder="请输入数字"/></td>
+					<td>
+						<div class="demo">
+							<input type="text" class="allInput" id="addStartTime" />
+						</div>
+					</td>
 				</tr>
 				<tr style='background-color:#ECF6EE;'>
 					<td>结束时间</td>
-					<td><input name="addEndTime"  id="addEndTime" type="text" class="allInput" oninput="javascript:checkInputCode(this.id)" maxlength="10"/ onkeyup="value=value.replace(/[^\d-]/g,'')" placeholder="请输入数字"/></td>
+					<td>
+						<div class="demo">
+							<input type="text" class="allInput" id="addEndTime" />
+						</div>
+					</td>
 				</tr>
 			</table>
 			</br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input class="btn03" type="button" onclick="javascript:addProject()" value="增加"/>
+			<div style="height:30px; line-height:30px;text-align:center;">
+				<input class="btn03" type="button" onclick="javascript:addProject()" value="增加"/>
+			</div>
 		</div>
+		<script type="text/javascript">
+			//js
+			$("#addStartTime").dateDropper({
+				animate: false,
+				format: 'Y-m-d',
+				maxYear: '2020'
+			});
+			$("#addEndTime").dateDropper({
+				animate: false,
+				format: 'Y-m-d',
+				maxYear: '2020'
+			});
+			$("#modifyStartTime").dateDropper({
+				animate: false,
+				format: 'Y-m-d',
+				maxYear: '2020'
+			});
+			$("#modifyEndTime").dateDropper({
+				animate: false,
+				format: 'Y-m-d',
+				maxYear: '2020'
+			});
+
+		</script>
 	</body>
 
 </html>
