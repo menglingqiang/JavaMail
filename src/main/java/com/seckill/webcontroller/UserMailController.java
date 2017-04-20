@@ -116,11 +116,6 @@ public class UserMailController {
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public String logIn(User user,Model model,HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
-		/*String flag = request.getParameter("flag");
-		if(flag.trim()=="true")//已经登录了
-		{
-			return "user/login-success";
-		}*/
 		//验证验证码是否输入正确	
 		boolean codeFlag = validateCode(request, response);
 		
@@ -248,7 +243,37 @@ public class UserMailController {
 			}
 		}
 	}
-	
+	@RequestMapping(value="/loginFlag",method=RequestMethod.GET)
+	public @ResponseBody String loginFlag(HttpServletRequest request,HttpServletResponse response) throws IOException
+	{
+		//1验证成功，2这个邮箱木有注册，3有邮箱但是密码不对，4验证码不对
+		//验证验证码是否输入正确	
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+		User user = new User();
+		user.setEmail(email);
+		user.setPassword(password);
+		//查询是否有该用户
+		if(userService.queryByEmail(user)==null)
+			return "2"; 	
+		//查询用户和密码是否正确，后期可以加密
+		if(userService.queryByPassword(user)==null)
+			return "3";
+		return "1";
+	}
+	@RequestMapping(value="/registerFlag",method=RequestMethod.GET)
+	public @ResponseBody String registerFlag(HttpServletRequest request,HttpServletResponse response) throws IOException
+	{
+		//1,邮箱已经注册，0，邮箱没有注册,2 邮箱格式不正确
+		String email = request.getParameter("email");
+		User user = new User();
+		user.setEmail(email);
+		//查询是否有该用户
+		if(userService.queryByEmail(user)==null)
+			return "0"; 	
+		else
+			return "1";
+	}
 }
 
 

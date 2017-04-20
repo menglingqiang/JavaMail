@@ -11,7 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body >
 	${user.name}:您好 
-	<a href='http://localhost:8080/JavaMail/user/activation?flag=false&code=${user.code}'>激活</a>
+	<a href='http://localhost:8080/JavaMail/user/activation?flag=false&code=${user.code}'>点击激活</a>
 </body>
 
 

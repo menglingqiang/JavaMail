@@ -21,6 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	function checkPicCode()
   	{
   		var inputCode = document.getElementById("inputCode").value.toUpperCase();//变成大写的，不区分大小写，并且后台写入的值是大写的
+  		var checkCodeFlag = document.getElementById("checkCodeFlag");
   		//inputCode 都变成大写的
   		$.ajax({
             type: "Get",
@@ -31,12 +32,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 if(inputCode==data)
                	{
                		document.getElementById("checkImage").src="<%=basePath %>resources/img/right.jpg";
-               		//恢复按钮点击功能
-               		$("#submit").removeAttr("disabled");
+               		checkCodeFlag.value="true";
                	}
                 //退回的时候按键的状态是可以点击的，相当于绕过了前台的验证
                 else
+                {
+               		checkCodeFlag.value="false";
                 	document.getElementById("checkImage").src="<%=basePath %>resources/img/wrong.jpg";
+                }
             }
         });
   		//checkInputCode();
@@ -55,7 +58,52 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		reloadImageCode();
   		checkInputCode();
   	}
-  	
+  	function preLoginCheck()
+  	{
+  		
+  		var email = document.getElementById("email").value;//得到输入的email
+  		var password = document.getElementById("password").value;//得到输入的密码
+  		var form =document.getElementById("form1");
+  		var msg =document.getElementById("message");
+  		var checkCodeFlag = document.getElementById("checkCodeFlag").value;
+  		if(!isEmail(email))
+		{
+  			msg.innerHTML = '<font size="4px"  color="red" >email格式不正确，请重新输入</font>';
+			return ;
+		}
+  		$.ajax({
+            type: "Get",
+            url: "loginFlag?email="+email+"&password="+password,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+            	if(data=="2")
+           		{
+            		msg.innerHTML = '<font size="4px"  color="red" >您还没有注册，请检查输入的邮箱，或者去注册！</font>';
+           		}
+            	else if(data=="3")
+            	{
+		  			msg.innerHTML = '<font size="4px"  color="red" >密码不正确请重新输入</font>'; 
+            	}
+            	else if(data=="1")
+            	{
+            		if(checkCodeFlag=="true")
+            			form.submit();
+            		else
+            			msg.innerHTML = '<font size="4px"  color="red" >验证码输入错误！</font>';
+            	}
+            	else
+            	{
+            		msg.innerHTML = '<font size="4px"  color="red" >不可预知的错误！</font>';
+            	}
+            		
+            }
+        });  
+  	}
+  	function isEmail(str){
+        var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+        return reg.test(str);
+    }
   </script>
 </head>
 <body class="login_bj" >
@@ -64,7 +112,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<div class="zc">
         	<div class="bj_bai">
             <h3>登录</h3>
-     <form action="<%=basePath %>user/login" method="post">
+            <input id="checkCodeFlag" name="checkCodeFlag" value="false" type="hidden"/>
+     <form id="form1" action="<%=basePath %>user/login" method="post">
 		<table>
 		
 			<tr>
@@ -86,17 +135,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<td><img onclick="javascript:reloadImageCode()" src="<%= basePath %>resources/img/zc_25.jpg" width="13" height="14"></td>
 			</tr>
 			<tr>
-				<!-- 设置按钮不可点击 -->
-				<td><input id="submit" type="submit" value="登录" class="btn_zhuce"/></td>
+				
+				<td><input id="login" name="login" type="button" value="登录" class="btn_zhuce" onclick="javascript:preLoginCheck()"/></td>
 				
 			</tr>
 			<tr>
 				<td>
-					<a href="<%=basePath %>user/preForgetPassword"/>忘记密码 
+					<a href="<%=basePath %>user/preForgetPassword">忘记密码</a></br>
+					 
+					<p id="message" name="message" ></p>
 				</td>
 			</tr>
 		</table>
 	</form>
+			  
        	  	  <!-- <form action="" method="get">
                 <input name="" type="text" class="kuang_txt" placeholder="手机号">
                 <input name="" type="text" class="kuang_txt" placeholder="密码">

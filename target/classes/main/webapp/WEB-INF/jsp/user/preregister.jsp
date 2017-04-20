@@ -23,6 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	{
   		var inputCode = document.getElementById("inputCode").value.toUpperCase();//变成大写的，不区分大小写，并且后台写入的值是大写的
   		//inputCode 都变成大写的
+  		var checkCodeFlag = document.getElementById("checkCodeFlag");
   		$.ajax({
             type: "Get",
             url: "getPicCode",
@@ -31,13 +32,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             success: function (data) {
                 if(inputCode==data)
                	{
+               		checkCodeFlag.value="true";
                		document.getElementById("checkImage").src="<%=basePath %>resources/img/right.jpg";
-               		//恢复按钮点击功能
-               		$("#submit").removeAttr("disabled");
                	}
                 //退回的时候按键的状态是可以点击的，相当于绕过了前台的验证
                 else
-                	document.getElementById("checkImage").src="<%=basePath %>resources/img/wrong.jpg";
+               	{
+                	checkCodeFlag.value="false";
+               		document.getElementById("checkImage").src="<%=basePath %>resources/img/wrong.jpg";
+               	}
             }
         }); 
   		//checkInputCode();
@@ -56,7 +59,50 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		reloadImageCode();
   		checkInputCode();
   	}
+  	function preRegister()
+  	{
+  		var password = document.getElementById("password").value;//得到输入的密码
+  		var rePassword = document.getElementById("rePassword").value;//得到确认密码
+  		var email = document.getElementById("email").value;//得到输入的email
+  		var msg =document.getElementById("message");
+  		if(!isEmail(email))
+		{
+  			msg.innerHTML = '<font size="4px"  color="red" >email格式不正确，请重新输入</font>';
+			return ;
+		}
+  		if(password!= rePassword)
+		{
+  			msg.innerHTML = '<font size="4px"  color="red" >两次输入的密码不一致，请重新输入</font>';
+			return ;
+		}
+  		var form =document.getElementById("form1");
+  		var checkCodeFlag = document.getElementById("checkCodeFlag").value;
+  		$.ajax({
+            type: "Get",
+            url: "registerFlag?email="+email,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+            	if(data=="1")
+           		{
+            		msg.innerHTML = '<font size="4px"  color="red" >该账号已经注册！</font>';
+           		}
+            	else if(data=="0")
+            	{
+            		if(checkCodeFlag=="true")
+            			form.submit();
+            		else
+            			msg.innerHTML = '<font size="4px"  color="red" >验证码输入错误！</font>';
+            	}
+            }
+        });  
+  		
+  	}
   	
+  	 function isEmail(str){
+         var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+         return reg.test(str);
+     }
   </script>
 </head>
 <body class="login_bj" >
@@ -66,21 +112,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<div class="zc">
         	<div class="bj_bai">
             <h3>欢迎注册</h3>
-       	  	  <form action="<%=basePath %>user/register" method="post">
+            <input id="checkCodeFlag" name="checkCodeFlag" value="false" type="hidden"/>
+       	  	  <form id="form1" action="<%=basePath %>user/register" method="post">
                
                 <table>
 		
 					<tr>
-						<td> <input id="name" name="name" type="text" class="kuang_txt phone" placeholder="用户名"></td>
+						<td> <input id="name" name="name" type="" class="kuang_txt phone" placeholder="用户名"></td>
 					</tr>
 					
 					<tr>
-						<td><input id="email" name="email" type="text" class="kuang_txt email" placeholder="邮箱"></td>
+						<td><input id="email" name="email" type="email" class="kuang_txt email" placeholder="邮箱"></td>
 					</tr>
 					<tr>
-						<td><input id="password" name="password" type="text" class="kuang_txt possword" placeholder="密码"></td>
+						<td><input id="password" name="password" type="password" class="kuang_txt possword" placeholder="密码"></td>
 					</tr>
-									
+					<tr>
+						<td><input id="rePassword" name="rePassword" type="password" class="kuang_txt possword" placeholder="确认密码"></td>
+					</tr>				
 					<tr>
 						<!-- input只可以输入4位 -->
 						<td><input name="inputCode" id="inputCode" oninput="javascript:checkInputCode()" type="text" class="kuang_txt yanzm" placeholder="验证码"></td>
@@ -92,8 +141,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><img onclick="javascript:reloadImageCode()" src="<%= basePath %>resources/img/zc_25.jpg" width="13" height="14"></td>
 					</tr>
 					<tr>
-						<!-- 设置按钮不可点击 --> 
-						<td><input type="submit" value="注册" class="btn_zhuce"/></td>
+						<td>
+							<input type="button" value="注册" class="btn_zhuce" onclick="javascript:preRegister()"/>
+							<p id="message" name="message" ></p>
+						</td>
 					</tr>
 				</table>
                 </form>
