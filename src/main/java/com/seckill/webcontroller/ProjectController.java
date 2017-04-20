@@ -183,11 +183,6 @@ public class ProjectController {
     	request.getSession().setAttribute("percentMap", map); 
     	//return "success";
     }
-    @RequestMapping(value="/test",method=RequestMethod.GET)
-    public  String test()
-    {
-    	return "fucktime/test";
-    }
 }
 
 
