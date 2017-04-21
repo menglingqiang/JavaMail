@@ -22,4 +22,5 @@ public interface ProjectDao {
 	public List<Project> queryEverything(Map map);
 	public float haveDone(long projectId);//该任务已经完成的百分比（截取两位小数）
 	public List<Project> queryAllProject();//得到所有的project
+	public List<Project> queryProjectByNameOrTime(Map map);//根据项目名称和时间得到
 }

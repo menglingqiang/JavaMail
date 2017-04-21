@@ -121,12 +121,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</tr>
 			
 			<tr>
-				<td><input type="password" id="password" name="password" class="kuang_txt possword" placeholder="密码"/></td>
+				<td><input type="password" id="password" name="password" class="kuang_txt possword" placeholder="密码" autocomplete="off"></td>
 			</tr>
 							
 			<tr>
 				<!-- input只可以输入4位 -->
-				<td><input name="inputCode" id="inputCode" type="text"  oninput="javascript:checkInputCode()" class="kuang_txt yanzm" placeholder="验证码"></td>
+				<td><input name="inputCode" id="inputCode" type="text"  oninput="javascript:checkInputCode()" class="kuang_txt yanzm" placeholder="验证码" autocomplete="off"></td>
 			    <td><img id="checkImage" src="" style="width:20px;height:20px;" /></td>
 			</tr>
                 

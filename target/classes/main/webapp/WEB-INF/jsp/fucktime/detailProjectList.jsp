@@ -215,14 +215,6 @@ function done(detailProjectId)
 	var con=confirm("确定完成了，没骗我?"); //在页面上弹出对话框
 	 if(con==true)
 	 {
-		 /* $.ajax({
-		        type: "Post",
-		        url: "doneDetailProject?detailProjectId="+detailProjectId+"&projectId="+projectId,
-		        contentType: "application/json; charset=utf-8",
-		        dataType: "text",
-		        success: function (data) {
-		        }
-		    });  */
 		 var projectId = document.getElementById("projectId").value;
 		 var name = document.getElementById("name").value;//总任务名称
 		 var form = document.getElementById("mainForm");
@@ -235,24 +227,27 @@ function done(detailProjectId)
 </head>
 <body >
 	<h1>${projectName}:分任务展示界面</h1>
-	<input id="name" name="name" value='${projectName}' type="hidden"/>
-	<input id="projectId" name="projectId" value='${projectId}' type="hidden"/> 
+	
 	<body style="background: #e1e9eb;">
-		<form action="#" id="mainForm" method="post">
+		<form action="<%=basePath%>project/queryDetailProjectByNameOrTime" id="mainForm" method="post">
+			<input id="name" name="name" value='${projectName}' type="hidden"/>
+			<input id="projectId" name="projectId" value='${projectId}' type="hidden"/> 
 			<div class="right">
 				<!-- <div class="current">当前位置：<a href="javascript:void(0)" style="color:#6E6E6E;">内容管理</a> &gt; 内容列表</div> -->
 				<div class="rightCont">
-					<p class="g_title fix">分任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${projectId}','add','')">增加</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn03" href="javascript:deleteBatch();">删 除</a></p>
+					<p class="g_title fix">分任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${projectId}','add','')">增加</a>
 					<table class="tab1">
 						<tbody>
 							<tr>
-								<td width="90" align="right">项目名称</td>
+								<td width="90" align="right">项目名称：</td>
 								<td>
-									<input name="projectNames" type="text" class="allInput" value="${command}"/>
+									<input name="queryDetailProjectName" id="queryDetailProjectName" type="text" class="allInput" />
 								</td>
-								<td width="90" align="right">日期</td>
+								<td width="90" align="right">日期：</td>
 								<td>
-									<input name="date" type="text" class="allInput" value="${description}"/>
+									<div class="demo">
+										<input type="text" class="allInput" id="queryTime" name="queryTime"/>
+									</div>
 								</td>
 	                            <td width="85" align="right"><input type="submit" class="tabSub" value="查 询" /></td>
 	       					</tr>
@@ -289,7 +284,9 @@ function done(detailProjectId)
 								</c:forEach>
 							</tbody>
 						</table>
-						<input class="btn03" type="button" onclick="javascript:back()" value="返回总任务界面"/>
+						<div style="height:30px; line-height:30px;text-align:center;">
+							<input class="btn03" type="button" onclick="javascript:back()" value="返回总任务界面"/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -391,7 +388,11 @@ function done(detailProjectId)
 				format: 'Y-m-d',
 				maxYear: '2020'
 			});
-
+			$("#queryTime").dateDropper({
+				animate: false,
+				format: 'Y-m-d',
+				maxYear: '2020'
+			});
 		</script>
 	</body>
 

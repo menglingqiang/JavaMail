@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="zhuce_kong">
     	<div class="zc">
         	<div class="bj_bai">
-            <h3>登录</h3>
+            <h3>忘记密码</h3>
      <form id="form1" action="<%=basePath %>user/forgetPassword" method="post">
 		<table>
 		
@@ -65,11 +65,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</tr>
 			
 			<tr>
-				<td><input id="password" name="password" type="password" placeholder="请输入新密码" class="kuang_txt possword"/></td>
+				<td><input id="password" name="password" type="password" placeholder="请输入新密码" class="kuang_txt possword" autocomplete="off"/></td>
 			</tr>
 			
 			<tr>
-				<td><input id="rePassword" name="rePassword" type="password" placeholder="重新输入密码" class="kuang_txt possword"/></td>
+				<td><input id="rePassword" name="rePassword" type="password" placeholder="重新输入密码" class="kuang_txt possword" autocomplete="off"/></td>
 			</tr>
 			
 			<tr>

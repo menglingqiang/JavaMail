@@ -1,10 +1,9 @@
 package main.java.com.seckill.service;
 
 import java.util.List;
+import java.util.Map;
 
 import main.java.com.seckill.entity.DetailProject;
-import main.java.com.seckill.entity.Project;
-import main.java.com.seckill.entity.User;
 
 public interface DetailProjectService {
 	
@@ -13,4 +12,5 @@ public interface DetailProjectService {
 	public int addDetailProject(DetailProject detailProject);
 	public int modifyDetailProjectForDone(long projectDetailId);
 	public List<DetailProject> queryAllDetailProject();
+	public List<DetailProject> queryDetailProjectByNameOrTime(Map map);
 }

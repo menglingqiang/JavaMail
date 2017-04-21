@@ -310,6 +310,7 @@ LoadingBar.prototype = {
 };
 function loadBars()
 {
+	//alert(${projectList.size()});
 	var email = document.getElementById("email").value;
 	//先计算比例值
 	$.ajax({
@@ -322,14 +323,8 @@ function loadBars()
         	//alert(data);
         }
 	});
-	
-	alert("initPercentMap");
 	for(var i=0;i<${projectList.size()};i++)
 	{
-		/* var projectId = ${projectList.get(i).projectId};//只可以拿到第一个值??
-		alert("我的Id:"+i+"---"+projectId);
-		var loadBarName = "loadBar"+projectId; */
-		//alert(i+":"+loadBarName);
 		var loadBarName = getloadBarNameFromProjectList(i);
 		loadBar(loadBarName);
 	}
@@ -337,8 +332,6 @@ function loadBars()
 }
 function getloadBarNameFromProjectList(i)
 {
-	//var projectId = "${projectList.get(i).getProjectId()}";//只可以拿到第一个值??
-	//alert("projectId"+i);
 	var projectId  = document.getElementById("projectId"+i).value; 
 	var loadBarName = "loadBar"+projectId;
 	return loadBarName;
@@ -384,34 +377,34 @@ function getPercent(key)
 		}
 	}
 }
-//日期控件js
-function initModifyDate(){
-	
-}
+
 var init = setTimeout(
 		loadBars,100);
 </script>
 </head>
 <body >
-	<input type="hidden" id="email" name="email" value="${user.email}">
-	<input type="hidden" id="percentMap" name="percentMap" value="${percentMap}" >
+	
 	<h1>总任务列表界面展示:${user.name}</h1>
 	<body style="background: #e1e9eb;">
-		<form action="#" id="mainForm" method="post">
+		<form action="<%=basePath%>project/queryProjectByNameOrTime" id="mainForm" method="post">
+			<input type="hidden" id="email" name="email" value="${user.email}">
+			<input type="hidden" id="percentMap" name="percentMap" value="${percentMap}" >
 			<div class="right">
 				<!-- <div class="current">当前位置：<a href="javascript:void(0)" style="color:#6E6E6E;">内容管理</a> &gt; 内容列表</div> -->
 				<div class="rightCont">
-					<p class="g_title fix">总任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${user.email}','add','')">增加</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn03" href="javascript:deleteBatch();">删 除</a></p>
+					<p class="g_title fix">总任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${user.email}','add','')">增加</a>
 					<table class="tab1">
 						<tbody>
 							<tr>
-								<td width="90" align="right">项目名称</td>
+								<td width="90" align="right">项目名称：</td>
 								<td>
-									<input name="projectNames" type="text" class="allInput" value="${command}"/>
+									<input name="queryProjectName" id="queryProjectName" type="text" class="allInput" />
 								</td>
-								<td width="90" align="right">日期</td>
+								<td width="90" align="right">日期：</td>
 								<td>
-									<input name="date" type="text" class="allInput" value="${description}"/>
+									<div class="demo">
+										<input type="text" class="allInput" id="queryTime" name="queryTime"/>
+									</div>
 								</td>
 	                            <td width="85" align="right"><input type="submit" class="tabSub" value="查 询" /></td>
 	       					</tr>
@@ -557,7 +550,11 @@ var init = setTimeout(
 		format: 'Y-m-d',
 		maxYear: '2020'
 	});
-
+	$("#queryTime").dateDropper({
+		animate: false,
+		format: 'Y-m-d',
+		maxYear: '2020'
+	});
 	</script>
 </body>
 

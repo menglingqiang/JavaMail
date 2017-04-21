@@ -183,6 +183,49 @@ public class ProjectController {
     	request.getSession().setAttribute("percentMap", map); 
     	//return "success";
     }
+    @RequestMapping(value="/queryProjectByNameOrTime",method=RequestMethod.POST)
+    public  String queryProjectByNameOrTime(HttpServletRequest request,Model model)
+    {
+    	String projectName = request.getParameter("queryProjectName");
+    	String queryTime = request.getParameter("queryTime");
+    	String email = request.getParameter("email");
+    	String projectId = request.getParameter("projectId");
+    	Map map = new HashMap<>();
+    	map.put("projectName", projectName.trim());
+    	map.put("queryTime", queryTime.trim());
+    	map.put("projectId", Long.parseLong(projectId));
+    	List<Project> projectList = projectService.queryProjectByNameOrTime(map);
+    	//为了和前面的页面获取额email一致
+    	User user = new User();
+    	user.setEmail(email);
+    	model.addAttribute("user", user);
+    	model.addAttribute("projectList", projectList);//重新查询list
+    	//重新查一次数据放入页面中
+    	return "fucktime/projectList";
+    }
+    @RequestMapping(value="/queryDetailProjectByNameOrTime",method=RequestMethod.POST)
+    public  String queryDetailProjectByNameOrTime(HttpServletRequest request,Model model)
+    {
+    	String detailProjectName = request.getParameter("queryDetailProjectName");
+    	String queryTime = request.getParameter("queryTime");
+    	String projectId = request.getParameter("projectId");
+    	String projectName = request.getParameter("name");
+    	
+    	Map map = new HashMap<>();
+    	map.put("detailProjectName", detailProjectName.trim());
+    	map.put("queryTime", queryTime.trim());
+    	List <DetailProject> detailProjectList = 
+    			detailProjectService.queryDetailProjectByNameOrTime(map);
+    	model.addAttribute("detailProjectList",detailProjectList);
+    	model.addAttribute("projectId",projectId);
+    	model.addAttribute("projectName",projectName);
+    	return "fucktime/detailProjectList";
+    }
+    @RequestMapping(value="/test",method=RequestMethod.GET)
+    public  String test()
+    {
+    	return "user/404";
+    }
 }
 
 

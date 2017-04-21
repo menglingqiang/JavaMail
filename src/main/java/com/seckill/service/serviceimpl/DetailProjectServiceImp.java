@@ -1,6 +1,7 @@
 package main.java.com.seckill.service.serviceimpl;
 
 import java.util.List;
+import java.util.Map;
 
 import main.java.com.seckill.dao.DetailProjectDao;
 import main.java.com.seckill.dao.ProjectDao;
@@ -47,6 +48,12 @@ public class DetailProjectServiceImp implements DetailProjectService{
 	public List<DetailProject> queryAllDetailProject() {
 		
 		return detailProjectDao.queryAllDetailProject();
+	}
+
+	@Override
+	public List<DetailProject> queryDetailProjectByNameOrTime(Map map) {
+		
+		return detailProjectDao.queryDetailProjectByNameOrTime(map);
 	}
 
 	

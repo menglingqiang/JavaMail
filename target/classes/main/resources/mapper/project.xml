@@ -99,5 +99,20 @@
 				project_id=#{projectId} AND
 				done=1) as  b
 	</select>
+	
+	<select id="queryProjectByNameOrTime" parameterType="java.util.HashMap"  resultMap="projectResultMap">
+		SELECT
+			* 
+		FROM
+			user_info 
+		WHERE and project_id = #{projectId}
+		<if test="projectName!=null and !&quot;&quot;.equals(projectName.trim())">
+  			AND project_detail_name LIKE CONCAT('%',#{projectName},'%')
+	    </if>
+	    <if test="queryTime!=null and !&quot;&quot;.equals(queryTime.trim())">
+  			AND #{queryTime} BETWEEN start_time AND end_time
+		</if>
+			
+	</select>
 </mapper>
 

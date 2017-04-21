@@ -125,14 +125,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input id="email" name="email" type="email" class="kuang_txt email" placeholder="邮箱"></td>
 					</tr>
 					<tr>
-						<td><input id="password" name="password" type="password" class="kuang_txt possword" placeholder="密码"></td>
+						<td><input id="password" name="password" type="password" class="kuang_txt possword" placeholder="密码" autocomplete="off"/></td>
 					</tr>
 					<tr>
-						<td><input id="rePassword" name="rePassword" type="password" class="kuang_txt possword" placeholder="确认密码"></td>
+						<td><input id="rePassword" name="rePassword" type="password" class="kuang_txt possword" placeholder="确认密码" autocomplete="off"/></td>
 					</tr>				
 					<tr>
 						<!-- input只可以输入4位 -->
-						<td><input name="inputCode" id="inputCode" oninput="javascript:checkInputCode()" type="text" class="kuang_txt yanzm" placeholder="验证码"></td>
+						<td><input name="inputCode" id="inputCode" oninput="javascript:checkInputCode()" type="text" class="kuang_txt yanzm" placeholder="验证码" autocomplete="off"/></td>
 					    <td><img id="checkImage" src="" style="width:20px;height:20px;" /></td>
 					</tr>
 		                
@@ -148,25 +148,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</tr>
 				</table>
                 </form>
-                <%-- <form action="<%=basePath %>user/register" method="post">
-					<table>
-						<tr>
-							<td>用户昵称 <input type="text" id="name" name="name"/></td>
-						</tr>
-						
-						<tr>
-							<td>用户密码 <input type="password" id="password" name="password"/></td>
-						</tr>
-						
-						<tr>
-							<td>邮件地址 <input type="email" id="email" name="email"/></td>
-						</tr>
-						<tr>
-							<td><input type="submit" value="注册"/></td>
-							<td><a href="<%=basePath %>user/preLogin"/>有账号，去登陆？ </td>
-						</tr>
-					</table>
-				</form> --%>
             </div>
         	<div class="bj_right">
             	<p>使用以下账号直接登录</p>

@@ -74,5 +74,11 @@ public class ProjectServiceImp implements ProjectService{
 	public List<Project> queryAllProject() {
 		return projectDao.queryAllProject();
 	}
+
+	@Override
+	public List<Project> queryProjectByNameOrTime(Map map) {
+		
+		return projectDao.queryProjectByNameOrTime(map);
+	}
 	
 }
