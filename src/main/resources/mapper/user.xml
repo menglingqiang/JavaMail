@@ -38,24 +38,6 @@
 	
 	<update id="updateUser" parameterType="main.java.com.seckill.entity.User">
 		UPDATE user 
-		<!-- <set>
-			<if test="name!=null">
-				name=#{name}
-			</if>
-			<if test="password!=null">
-				password=#{password}
-			</if>
-			<if test="email!=null">
-				email=#{email}
-			</if>
-			<if test="code!=null">
-				code=#{code}
-			</if>
-			
-			<if test="status!=null">
-				status=#{status}
-			</if>
-		</set> -->
 		set password = #{password}
 		
 		where email = #{email}

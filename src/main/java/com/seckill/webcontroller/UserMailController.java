@@ -90,7 +90,7 @@ public class UserMailController {
 		{
 			if(!flag)//不是第一次注册，激活
 				SendUtil.send(user.getEmail(), 
-					"<h1>点击链接激活邮箱</h1><h3><a href='http://localhost:8080/JavaMail/user/activation?flag=true&code="+code+"'>http://localhost:8080/JavaMail/user/activation?code="+code+"</a></h3>");
+					"<h3><a href='http://localhost:8080/JavaMail/user/activation?flag=true&code="+code+"'>点击链接激活邮箱</a></h3>");
 			else
 			{
 				userService.UpdateUserCode(code);//根据激活码更新用户的状态
@@ -196,8 +196,9 @@ public class UserMailController {
 	public String forgetPassword(User user,HttpServletRequest request)//前台会自动的将email注入到user中
 	{
 		String email = (String)request.getParameter("email");
+		String password = request.getParameter("password");
 		//TODO 修改信息，进入修改界面
-		String msg = "<h1>点击链接修改密码</h1><h3><a href='http://localhost:8080/JavaMail/user/preModifyPassword?email="+email+"'>http://localhost:8080/JavaMail/user/preModifyPassword?email="+email+"</a></h3>";
+		String msg = "<h3><a href='http://localhost:8080/JavaMail/user/modifyPassword?email="+email+"&password="+password+"'>点击重置密码</a></h3>";
 		//发送邮件
 		SendUtil.send(email,msg);//点击连接，进入修改界面传入邮箱
 		request.getSession().setAttribute("msg", "邮件已经发送到您的邮箱，请查收");
@@ -214,16 +215,14 @@ public class UserMailController {
 		return flag;
 	}
 	//进入用户信息修改界面
-	@RequestMapping(value="/preModifyPassword",method=RequestMethod.GET)
-	public String preModifyPassword(HttpServletRequest request,String email)//修改用户的信息
-	{
-		request.getSession().setAttribute("email", email);
-		return "user/preModifyPassword";
-	}
-	//进入用户信息修改界面
 	@RequestMapping(value="/modifyPassword",method=RequestMethod.GET)
-	public String modifyPassword(Model model,User user)//修改用户的信息,就不用激活了，保持原来账户的信息
+	public String modifyPassword(HttpServletRequest request,Model model)//修改用户的信息,就不用激活了，保持原来账户的信息
 	{
+		String email = (String)request.getParameter("email");
+		String password = request.getParameter("password");
+		User user = new User();
+		user.setEmail(email);
+		user.setPassword(password);
 		user.setCreateTime(new Date());//更新更改时间
 		int flag = userService.updateUser(user);
 		//TODO  动态sql写的有问题
