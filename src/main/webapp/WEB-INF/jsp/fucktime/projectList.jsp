@@ -378,8 +378,19 @@ function getPercent(key)
 		}
 	}
 }
+function changeDateFormat()
+{
+	var content=document.getElementsByTagName("p");[0].innerHTML;
+	for(var i=1;i<content.length;i++)
+	{
+		var d = new Date(content[i].innerHTML);
+		var sd = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+		content[i].innerHTML = sd;
+	}
+}
 window.onload=function(){
 
+	//changeDateFormat();
 	setTimeout(
 			loadBars,100);
 }
@@ -432,8 +443,8 @@ window.onload=function(){
 										<%-- <input type="hidden" name="projectId" id="projectId" value="${project.projectId}"> --%>
 										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${status.index + 1}</td>
 										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.projectName}</td>
-										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.startTime}</td>
-										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.endTime}</td>
+										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.getStartDate()}</td>
+										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">${project.getEndDate()}</td>
 										<td  onclick="javascript:showDetail('${project.projectId}','${project.projectName}')">
 											<div id='loadBar${project.projectId}' class="loadBar">
 										        <div>

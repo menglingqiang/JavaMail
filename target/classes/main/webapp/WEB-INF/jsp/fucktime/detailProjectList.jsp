@@ -223,6 +223,20 @@ function done(detailProjectId)
 	 }
 		
 }
+function changeDateFormat()
+{
+	var content=document.getElementsByTagName("p");[0].innerHTML;
+	for(var i=1;i<content.length;i++)
+	{
+		var d = new Date(content[i].innerHTML);
+		var sd = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+		content[i].innerHTML = sd;
+	}
+}
+/* window.onload=function(){
+
+	changeDateFormat();
+} */
 </script>
 </head>
 <body >
@@ -271,8 +285,8 @@ function done(detailProjectId)
 										<%-- <input type="hidden" name="projectId" id="projectId" value="${project.projectId}"> --%>
 										<td>${status.index + 1}</td>
 										<td>${detailProject.projectDetailName}</td>
-										<td>${detailProject.detailStartTime}</td>
-										<td>${detailProject.detailEndTime}</td>
+										<td>${detailProject.getDetailStartDate()}</td>
+										<td>${detailProject.getDetailEndDate()}</td>
 										<td><c:if test="${detailProject.done==0}"><a href="javascript:done('${detailProject.projectDetailId}')">已完成？</a></c:if>
 											<c:if test="${detailProject.done==1}">完成</c:if>
 										</td>

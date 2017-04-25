@@ -191,11 +191,9 @@ public class ProjectController {
     	String projectName = request.getParameter("queryProjectName");
     	String queryTime = request.getParameter("queryTime");
     	String email = request.getParameter("email");
-    	String projectId = request.getParameter("projectId");
     	Map map = new HashMap<>();
     	map.put("projectName", projectName.trim());
     	map.put("queryTime", queryTime.trim());
-    	map.put("projectId", Long.parseLong(projectId));
     	List<Project> projectList = projectService.queryProjectByNameOrTime(map);
     	//为了和前面的页面获取额email一致
     	User user = new User();
@@ -216,6 +214,7 @@ public class ProjectController {
     	Map map = new HashMap<>();
     	map.put("detailProjectName", detailProjectName.trim());
     	map.put("queryTime", queryTime.trim());
+    	map.put("projectId", Long.parseLong(projectId));
     	List <DetailProject> detailProjectList = 
     			detailProjectService.queryDetailProjectByNameOrTime(map);
     	model.addAttribute("detailProjectList",detailProjectList);

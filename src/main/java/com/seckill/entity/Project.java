@@ -1,7 +1,10 @@
 package main.java.com.seckill.entity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Project {
 
@@ -63,5 +66,29 @@ public class Project {
 				+ ", endTime=" + endTime + ", modify=" + modify
 				+ ", detailProjects=" + detailProjects + "]";
 	}
-	
+	public String getStartDate()
+	{
+	    return DateFormate(this.startTime.toString());
+	}
+	public String getEndDate()
+	{
+		return DateFormate(this.endTime.toString());
+	}
+	public String DateFormate(String d)
+	{
+		String x =d;
+	    SimpleDateFormat sdf1 = new SimpleDateFormat ("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
+	    try
+	    {
+	    	Date date=sdf1.parse(x);
+	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+	        String sDate=sdf.format(date);
+	        return sDate;
+	    }
+	    catch (ParseException e)
+	    {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
 }

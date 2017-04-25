@@ -5,7 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
+
+import com.sun.tools.apt.Main;
 
 import main.java.com.seckill.entity.Project;
 public class UUIDUtil {
@@ -67,4 +70,21 @@ public class UUIDUtil {
 			return true;
 		return false;
 	}
+	public static void main(String[] str)
+	{
+		String x = "Mon Mar 02 13:57:49 CST 2015";
+	    SimpleDateFormat sdf1 = new SimpleDateFormat ("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
+	    try
+	    {
+	    	Date date=sdf1.parse(x);
+	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+	        String sDate=sdf.format(date);
+	        System.out.println(sDate);
+	    }
+	    catch (ParseException e)
+	    {
+	        e.printStackTrace();
+	    }
+	}
+	
 }

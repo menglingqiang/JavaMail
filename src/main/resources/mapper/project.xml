@@ -105,9 +105,9 @@
 			* 
 		FROM
 			user_info 
-		WHERE and project_id = #{projectId}
+		WHERE 1=1
 		<if test="projectName!=null and !&quot;&quot;.equals(projectName.trim())">
-  			AND project_detail_name LIKE CONCAT('%',#{projectName},'%')
+  			AND project_name LIKE CONCAT('%',#{projectName},'%')
 	    </if>
 	    <if test="queryTime!=null and !&quot;&quot;.equals(queryTime.trim())">
   			AND #{queryTime} BETWEEN start_time AND end_time

@@ -54,12 +54,13 @@
 			* 
 		FROM
 			user_detail_info 
-		WHERE 1=1
+		WHERE project_id=#{projectId}
 		<if test="detailProjectName!=null and !&quot;&quot;.equals(detailProjectName.trim())">
- 			AND project_name LIKE CONCAT('%',#{projectName},'%')
+ 			AND project_detail_name LIKE CONCAT('%',#{detailProjectName},'%')
 	    </if>
 	    <if test="queryTime!=null and !&quot;&quot;.equals(queryTime.trim())">
-  			AND #{queryTime} BETWEEN start_time AND end_time
+  			AND #{queryTime} BETWEEN detail_start_time AND
+			detail_end_time
 		</if>
 	</select>
 </mapper>
