@@ -317,10 +317,11 @@ function loadBars()
         type: "GET",
         url: "<%=basePath%>project/getHaveDone?email="+email,
         cache: false,
+        async:false,
         contentType: "application/json; charset=utf-8",
         dataType: "",
         success: function (data) {
-        	//alert(data);
+        	document.getElementById("percentMap").value=data;
         }
 	});
 	for(var i=0;i<${projectList.size()};i++)
@@ -377,9 +378,12 @@ function getPercent(key)
 		}
 	}
 }
+window.onload=function(){
 
-var init = setTimeout(
-		loadBars,100);
+	setTimeout(
+			loadBars,100);
+}
+
 </script>
 </head>
 <body >

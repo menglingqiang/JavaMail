@@ -168,7 +168,7 @@ public class ProjectController {
     }
     //得到完成的百分比
     @RequestMapping(value="/getHaveDone",method=RequestMethod.GET)
-    public  void getHaveDone(HttpServletRequest request,HttpServletResponse response)
+    public  @ResponseBody String getHaveDone(HttpServletRequest request,HttpServletResponse response,Model model)
     {
     	HashMap<String,Float> map = new HashMap<String,Float>();//key是项目的id,value是项目的完成百分比
     	String email = request.getParameter("email");
@@ -180,7 +180,9 @@ public class ProjectController {
     		float f = projectService.haveDone(tempProjectId);
     		map.put(String.valueOf(tempProjectId), f);//没有子项目会报异常
 		}
-    	request.getSession().setAttribute("percentMap", map); 
+    	//model.addAttribute("percentMap", map);
+    	//request.getSession().setAttribute("percentMap", map); 
+    	return map.toString();
     	//return "success";
     }
     @RequestMapping(value="/queryProjectByNameOrTime",method=RequestMethod.POST)
