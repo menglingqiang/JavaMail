@@ -391,15 +391,37 @@ function changeDateFormat()
 window.onload=function(){
 
 	//changeDateFormat();
+	getUserName();
 	setTimeout(
 			loadBars,100);
 }
-
+function getUserName()
+{
+	var email = document.getElementById("projectEmail").value;
+	var content=document.getElementById("userName");
+	var modifyContent=document.getElementById("userName1");
+	var addContent=document.getElementById("userName2");
+	//先计算比例值
+	$.ajax({
+        type: "GET",
+        url: "<%=basePath%>project/queryUserName?email="+email,
+        cache: false,
+        async:false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "",
+        success: function (data) {
+        	content.innerHTML =data;
+        	addContent.innerHTML =data;
+        	modifyContent.innerHTML =data;
+        }
+	});
+   
+}
 </script>
 </head>
 <body >
 	
-	<h1>总任务列表界面展示:${user.name}</h1>
+	<h1><span id="userName"></span>:总任务列表界面展示</h1>
 	<body style="background: #e1e9eb;">
 		<form action="<%=basePath%>project/queryProjectByNameOrTime" id="mainForm" method="post">
 			<input type="hidden" id="email" name="email" value="${user.email}">
@@ -457,6 +479,7 @@ window.onload=function(){
 										</td><!-- 进来展现进度，然后放在进度条上显示比例 -->
 										<td>
 											<input id='projectId${status.index}'  value='${project.projectId}' type="hidden">
+											<input id='projectEmail'  name="projectEmail" type="hidden" value="${project.email}">
 											<a href="javascript:ShowDiv('MyModifyDiv','fade','${project.projectId}','modify','${project.projectName}')">修改</a>&nbsp;&nbsp;&nbsp;
 											<a href="javascript:deleteProject('${project.projectId}')">删除</a>
 										</td>
@@ -476,7 +499,7 @@ window.onload=function(){
 			<div style="text-align: right; cursor: default; height: 40px;">
 			<span style="font-size: 16px;" onclick="CloseDiv('MyModifyDiv','fade')">关闭</span>
 			</div>
-			<h1>${user.name}:任务修改界面</h1>
+			<h1><span id="userName1"></span>:任务修改界面</h1>
 			<input type="hidden" id="modifyProjectId" name="modifyProjectId">
 			<table class="tab2" width="100%" id="fm2_table">
 				<tr style='background-color:#ECF6EE;'>
@@ -514,7 +537,7 @@ window.onload=function(){
 			<div style="text-align: right; cursor: default; height: 40px;">
 			<span style="font-size: 16px;" onclick="CloseDiv('MyAddDiv','fade')">关闭</span>
 			</div>
-			<h1>${user.name}:任务添加界面</h1>
+			<h1><span id="userName2"></span>:任务添加界面</h1>
 			<input type="hidden" id="addEmail" name="addEmail">
 			<table class="tab2" width="100%" id="fm2_table">
 				<tr style='background-color:#ECF6EE;'>

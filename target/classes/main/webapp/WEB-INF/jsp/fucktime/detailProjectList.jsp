@@ -233,14 +233,36 @@ function changeDateFormat()
 		content[i].innerHTML = sd;
 	}
 }
-/* window.onload=function(){
-
-	changeDateFormat();
-} */
+function getProjectName()
+{
+	var projectId = document.getElementById("projectId").value;
+	var content=document.getElementById("projectName");
+	var modifyContent=document.getElementById("projectName1");
+	var addContent=document.getElementById("projectName2");
+	//先计算比例值
+	$.ajax({
+        type: "GET",
+        url: "<%=basePath%>project/queryPorjectName?projectId="+projectId,
+        cache: false,
+        async:false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "text",
+        success: function (data) {
+        	content.innerHTML =data;
+        	addContent.innerHTML = data;
+        	modifyContent.innerHTML =data;
+        }
+	});
+   
+}
+window.onload=function(){
+	
+	getProjectName();
+} 
 </script>
 </head>
 <body >
-	<h1>${projectName}:分任务展示界面</h1>
+	<h1><span id ="projectName"></span>:分任务展示界面</h1>
 	
 	<body style="background: #e1e9eb;">
 		<form action="<%=basePath%>project/queryDetailProjectByNameOrTime" id="mainForm" method="post">
@@ -291,6 +313,7 @@ function changeDateFormat()
 											<c:if test="${detailProject.done==1}">完成</c:if>
 										</td>
 										<td>
+											
 											<a href="javascript:ShowDiv('MyModifyDiv','fade','${detailProject.projectDetailId}','modify','${detailProject.projectDetailName}')">修改</a>&nbsp;&nbsp;&nbsp;
 											<a href="javascript:deleteProject('${detailProject.projectDetailId}')">删除</a>
 										</td>
@@ -313,7 +336,7 @@ function changeDateFormat()
 			<div style="text-align: right; cursor: default; height: 40px;">
 			<span style="font-size: 16px;" onclick="CloseDiv('MyModifyDiv','fade')">关闭</span>
 			</div>
-			<h1>${projectName}:分任务修改界面</h1>
+			<h1><span id ="projectName1"></span>:分任务修改界面</h1>
 			<input type="hidden" id="modifyDetailProjectId" name="modifyDetailProjectId">
 			<table class="tab2" width="100%" id="fm2_table">
 				<tr style='background-color:#ECF6EE;'>
@@ -351,7 +374,7 @@ function changeDateFormat()
 			<div style="text-align: right; cursor: default; height: 40px;">
 			<span style="font-size: 16px;" onclick="CloseDiv('MyAddDiv','fade')">关闭</span>
 			</div>
-			<h1>${projectName}:分任务添加界面</h1>
+			<h1><span id ="projectName2"></span>:分任务添加界面</h1>
 			<input type="hidden" id="addEmail" name="addEmail">
 			<table class="tab2" width="100%" id="fm2_table">
 				<tr style='background-color:#ECF6EE;'>

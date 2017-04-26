@@ -194,6 +194,7 @@ public class ProjectController {
     	Map map = new HashMap<>();
     	map.put("projectName", projectName.trim());
     	map.put("queryTime", queryTime.trim());
+    	map.put("email", email.trim());
     	List<Project> projectList = projectService.queryProjectByNameOrTime(map);
     	//为了和前面的页面获取额email一致
     	User user = new User();
@@ -222,10 +223,32 @@ public class ProjectController {
     	model.addAttribute("projectName",projectName);
     	return "fucktime/detailProjectList";
     }
-    @RequestMapping(value="/test",method=RequestMethod.GET)
-    public  String test()
+    @RequestMapping(value="/queryUserName",method=RequestMethod.GET,produces={"application/text;charset=UTF-8"})
+    public  @ResponseBody String queryUserName(HttpServletRequest request)
     {
-    	return "user/404";
+    	String email = request.getParameter("email");
+    	User temp = new User();
+    	temp.setEmail(email);
+    	User user = userService.queryByEmail(temp);
+    	if(user == null)
+    		return "";
+    	return user.getName();
+    }
+    /**
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="/queryPorjectName",method=RequestMethod.GET,produces={"application/text;charset=UTF-8"})
+    public  @ResponseBody String queryPorjectName(HttpServletRequest request)
+    {
+    	
+    	String projectId = request.getParameter("projectId");
+    	Map map = new HashMap();
+    	map.put("projectId",Long.parseLong(projectId));
+    	List<Project> projectList = projectService.queryEverything(map);
+    	if(projectList.size()==0)
+    		return "";
+    	return projectList.get(0).getProjectName();
     }
 }
 

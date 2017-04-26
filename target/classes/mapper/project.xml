@@ -105,7 +105,7 @@
 			* 
 		FROM
 			user_info 
-		WHERE 1=1
+		WHERE email = #{email}
 		<if test="projectName!=null and !&quot;&quot;.equals(projectName.trim())">
   			AND project_name LIKE CONCAT('%',#{projectName},'%')
 	    </if>
