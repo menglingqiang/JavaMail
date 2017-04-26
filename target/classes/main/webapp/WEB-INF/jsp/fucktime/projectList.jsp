@@ -140,7 +140,7 @@ function ShowDiv(show_div,bg_div,para,type,secPara){
   document.getElementById("beforeProjectName").value=secPara;
 }
  else
- 	document.getElementById("addEmail").value= para;
+ document.getElementById("addEmail").value=document.getElementById("projectEmail").value;
  document.getElementById(show_div).style.display='block';
  document.getElementById(bg_div).style.display='block' ;
  var bgdiv = document.getElementById(bg_div);
@@ -207,12 +207,12 @@ function checkTime(startTime,endTime)//2014-09-09
 	}
 	if(start > end) 
 	{ 
-		alert("时光不可以倒流，开始时间不可以大于结束时间");
+		alert("给你个机器猫得了，时光不可以倒流，开始时间不可以大于结束时间");
 		return false; 
 	}
 	if(now > end) 
 	{ 
-		alert("这是一个网站，不是时光机，结束时间不可以小于当前的时间");
+		alert("这是一个网站虽然没有域名，不是时光机，结束时间不可以小于当前的时间");
 		return false; 
 	}
 	return true;
@@ -240,7 +240,7 @@ function addProject()
 {
  if(!checkDate("add"))
 	 return ;
- var email = document.getElementById("email").value;
+ var email = document.getElementById("projectEmail").value;
  var projectName = document.getElementById("addProjectName").value;
  var startTime = document.getElementById("addStartTime").value;
  var endTime = document.getElementById("addEndTime").value;
@@ -252,7 +252,7 @@ function modifyProject()
 {
  if(!checkDate("modify"))
 	 return ;
- var email = document.getElementById("email").value;
+ var email = document.getElementById("projectEmail").value;
  var projectId = document.getElementById("modifyProjectId").value;
  var projectName = document.getElementById("modifyProjectName").value;
  var startTime = document.getElementById("modifyStartTime").value;
@@ -267,7 +267,7 @@ function deleteProject(projectId)
  var con=confirm("确定删除?"); //在页面上弹出对话框
  if(con==true)
  {
-  var email = document.getElementById("email").value;
+  var email = document.getElementById("projectEmail").value;
   var form = document.getElementById("mainForm");
   form.action = "<%=basePath%>project/operation?type=delete&projectId="+projectId+"&email="+email;
   form.submit();
@@ -311,7 +311,7 @@ LoadingBar.prototype = {
 function loadBars()
 {
 	//alert(${projectList.size()});
-	var email = document.getElementById("email").value;
+	var email = document.getElementById("projectEmail").value;
 	//先计算比例值
 	$.ajax({
         type: "GET",
@@ -424,7 +424,6 @@ function getUserName()
 	<h1><span id="userName"></span>:总任务列表界面展示</h1>
 	<body style="background: #e1e9eb;">
 		<form action="<%=basePath%>project/queryProjectByNameOrTime" id="mainForm" method="post">
-			<input type="hidden" id="email" name="email" value="${user.email}">
 			<input type="hidden" id="percentMap" name="percentMap" value="${percentMap}" >
 			<div class="right">
 				<!-- <div class="current">当前位置：<a href="javascript:void(0)" style="color:#6E6E6E;">内容管理</a> &gt; 内容列表</div> -->

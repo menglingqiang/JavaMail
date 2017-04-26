@@ -190,7 +190,7 @@ public class ProjectController {
     {
     	String projectName = request.getParameter("queryProjectName");
     	String queryTime = request.getParameter("queryTime");
-    	String email = request.getParameter("email");
+    	String email = request.getParameter("projectEmail");
     	Map map = new HashMap<>();
     	map.put("projectName", projectName.trim());
     	map.put("queryTime", queryTime.trim());

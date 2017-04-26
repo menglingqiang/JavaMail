@@ -33,7 +33,7 @@
     
     <delete id="deteleDetailProject" parameterType="java.lang.Long">
     	delete from user_detail_info
-    	where project_dedtail_id=#{projectDetailId}
+    	where project_detail_id=#{projectDetailId}
     </delete>
     
     <!-- 后期换成动态sql -->
