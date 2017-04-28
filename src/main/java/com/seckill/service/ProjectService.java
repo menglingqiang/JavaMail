@@ -23,4 +23,6 @@ public interface ProjectService {
 	public float haveDone(long projectId);//该任务已经完成的百分比（截取两位小数）
 	public List<Project> queryAllProject();
 	public List<Project> queryProjectByNameOrTime(Map map);
+	public int queryAllDetailProjectCountByEmail(String email);
+	public int queryAllDoneDetailProjectCountByEmail(String email);
 }

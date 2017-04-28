@@ -151,7 +151,7 @@ public class UserMailController {
 		g.setColor(c);
 		g.fillRect(0, 0, 92, 31);
 		//验证码里面的信息
-		char[] ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();//全是大写
+		char[] ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".toCharArray();//
 		Random random = new Random();
 		StringBuffer sb = new StringBuffer();
 		
@@ -272,6 +272,20 @@ public class UserMailController {
 			return "0"; 	
 		else
 			return "1";
+	}
+	@RequestMapping(value="/showUserInfo",method=RequestMethod.GET)
+	public  String showUserInfo(HttpServletRequest request,Model model) 
+	{
+		String email = request.getParameter("email");
+		User temp = new User();
+		temp.setEmail(email);
+		User user = userService.queryByEmail(temp);//查询用户的信息
+		int sum = projectService.queryAllDetailProjectCountByEmail(email);
+		int done = projectService.queryAllDoneDetailProjectCountByEmail(email);
+		model.addAttribute("user",user);
+		model.addAttribute("sum",sum);
+		model.addAttribute("done",done);
+		return "/user/userInfo";
 	}
 }
 

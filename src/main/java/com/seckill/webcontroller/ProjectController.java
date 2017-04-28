@@ -238,8 +238,8 @@ public class ProjectController {
      * @param request
      * @return
      */
-    @RequestMapping(value="/queryPorjectName",method=RequestMethod.GET,produces={"application/text;charset=UTF-8"})
-    public  @ResponseBody String queryPorjectName(HttpServletRequest request)
+    @RequestMapping(value="/queryPorjectNameAndTime",method=RequestMethod.GET,produces={"application/text;charset=UTF-8"})
+    public  @ResponseBody String queryPorjectNameAndTime(HttpServletRequest request)
     {
     	
     	String projectId = request.getParameter("projectId");
@@ -248,7 +248,8 @@ public class ProjectController {
     	List<Project> projectList = projectService.queryEverything(map);
     	if(projectList.size()==0)
     		return "";
-    	return projectList.get(0).getProjectName();
+    	return projectList.get(0).getProjectName()+","+projectList.get(0).getStartDate()+","+
+    	projectList.get(0).getEndDate();
     }
 }
 

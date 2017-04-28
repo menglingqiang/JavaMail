@@ -90,6 +90,8 @@ function checkDate(type)
 {
  if(type=="modify")
  {
+	if(!checkAddOrModifyDate("modify"))
+		return ;
  	var startTime = document.getElementById("modifyStartTime").value;
  	var endTime = document.getElementById("modifyEndTime").value;
  	var projecctId = document.getElementById("modifyProjectName").value;
@@ -102,6 +104,8 @@ function checkDate(type)
  }
  else if(type=="add")
  {
+	if(!checkAddOrModifyDate("add"))
+		return ;
  	var startTime = document.getElementById("addStartTime").value;
  	var endTime = document.getElementById("addEndTime").value;
  	var projecctId = document.getElementById("addProjectName").value;
@@ -233,31 +237,75 @@ function changeDateFormat()
 		content[i].innerHTML = sd;
 	}
 }
-function getProjectName()
+function getProjectNameAndTime()
 {
 	var projectId = document.getElementById("projectId").value;
 	var content=document.getElementById("projectName");
 	var modifyContent=document.getElementById("projectName1");
 	var addContent=document.getElementById("projectName2");
+	var projectStartTime = document.getElementById("projectStartTime");
+	var projectEndTime = document.getElementById("projectEndTime");
 	//先计算比例值
 	$.ajax({
         type: "GET",
-        url: "<%=basePath%>project/queryPorjectName?projectId="+projectId,
+        url: "<%=basePath%>project/queryPorjectNameAndTime?projectId="+projectId,
         cache: false,
         async:false,
         contentType: "application/json; charset=utf-8",
         dataType: "text",
         success: function (data) {
-        	content.innerHTML =data;
-        	addContent.innerHTML = data;
-        	modifyContent.innerHTML =data;
+        	var dateList = data.split(",");//将得到的字符串经过，分割分别得到项目名称，开始时间和结束时间
+        	content.innerHTML =dateList[0];
+        	addContent.innerHTML = dateList[0];
+        	modifyContent.innerHTML =dateList[0];
+        	
+        	projectStartTime.value = dateList[1];
+        	projectEndTime.value=dateList[2];
         }
 	});
    
 }
+function checkAddOrModifyDate(operation)
+{
+	var projectStartTime = document.getElementById("projectStartTime").value;
+	var projectEndTime = document.getElementById("projectEndTime").value;
+	if(operation=="add")
+	{
+		var addStartTime = document.getElementById("addStartTime").value; 
+		var addEndTime = document.getElementById("addEndTime").value;
+		if(compateDate(addStartTime,projectStartTime) && compateDate(projectEndTime,addEndTime))
+			return true;
+		else
+		{
+			alert("分项目的开始时间和结束时间等应该总项目的时间之内\n总项目开始时间："+projectStartTime+"   总项目结束时间："+projectStartTime);
+			return false;
+		}
+	}else if(operation=="modify")
+	{
+		var modifyStartTime = document.getElementById("modifyStartTime").value; 
+		var modifyEndTime = document.getElementById("modifyEndTime").value; 
+		if(compateDate(modifyStartTime,projectStartTime) && compateDate(projectEndTime,modifyEndTime))
+			return true;
+		else
+		{
+			alert("分项目的开始时间和结束时间等应该总项目的时间之内\n总项目开始时间："+projectStartTime+"   总项目结束时间："+projectEndTime);
+			return false;
+		}
+		
+	}
+}
+function compateDate(dayOne,dayTwo)//dayOne如果大于等于dayTwo返回true否则返回false
+{
+	var one = new Date($.trim(dayOne));
+	var two = new Date($.trim(dayTwo));
+	if(one >= two)
+		return true;
+	else
+		return false;
+}
 window.onload=function(){
 	
-	getProjectName();
+	getProjectNameAndTime();
 } 
 </script>
 </head>
@@ -268,10 +316,12 @@ window.onload=function(){
 		<form action="<%=basePath%>project/queryDetailProjectByNameOrTime" id="mainForm" method="post">
 			<input id="name" name="name" value='${projectName}' type="hidden"/>
 			<input id="projectId" name="projectId" value='${projectId}' type="hidden"/> 
+			<input id="projectStartTime" name="projectStartTime" value='${projectStartTime}' type="hidden"/> 
+			<input id="projectEndTime" name="projectEndTime" value='${projectEndTime}' type="hidden"/> 
 			<div class="right">
 				<!-- <div class="current">当前位置：<a href="javascript:void(0)" style="color:#6E6E6E;">内容管理</a> &gt; 内容列表</div> -->
 				<div class="rightCont">
-					<p class="g_title fix">分任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${projectId}','add','')">增加</a>
+					<p class="g_title fix">分任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${projectId}','add','')">增加</a></p>
 					<table class="tab1">
 						<tbody>
 							<tr>
@@ -309,8 +359,20 @@ window.onload=function(){
 										<td>${detailProject.projectDetailName}</td>
 										<td>${detailProject.getDetailStartDate()}</td>
 										<td>${detailProject.getDetailEndDate()}</td>
-										<td><c:if test="${detailProject.done==0}"><a href="javascript:done('${detailProject.projectDetailId}')">已完成？</a></c:if>
-											<c:if test="${detailProject.done==1}">完成</c:if>
+										<td><c:if test="${detailProject.done==1}">
+												 <font color="#009900">完成</font>
+											</c:if>
+											
+											<c:if test="${detailProject.done==0}">
+												<c:set var="nowDate" value="<%=System.currentTimeMillis()%>"></c:set>
+												<c:if  test="${nowDate-detailProject.detailEndTime.time >0}">
+													<a href="javascript:done('${detailProject.projectDetailId}')"> <font color="#FF0000">已超时</font></a>
+												</c:if>
+												<c:if test="${nowDate-detailProject.detailEndTime.time <=0}">
+													<a href="javascript:done('${detailProject.projectDetailId}')"><font color="#0066CC">进行中</font></a>
+												</c:if>
+												
+											</c:if>
 										</td>
 										<td>
 											

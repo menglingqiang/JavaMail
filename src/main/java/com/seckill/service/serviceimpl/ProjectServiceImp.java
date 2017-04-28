@@ -80,5 +80,17 @@ public class ProjectServiceImp implements ProjectService{
 		
 		return projectDao.queryProjectByNameOrTime(map);
 	}
+
+	@Override
+	public int queryAllDetailProjectCountByEmail(String email) {
+		
+		return projectDao.queryAllDetailProjectCountByEmail(email);
+	}
+
+	@Override
+	public int queryAllDoneDetailProjectCountByEmail(String email) {
+		
+		return projectDao.queryAllDoneDetailProjectCountByEmail(email);
+	}
 	
 }

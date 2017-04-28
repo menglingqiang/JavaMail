@@ -16,4 +16,5 @@ public interface DetailProjectDao {
 	public int modifyDetailProjectForDone(long projectDetailId);
 	public List<DetailProject> queryAllDetailProject();
 	public List<DetailProject> queryDetailProjectByNameOrTime(Map map);
+	
 }

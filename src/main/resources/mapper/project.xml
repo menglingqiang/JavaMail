@@ -76,8 +76,16 @@
 	</update>
 	
 	<delete id="deleteProject" parameterType="java.lang.Long" >  
-		delete from user_info
-		where project_id=#{projectId}
+		DELETE
+			i.*,
+			d.* 
+		FROM
+			user_info       AS i ,
+			user_detail_info AS d 
+		WHERE
+			i.project_id=#{projectId} AND
+			i.project_id=d.project_id
+		
 	</delete>
 	<select id="haveDone" parameterType="java.lang.Long" resultType="java.lang.Float">
 		SELECT
@@ -113,6 +121,31 @@
   			AND #{queryTime} BETWEEN start_time AND end_time
 		</if>
 			
+	</select>
+	
+	<select id="queryAllDetailProjectCountByEmail" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			COUNT(d.project_detail_id) 
+		FROM
+			USER            AS u ,
+			user_info       AS i,
+			user_detail_info AS d 
+		WHERE
+			u.email = i.email AND
+			i.project_id = d.project_id
+	</select>
+	
+	<select id="queryAllDoneDetailProjectCountByEmail" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			COUNT(d.project_detail_id) 
+		FROM
+			USER            AS u ,
+			user_info       AS i,
+			user_detail_info AS d 
+		WHERE
+			u.email = i.email AND
+			i.project_id = d.project_id
+            AND d.done=1
 	</select>
 </mapper>
 

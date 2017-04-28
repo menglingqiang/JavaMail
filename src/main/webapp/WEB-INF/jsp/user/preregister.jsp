@@ -16,7 +16,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	{
   		var date = new Date();//不传入一个date的话浏览器认为这个请求是没有必要的，不会刷新页面
   		document.getElementById("imageCode").src="<%=basePath %>user/validate?"+date;
-  		
   	}
   	
   	function checkPicCode()

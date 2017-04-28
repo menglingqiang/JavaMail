@@ -43,7 +43,7 @@ public class TaskJob {
 			Project project = projectList.get(i);
 			if(UUIDUtil.compareDate(today, project.getEndTime()))//今天的日期大于结束日期
 			{
-				String str = "你的项目："+project.getProjectName()+",今天到期，你这个态度药丸！";
+				String str = "你的项目："+project.getProjectName()+",今天到期，你还有一天的时间完成，再不做就不赶趟了！";
 				SendUtil.send(project.getEmail(),str);
 				System.out.println(today+"总项目已经发送邮件");
 			}
@@ -68,7 +68,7 @@ public class TaskJob {
 			String email = projectService.queryEverything(temp).get(0).getEmail();
 			if(UUIDUtil.compareDate(today, detailProject.getDetailEndTime()))//今天的日期大于结束日期
 			{
-				String str = "你的项目："+detailProject.getProjectDetailName()+",今天到期，你这个态度药丸！";
+				String str = "你的项目："+detailProject.getProjectDetailName()+",今天到期，你还有一天的时间，再不做就不赶趟了！";
 				SendUtil.send(email,str);
 				System.out.println(today+"分项目已经发送邮件");
 			}
