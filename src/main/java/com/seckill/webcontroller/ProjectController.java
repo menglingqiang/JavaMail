@@ -151,12 +151,15 @@ public class ProjectController {
     public String getDetailProject(HttpServletRequest request,Model model)
     {
     	String projectId = request.getParameter("projectId");
-    	Map map = new HashMap();
-    	map.put("projectId", projectId);
-    	List<Project> temp = projectService.queryEverything(map);
-    	String email = null;
-    	if(temp.size()>0)
-    		email = temp.get(0).getEmail();
+    	String email = request.getParameter("email");
+    	if(email==null)
+    	{
+    		Map map = new HashMap();
+    		map.put("projectId", projectId);
+    		List<Project> temp = projectService.queryEverything(map);
+    		if(temp.size()>0)
+    			email = temp.get(0).getEmail();
+    	}	
     	List<Project> projectList = projectService.queryProjectByEmail(email);
     	//为了和前面的页面获取额email一致
     	User user = new User();
@@ -196,6 +199,7 @@ public class ProjectController {
     	map.put("queryTime", queryTime.trim());
     	map.put("email", email.trim());
     	List<Project> projectList = projectService.queryProjectByNameOrTime(map);
+    	
     	//为了和前面的页面获取额email一致
     	User user = new User();
     	user.setEmail(email);
@@ -250,6 +254,11 @@ public class ProjectController {
     		return "";
     	return projectList.get(0).getProjectName()+","+projectList.get(0).getStartDate()+","+
     	projectList.get(0).getEndDate();
+    }
+    @RequestMapping(value="/test",method=RequestMethod.GET)
+    public  String test(HttpServletRequest request,HttpServletResponse response,Model model)
+    {
+    	return "user/test";
     }
 }
 

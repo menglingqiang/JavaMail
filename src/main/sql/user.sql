@@ -38,6 +38,8 @@ detail_modify int default 0 COMMENT'项目修改次数',
 done int default 0 COMMENT '是否完成任务，0没有，1完成',
 PRIMARY KEY (porject_detail_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='用户分项目表'
-
+-- 添加级联约束使得如果删除总项目，那么总项目下面的分项目也会被删除
+alter table user_detail_info add constraint fk_tb_aid foreign key (project_id) 
+references user_info(project_id) on delete cascade
 
 

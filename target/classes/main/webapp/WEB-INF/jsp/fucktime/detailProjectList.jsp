@@ -94,8 +94,8 @@ function checkDate(type)
 		return ;
  	var startTime = document.getElementById("modifyStartTime").value;
  	var endTime = document.getElementById("modifyEndTime").value;
- 	var projecctId = document.getElementById("modifyProjectName").value;
- 	if(projecctId=="")
+ 	var projecctName = document.getElementById("modifyProjectName").value;
+ 	if(projecctName=="")
  	{	
  		alert("请输入新添加的项目名称");
  		return ;

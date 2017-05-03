@@ -1,6 +1,6 @@
 package main.java.com.seckill.util;
 
-import java.text.DateFormat;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-import com.sun.tools.apt.Main;
+import org.springframework.web.multipart.MultipartFile;
 
 import main.java.com.seckill.entity.Project;
 public class UUIDUtil {
@@ -72,19 +72,18 @@ public class UUIDUtil {
 	}
 	public static void main(String[] str)
 	{
-		String x = "Mon Mar 02 13:57:49 CST 2015";
-	    SimpleDateFormat sdf1 = new SimpleDateFormat ("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
-	    try
-	    {
-	    	Date date=sdf1.parse(x);
-	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-	        String sDate=sdf.format(date);
-	        System.out.println(sDate);
-	    }
-	    catch (ParseException e)
-	    {
-	        e.printStackTrace();
-	    }
+		String fileName = "safde4.jpj";
+		String prefix=fileName.substring(fileName.lastIndexOf(".")+1,fileName.length());
+		System.out.print(prefix);
 	}
-	
+	public static String getFileType(MultipartFile file)
+	{
+		String fileName = file.getOriginalFilename();
+		String prefix=fileName.substring(fileName.lastIndexOf(".")+1,fileName.length());
+	    return prefix;
+	}
 }
+
+
+
+

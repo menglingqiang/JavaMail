@@ -77,14 +77,11 @@
 	
 	<delete id="deleteProject" parameterType="java.lang.Long" >  
 		DELETE
-			i.*,
-			d.* 
+			
 		FROM
-			user_info       AS i ,
-			user_detail_info AS d 
+			user_info
 		WHERE
-			i.project_id=#{projectId} AND
-			i.project_id=d.project_id
+			project_id=#{projectId}
 		
 	</delete>
 	<select id="haveDone" parameterType="java.lang.Long" resultType="java.lang.Float">

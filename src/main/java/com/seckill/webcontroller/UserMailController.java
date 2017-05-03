@@ -3,6 +3,7 @@ package main.java.com.seckill.webcontroller;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -17,16 +18,20 @@ import main.java.com.seckill.entity.Project;
 import main.java.com.seckill.entity.User;
 import main.java.com.seckill.service.ProjectService;
 import main.java.com.seckill.service.UserService;
+import main.java.com.seckill.util.Constant;
 import main.java.com.seckill.util.SendUtil;
 import main.java.com.seckill.util.UUIDUtil;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/user")
@@ -273,13 +278,43 @@ public class UserMailController {
 		else
 			return "1";
 	}
-	@RequestMapping(value="/showUserInfo",method=RequestMethod.GET)
+	@RequestMapping(value="/showUserInfo",method=RequestMethod.POST)
 	public  String showUserInfo(HttpServletRequest request,Model model) 
 	{
 		String email = request.getParameter("email");
+				
 		User temp = new User();
 		temp.setEmail(email);
 		User user = userService.queryByEmail(temp);//查询用户的信息
+		int sum = projectService.queryAllDetailProjectCountByEmail(email);
+		int done = projectService.queryAllDoneDetailProjectCountByEmail(email);
+		model.addAttribute("user",user);
+		model.addAttribute("sum",sum);
+		model.addAttribute("done",done);
+		return "/user/userInfo";
+	}
+	
+	@RequestMapping(value="/changeUserPic",method=RequestMethod.POST)//使用两次就不抽象成函数了,更改数据库的
+	public  String changeUserPic(@RequestParam("file1") MultipartFile file,HttpServletRequest request,Model model) 
+	{
+		String email = request.getParameter("email");
+		//String email = "13429774945@163.com";
+		User temp = new User();
+		temp.setEmail(email);
+		User user = userService.queryByEmail(temp);//查询用户的信息
+		String userPicName = user.getUserId() +"." +UUIDUtil.getFileType(file);//用户头像名称
+		temp.setUserPic(userPicName);
+		
+		if(!file.isEmpty()){
+			try {
+				FileUtils.copyInputStreamToFile(file.getInputStream(), new File(Constant.USERPICLOCALPATH,
+						userPicName));//把本地的图片复制到你想要存放用户头像的位置
+				userService.updateUser(temp);//更新用户的头像
+			} catch (IOException e) {
+				e.printStackTrace();
+				return "/user/login-error";//TODO,新建一个错误页面，返回直接historyback
+			}
+		}
 		int sum = projectService.queryAllDetailProjectCountByEmail(email);
 		int done = projectService.queryAllDoneDetailProjectCountByEmail(email);
 		model.addAttribute("user",user);

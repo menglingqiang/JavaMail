@@ -9,6 +9,8 @@ public class User {
 	private String name;
 	private String email;
 	private String code;
+	private String userPic;
+	
 	private Date createTime;
 	private int status;
 	
@@ -55,10 +57,19 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getUserPic() {
+		return userPic;
+	}
+	public void setUserPic(String userPic) {
+		this.userPic = userPic;
+	}
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", password=" + password + ", name="
-				+ name + ", email=" + email + ", code=" + code
-				+ ", createTime=" + createTime + ", status=" + status + "]";
+				+ name + ", email=" + email + ", code=" + code + ", userPic="
+				+ userPic + ", createTime=" + createTime + ", status=" + status
+				+ "]";
 	}
+	
 }

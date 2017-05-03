@@ -11,29 +11,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>用户信息</title>
-	<script src="<%=basePath%>resources/script/jquery-1.8.0.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/default.css">
+	<link href="<%=basePath%>resources/css/material-design-iconic-font.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/styles.css">
+	<script src="<%=basePath%>resources/script/modernizr.js" type="text/javascript"></script>
 	<script type="text/javascript">
-	function returnProject()
-	{
-		var email = document.getElementById("email").value;
-		var form = document.getElementById("form1");
-		form.action ="<%=basePath%>project/getProjectByEmail?email="+email;
-		form.submit();
-	}
+   
 	function uploadUserPic(obj)
 	{
 		var obj = document.getElementById("file1");
-		var objValue = document.getElementById("file1").value;
-		if(objValue=="")
-		{
-			alert("请先选择上传文件");
-			return ;
-		}
-		var email = document.getElementById("email").value;
 		if(PreviewImage(obj,'imgView','pic_preview'))
 		{
 			var form = document.getElementById("form1");
-			form.action="<%=basePath %>user/changeUserPic?email="+email;
+			form.action="<%=basePath %>user/changeUserPic";
 			form.submit();
 		}else
 		{
@@ -44,7 +35,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     function PreviewImage(obj, imgPreviewId, divPreviewId) {  
     	var extend=obj.value.substring(obj.value.lastIndexOf(".") + 1);
 		var msg = document.getElementById("message");
-		msg.innerHTML = '<font size="4px"  color="red" ></font>';//先清空一下信息
 		if (extend != "" && !(extend=="jpg")) {
 			msg.innerHTML = '<font size="4px"  color="red" >请上传后缀名为jpg的文件</font>';
 			return false;
@@ -101,45 +91,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 	<form id="form1" action="" enctype="multipart/form-data" method="post">
-	<input type="hidden" value="${user.email}" id="email" name="email"/>
-	            <img src="<%= basePath %>resources/userimg/${user.userPic}" id="imgView" onclick="javascript:changeUserPic(${user.email})">
-	    <ul>
-	        <li>
-	            <span>
-	                	昵称 :${user.name}
-	           </span>
-	        </li>
-	        <li>
-	            <span>
-	               	邮箱 :${user.email}
-	            </span>
-	        </li>
-	        <li>
-	            <span>
-	                	总任务量 :${sum}
-	            </span>
-	        </li>
-	        <li>
-	            <span>
-	                	已完成任务量 :${done}
-	            </span>
-	        </li>
-	       
-	        <li>
-	             <a href="javascript:returnProject()">
-	                	返回总任务界面
-	            </a>
-	           
-	        </li>
-	    </ul>
-	
-	   <div>  
-	       <label >配图：</label>  
+	    <div class="news_img">  
+	       <label for="newCover" class="ncLabel">配图：</label>  
 	       <img id="imgView" src=""  alt="" />  
 	       <input type="button" value="上传" onclick="javascript:uploadUserPic(this)"/>
 	       <input type="file" name="file1" id="file1" class="file"  value='浏览...' onchange="PreviewImage(this,'imgView','pic_preview')" />  
 	       <p id="message" name="message" ></p> 
     	</div>  
 	</form>
+    
 </body>
 </html>

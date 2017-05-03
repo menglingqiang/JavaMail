@@ -19,14 +19,14 @@
     </select>
     
      <select id="queryByEmail" parameterType="main.java.com.seckill.entity.User" resultType="main.java.com.seckill.entity.User">
-    	select user_id,name,password,email,code,status,create_time
+    	select user_id,name,password,email,code,status,create_time,user_pic
     	from user where email = #{email}
     </select>
 	
 	<insert id="register" parameterType="main.java.com.seckill.entity.User" >
 	
-		INSERT INTO user(name, password, email, code, status, create_time) 
-		VALUES(#{name}, #{password}, #{email}, #{code}, 0, #{createTime})
+		INSERT INTO user(name, password, email, code, status, create_time,user_pic) 
+		VALUES(#{name}, #{password}, #{email}, #{code}, 0, #{createTime},'userdefault.jpg')
 	</insert>
 	
 	<update id="UpdateUserByCode" parameterType="string">
@@ -38,9 +38,21 @@
 	
 	<update id="updateUser" parameterType="main.java.com.seckill.entity.User">
 		UPDATE user 
-		set password = #{password}
-		
+		<set>
+
+	        <if test="password!=null and !&quot;&quot;.equals(password.trim())">
+	  			password=#{password},
+		    </if>
+		    <if test="password!=null and !&quot;&quot;.equals(password.trim())">
+	  			name=#{name},
+		    </if>
+		    <if test="userPic!=null and !&quot;&quot;.equals(userPic.trim())">
+	  			user_pic=#{userPic},
+	    </if>
+
+        </set>
 		where email = #{email}
 	</update>
+	
 </mapper>
 

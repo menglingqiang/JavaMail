@@ -140,7 +140,7 @@ function ShowDiv(show_div,bg_div,para,type,secPara){
   document.getElementById("beforeProjectName").value=secPara;
 }
  else
- document.getElementById("addEmail").value=document.getElementById("projectEmail").value;
+ 	document.getElementById("addEmail").value=document.getElementById("projectEmail").value;
  document.getElementById(show_div).style.display='block';
  document.getElementById(bg_div).style.display='block' ;
  var bgdiv = document.getElementById(bg_div);
@@ -265,6 +265,12 @@ function modifyProject()
 function deleteProject(projectId)
 {
  var con=confirm("确定删除?"); //在页面上弹出对话框
+ var size = ${projectList.size()}
+ if(size==1)
+ {
+ 	alert("抱歉，一个用户至少需要有一条项目");
+ 	return;
+ }
  if(con==true)
  {
   var email = document.getElementById("projectEmail").value;
