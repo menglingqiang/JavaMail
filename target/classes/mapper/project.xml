@@ -144,5 +144,19 @@
 			i.project_id = d.project_id
             AND d.done=1
 	</select>
+	
+	<select id="queryMessage" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+			d.project_detail_name,u.project_name 
+		FROM
+			user_detail_info AS d,
+			user_info        AS u 
+		WHERE
+			u.email=#{email} AND
+			u.project_id=d.project_id AND
+			now() BETWEEN d.detail_start_time AND
+			d.detail_end_time  
+	</select>
+	
 </mapper>
 

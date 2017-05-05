@@ -1,5 +1,7 @@
 package main.java.com.seckill.service.serviceimpl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +9,7 @@ import main.java.com.seckill.dao.ProjectDao;
 import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
 import main.java.com.seckill.entity.User;
+import main.java.com.seckill.model.Message;
 import main.java.com.seckill.service.ProjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +94,23 @@ public class ProjectServiceImp implements ProjectService{
 	public int queryAllDoneDetailProjectCountByEmail(String email) {
 		
 		return projectDao.queryAllDoneDetailProjectCountByEmail(email);
+	}
+
+	@Override
+	public List<Message> queryMessage(String email) {
+		
+		List<HashMap> maps = projectDao.queryMessage(email);
+		List<Message> messages = new ArrayList<Message>();
+		for(int i=0;i<maps.size();i++)
+		{
+			Message message = new Message();
+			message.setDetailProjectName((String)maps.get(i).get("project_detail_name"));
+			message.setProjectName((String)maps.get(i).get("project_name"));
+			message.setEmail(email);
+			
+			messages.add(message);
+		}
+		return messages;
 	}
 	
 }

@@ -63,5 +63,49 @@
 			detail_end_time
 		</if>
 	</select>
+	
+	<resultMap type="main.java.com.seckill.entity.Project" id="projectResultMap">  
+        <id column="project_id" property="projectId"/>  
+        <result column="project_name" property="projectName"/>  
+        <result column="start_time" property="startTime"/>  
+        <result column="end_time" property="endTime"/>  
+        <result column="modify" property="modify"/>  
+        <result column="email" property="email"/>  
+        <collection property="detailProjects" ofType="main.java.com.seckill.entity.DetailProject">  
+            <id column="project_detail_id" property="projectDetailId"/>  
+	        <result column="project_detail_name" property="projectDetailName"/>  
+	        <result column="detail_start_time" property="detailStartTime"/>  
+	        <result column="detail_end_time" property="detailEndTime"/>  
+	        <result column="done" property="done"/>  
+        </collection>  
+          
+    </resultMap>
+    
+     <!-- 查询今天所有正在进行的总项目 -->
+	 <select id="queryPojectMessage" parameterType="java.lang.String"  resultMap="projectResultMap">
+		SELECT
+			* 
+		FROM
+			user_info 
+		WHERE
+			email=#email# AND
+			now() BETWEEN start_time AND
+			end_time
+	</select>
+	
+	<!-- 查询今天所有正在进行的分项目 -->
+	<select id="queryDetailPojectMessage" parameterType="java.lang.String"  resultMap="detailProjectResultMap">
+		SELECT
+			d.* 
+		FROM
+			user_detail_info AS d,
+			user_info        AS u 
+		WHERE
+			u.email=#email# AND
+			u.project_id=d.project_id AND
+			now() BETWEEN d.detail_start_time AND
+			d.detail_end_time 
+	</select>
+	
 </mapper>
 

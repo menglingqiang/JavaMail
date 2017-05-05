@@ -56,6 +56,17 @@ public class DetailProjectServiceImp implements DetailProjectService{
 		return detailProjectDao.queryDetailProjectByNameOrTime(map);
 	}
 
+	@Override
+	public List<Project> queryPojectMessage(String email) {
+		return detailProjectDao.queryPojectMessage(email);
+	}
+
+	@Override
+	public List<DetailProject> queryDetailPojectMessage(String email) {
+		// TODO Auto-generated method stub
+		return detailProjectDao.queryDetailPojectMessage(email);
+	}
+
 	
 	
 }

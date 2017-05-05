@@ -419,11 +419,14 @@ function getUserName()
 }
 function message()
 {
-	alert("message");
+	var email = document.getElementById("email").value;
+	var form = document.getElementById("mainForm");
+	form.action = "<%=basePath%>project/queryMessage?email="+email;
+	form.submit();
 	}
 function userInfo()
 {
-	var email = document.getElementById("projectEmail").value;
+	var email = document.getElementById("email").value;
 	var form = document.getElementById("mainForm");
 	form.action = "<%=basePath%>user/showUserInfo?email="+email;
 	form.submit();
@@ -443,6 +446,7 @@ window.onload=function(){
 	<h1><span id="userName"></span>:总任务列表界面展示</h1>
 	<body style="background: #e1e9eb;">
 		<form action="<%=basePath%>project/queryProjectByNameOrTime" id="mainForm" method="post">
+			<input id='email'  name="email" type="hidden" value="${user.email}">
 			<input type="hidden" id="percentMap" name="percentMap" value="${percentMap}" >
 			<div class="right">
 				<!-- <div class="current">当前位置：<a href="javascript:void(0)" style="color:#6E6E6E;">内容管理</a> &gt; 内容列表</div> -->

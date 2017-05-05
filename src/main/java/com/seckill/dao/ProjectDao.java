@@ -1,5 +1,6 @@
 package main.java.com.seckill.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,4 +26,5 @@ public interface ProjectDao {
 	public List<Project> queryProjectByNameOrTime(Map map);//根据项目名称和时间得到
 	public int queryAllDetailProjectCountByEmail(String email);
 	public int queryAllDoneDetailProjectCountByEmail(String email);
+	public List<HashMap> queryMessage(String email);
 }

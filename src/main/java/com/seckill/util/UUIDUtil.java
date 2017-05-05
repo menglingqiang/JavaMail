@@ -82,6 +82,13 @@ public class UUIDUtil {
 		String prefix=fileName.substring(fileName.lastIndexOf(".")+1,fileName.length());
 	    return prefix;
 	}
+	public static Object parseNull2Empty(Object obj)
+	{
+		if(obj==null)
+			return "";
+		else
+			return obj;
+	}
 }
 
 

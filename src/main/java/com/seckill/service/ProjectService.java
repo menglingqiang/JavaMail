@@ -6,6 +6,7 @@ import java.util.Map;
 import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
 import main.java.com.seckill.entity.User;
+import main.java.com.seckill.model.Message;
 
 public interface ProjectService {
 	
@@ -25,4 +26,5 @@ public interface ProjectService {
 	public List<Project> queryProjectByNameOrTime(Map map);
 	public int queryAllDetailProjectCountByEmail(String email);
 	public int queryAllDoneDetailProjectCountByEmail(String email);
+	public List<Message> queryMessage(String email);
 }

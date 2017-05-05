@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
 import main.java.com.seckill.entity.User;
+import main.java.com.seckill.model.Message;
 import main.java.com.seckill.service.DetailProjectService;
 import main.java.com.seckill.service.ProjectService;
 import main.java.com.seckill.service.UserService;
@@ -191,9 +192,11 @@ public class ProjectController {
     @RequestMapping(value="/queryProjectByNameOrTime",method=RequestMethod.POST)
     public  String queryProjectByNameOrTime(HttpServletRequest request,Model model)
     {
-    	String projectName = request.getParameter("queryProjectName");
-    	String queryTime = request.getParameter("queryTime");
-    	String email = request.getParameter("projectEmail");
+    	String projectName = (String)UUIDUtil.parseNull2Empty(request.getParameter("queryProjectName"));
+    	String queryTime = (String)UUIDUtil.parseNull2Empty(request.getParameter("queryTime"));
+    	String email = (String)UUIDUtil.parseNull2Empty(request.getParameter("projectEmail"));
+    	if(email==""||email==null)
+    		email = (String)UUIDUtil.parseNull2Empty(request.getParameter("email"));
     	Map map = new HashMap<>();
     	map.put("projectName", projectName.trim());
     	map.put("queryTime", queryTime.trim());
@@ -254,6 +257,20 @@ public class ProjectController {
     		return "";
     	return projectList.get(0).getProjectName()+","+projectList.get(0).getStartDate()+","+
     	projectList.get(0).getEndDate();
+    }
+    @RequestMapping(value="queryMessage",method=RequestMethod.POST)
+    public String queryMessage(HttpServletRequest request,Model model)
+    {
+    	String email = request.getParameter("email");
+    	List<Message> messageList = projectService.queryMessage(email);
+    	
+    	User temp = new User();
+    	temp.setEmail(email);
+    	
+    	User user = userService.queryByEmail(temp);
+    	model.addAttribute("user",user);
+    	model.addAttribute("messageList", messageList);
+    	return "user/message";
     }
     @RequestMapping(value="/test",method=RequestMethod.GET)
     public  String test(HttpServletRequest request,HttpServletResponse response,Model model)

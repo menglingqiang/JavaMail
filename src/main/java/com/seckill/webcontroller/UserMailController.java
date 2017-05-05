@@ -268,7 +268,7 @@ public class UserMailController {
 	@RequestMapping(value="/registerFlag",method=RequestMethod.GET)
 	public @ResponseBody String registerFlag(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
-		//1,邮箱已经注册，0，邮箱没有注册,2 邮箱格式不正确
+		//1,邮箱已经注册，0，邮箱没有注册
 		String email = request.getParameter("email");
 		User user = new User();
 		user.setEmail(email);
@@ -308,8 +308,10 @@ public class UserMailController {
 		if(!file.isEmpty()){
 			try {
 				FileUtils.copyInputStreamToFile(file.getInputStream(), new File(Constant.USERPICLOCALPATH,
-						userPicName));//把本地的图片复制到你想要存放用户头像的位置
-				userService.updateUser(temp);//更新用户的头像
+						userPicName));//把用户头像图片复制到本地（这样clean的时候本地的图片会加载到服务器端）
+				FileUtils.copyInputStreamToFile(file.getInputStream(), new File(Constant.SERVICELOCALPAHT,
+						userPicName));//把用户头像图片复制到服务器(换头像的时候可以从服务器拿到用户的头像)
+				userService.updateUser(temp);//更新用户的头像，（用户头像名称）
 			} catch (IOException e) {
 				e.printStackTrace();
 				return "/user/login-error";//TODO,新建一个错误页面，返回直接historyback
@@ -321,8 +323,7 @@ public class UserMailController {
 		model.addAttribute("sum",sum);
 		model.addAttribute("done",done);
 		return "/user/userInfo";
+		
 	}
 }
-
-
 
