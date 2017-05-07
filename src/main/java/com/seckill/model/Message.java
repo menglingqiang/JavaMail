@@ -18,9 +18,11 @@ public class Message {
 	public void setDetailProjectName(String detailProjectName) {
 		this.detailProjectName = detailProjectName;
 	}
+	
 	public String getEmail() {
 		return email;
 	}
+	
 	public void setEmail(String email) {
 		this.email = email;
 	}

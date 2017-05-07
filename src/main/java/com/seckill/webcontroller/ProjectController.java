@@ -277,6 +277,11 @@ public class ProjectController {
     {
     	return "user/test";
     }
+    @RequestMapping(value="/testTwo",method=RequestMethod.GET)
+    public  String testTwo(HttpServletRequest request,HttpServletResponse response,Model model)
+    {
+    	return "user/testtwo";
+    }
 }
 
 

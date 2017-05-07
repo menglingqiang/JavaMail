@@ -19,21 +19,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
    		
 		<% 
-			String userName = "";
-			String password = "";
-			
+		if(request.getParameter("autoLogin")!=null&& request.getParameter("autoLogin")!="")
+		{
 			Cookie[] cookies = request.getCookies();
-			if(cookies!=null||cookies.length>0)
+			if(cookies!=null&&cookies.length>0)
 			{
-				for(int i=0;i<cookies.length;i++)
+				String userName = request.getParameter("userName");
+				String password = request.getParameter("password");
+				Cookie userNameCookie = new Cookie("userName",userName);
+				Cookie passwordCookie = new Cookie("password",password);
+				userNameCookie.setMaxAge(60*60*24*10);
+				passwordCookie.setMaxAge(60*60*24*10);
+				response.addCookie(userNameCookie);
+				response.addCookie(passwordCookie);
+			}
+		}else
+		{
+			Cookie[] cookies = request.getCookies();
+			if(cookies!=null&&cookies.length>0)
+			{
+				for(Cookie c:cookies)
 				{
-					if(cookies[i].getName().equals("userName"))
-						userName =cookies[i].getValue();
-					if(cookies[i].getName().equals("password"))
-						password = cookies[i].getValue();
+					if(c.getName().equals("userName")||c.getName().equals("password"))
+					{
+						c.setMaxAge(0);
+						response.addCookie(c);
+					}
 				}
 			}
-				
+		}
+			
 			
 		%>
    
@@ -41,22 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 <% %>
-	<form id="form1" action="<%=basePath %>project/testTwo" method="get">
-	    <table>
-	    	<tr>
-	    		<input type="text" id="userName" name="userName" value="<%= userName%>" /><br>
-	    	</tr>
-	    	<tr>
-	    		<input id="password" name="password" type="password" value="<%= password%>" /><br>
-	    	</tr>
-	    	<tr>
-	    		自动登录10天<input type="checkbox" id="autoLogin" name="autoLogin" checked/>
-	    	</tr>
-	    	<tr>
-	    		<input type="submit" value="提交" />
-	    	</tr>
-	    </table>
-	</form>
+	<a href="<%=basePath%>project/test">返回testone页面</a>
     
 </body>
 </html>

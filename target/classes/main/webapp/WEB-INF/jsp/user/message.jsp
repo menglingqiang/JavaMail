@@ -13,12 +13,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<title>用户信息</title>
 	<script src="<%=basePath%>resources/script/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript">
-	
+		function returnProject()
+		{
+			var email = document.getElementById("email").value;
+			var form = document.getElementById("form1");
+			form.action ="<%=basePath%>project/getProjectByEmail?email="+email;
+			form.submit();
+		}
 	</script>
 </head>
 <body>
-	<form id="form1" action="" enctype="multipart/form-data" method="post">
-		${user.name}:您好 ${messageList}
+	<form id="form1"  method="post">
+		<input id="email" name="email" value="${user.email}" type="hidden">
+			${user.name}:您好 ${messageList}
+		<input  value="返回总任务" type="button" onclick="javascript:returnProject()">
 	</form>
 </body>
 </html>
