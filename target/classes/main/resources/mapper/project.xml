@@ -155,7 +155,7 @@
 			u.email=#{email} AND
 			u.project_id=d.project_id AND
 			now() BETWEEN d.detail_start_time AND
-			d.detail_end_time  
+			DATE_ADD(d.detail_end_time,INTERVAL 1 DAY)  
 	</select>
 	
 </mapper>

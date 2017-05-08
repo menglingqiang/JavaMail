@@ -452,10 +452,10 @@ window.onload=function(){
 				<!-- <div class="current">当前位置：<a href="javascript:void(0)" style="color:#6E6E6E;">内容管理</a> &gt; 内容列表</div> -->
 				<div class="rightCont">
 					<p class="g_title fix">总任务内容列表
+				     	<a class="btn03" href="<%=basePath%>user/logout">用户注销</a>
+				     	<a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${user.email}','add','')">增加</a>
 						<img class="btn03" id="checkImage" src="<%= basePath %>resources/img/message.jpg" style="width:30px;height:30px;" title="消息" onclick="javascript:message()"/>
 						<img class="btn03" id="checkImage" src="<%= basePath %>resources/img/userpic.jpg" style="width:30px;height:30px;" title="用户信息" onclick="javascript:userInfo()"/>
-				     	<a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${user.email}','add','')">增加</a>
-				     	<a class="btn03" href="<%=basePath%>user/logout">注销</a>
 				     </p>
 					<table class="tab1">
 						<tbody>

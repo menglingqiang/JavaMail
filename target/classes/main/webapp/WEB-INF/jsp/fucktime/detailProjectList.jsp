@@ -321,8 +321,10 @@ window.onload=function(){
 			<div class="right">
 				<!-- <div class="current">当前位置：<a href="javascript:void(0)" style="color:#6E6E6E;">内容管理</a> &gt; 内容列表</div> -->
 				<div class="rightCont">
-					<p class="g_title fix">分任务内容列表 <a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${projectId}','add','')">增加</a>
-					<a class="btn03" href="<%=basePath%>user/logout">注销</a></p>
+					<p class="g_title fix">分任务内容列表 
+					<a class="btn03" href="<%=basePath%>user/logout">注销</a>
+					<a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${projectId}','add','')">增加</a>
+					</p>
 					
 					<table class="tab1">
 						<tbody>
