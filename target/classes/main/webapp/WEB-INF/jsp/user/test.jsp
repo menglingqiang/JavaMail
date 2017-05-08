@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<% 
 			String userName = "";
 			String password = "";
-			
+			boolean flag = false;
 			Cookie[] cookies = request.getCookies();
 			if(cookies!=null||cookies.length>0)
 			{
@@ -30,11 +30,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					if(cookies[i].getName().equals("userName"))
 						userName =cookies[i].getValue();
 					if(cookies[i].getName().equals("password"))
+					{
 						password = cookies[i].getValue();
+						flag=true;
+					}
 				}
 			}
-				
-			
+			if(flag)	
+				request.getRequestDispatcher("testtwo.jsp").forward(request,response);
 		%>
    
 	</script>

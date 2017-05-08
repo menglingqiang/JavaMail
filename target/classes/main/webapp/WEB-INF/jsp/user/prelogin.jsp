@@ -104,6 +104,65 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
         return reg.test(str);
     }
+
+	<% 
+		String email = "";
+		String password = "";
+		boolean flag = false;
+		Cookie[] cookies = request.getCookies();
+		if(cookies!=null||cookies.length>0)
+		{
+			for(int i=0;i<cookies.length;i++)
+			{
+				if(cookies[i].getName().equals("email"))
+					email =cookies[i].getValue();
+				if(cookies[i].getName().equals("password"))
+				{
+					password = cookies[i].getValue();
+					flag=true;
+				}
+			}
+		}
+		/* if(flag)	//进入总任务页面
+			request.getRequestDispatcher("testtwo.jsp").forward(request,response); */
+	%>
+	//如果password有值，那么默认是可以自动进入的
+	window.onload=function(){
+		var email = document.getElementById("email").value;//得到输入的email
+  		var password = document.getElementById("password").value;//得到输入的密码
+  		var form =document.getElementById("form1");
+  		var msg =document.getElementById("message");
+		if(password!=null&&password!="")
+		{
+			$.ajax({
+	            type: "Get",
+	            url: "loginFlag?email="+email+"&password="+password,
+	            contentType: "application/json; charset=utf-8",
+	            dataType: "text",
+	            success: function (data) {
+	            	if(data=="2")
+	           		{
+	            		msg.innerHTML = '<font size="4px"  color="red" >您还没有注册，请检查输入的邮箱，或者去注册！</font>';
+	           		}
+	            	else if(data=="3")
+	            	{
+			  			msg.innerHTML = '<font size="4px"  color="red" >密码不正确请重新输入</font>'; 
+	            	}
+	            	else if(data=="1")
+	            	{
+	            		form.submit();
+	            	}
+	            	else
+	            	{
+	            		msg.innerHTML = '<font size="4px"  color="red" >不可预知的错误！</font>';
+	            	}
+	            		
+	            }
+	        });  
+		}
+		else
+			reloadImageCode();
+	}
   </script>
 </head>
 <body class="login_bj" >
@@ -117,11 +176,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<table>
 		
 			<tr>
-				<td><input type="email" id="email" name="email" class="kuang_txt email" placeholder="邮 箱"/></td>
+				<td><input type="email" id="email" name="email" class="kuang_txt email" placeholder="邮 箱" value="<%=email%>"/></td>
 			</tr>
 			
 			<tr>
-				<td><input type="password" id="password" name="password" class="kuang_txt possword" placeholder="密码" autocomplete="off"></td>
+				<td><input type="password" id="password" name="password" class="kuang_txt possword" placeholder="密码" value="<%=password%>"autocomplete="off"></td>
 			</tr>
 							
 			<tr>
@@ -140,6 +199,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				
 			</tr>
 			<tr>
+				
+				<td><input type="checkbox" id="autoLogin" name="autoLogin" checked/>自动登录10天</td>
+				
+			</tr>
+			<tr>
 				<td>
 					<a href="<%=basePath %>user/preForgetPassword">忘记密码</a></br>
 					 
@@ -149,15 +213,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</table>
 	</form>
 			  
-       	  	  <!-- <form action="" method="get">
-                <input name="" type="text" class="kuang_txt" placeholder="手机号">
-                <input name="" type="text" class="kuang_txt" placeholder="密码">
-                <div>
-               		<a href="#">忘记密码？</a><input name="" type="checkbox" value="" checked><span>记住我</span> 
-                </div>
-                <input name="登录" type="button" class="btn_zhuce" value="登录">
-                
-                </form> -->
+       	  	  
             </div>
         	<div class="bj_right">
             	<p>使用以下账号直接登录</p>

@@ -455,6 +455,7 @@ window.onload=function(){
 						<img class="btn03" id="checkImage" src="<%= basePath %>resources/img/message.jpg" style="width:30px;height:30px;" title="消息" onclick="javascript:message()"/>
 						<img class="btn03" id="checkImage" src="<%= basePath %>resources/img/userpic.jpg" style="width:30px;height:30px;" title="用户信息" onclick="javascript:userInfo()"/>
 				     	<a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${user.email}','add','')">增加</a>
+				     	<a class="btn03" href="<%=basePath%>user/logout">注销</a>
 				     </p>
 					<table class="tab1">
 						<tbody>

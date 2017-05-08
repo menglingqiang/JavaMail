@@ -5,15 +5,16 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
 import main.java.com.seckill.entity.User;
 import main.java.com.seckill.service.ProjectService;
@@ -122,8 +123,12 @@ public class UserMailController {
 	public String logIn(User user,Model model,HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		//验证验证码是否输入正确	
-		boolean codeFlag = validateCode(request, response);
-		
+		boolean codeFlag = false;
+		boolean autoLogin = (request.getParameter("autoLogin")!=null && request.getParameter("autoLogin")!="");
+		if(autoLogin==true)
+			codeFlag=true;//自动登录忽略验证码判断
+		else
+			codeFlag= validateCode(request, response);
 		if(codeFlag)
 		{
 			//查询用户和密码是否正确，后期可以加密
@@ -133,6 +138,37 @@ public class UserMailController {
 			else 
 			{
 				model.addAttribute("user", userTemp);//传递用户的信息
+				//判断是否自动登录
+				if(autoLogin)
+				{
+					Cookie[] cookies = request.getCookies();
+					if(cookies!=null&&cookies.length>0)
+					{
+						//如果有中文，这里可以用URLEncoder放的之后编码，取得时候解码统一用utf-8
+						
+						Cookie emailCookie = new Cookie("email",userTemp.getEmail());
+						Cookie passwordCookie = new Cookie("password",userTemp.getPassword());
+						emailCookie.setMaxAge(60*60*24*10);//Cookie失效日期为十天
+						passwordCookie.setMaxAge(60*60*24*10);
+						response.addCookie(emailCookie);
+						response.addCookie(passwordCookie);
+					}
+				}else
+				{
+					Cookie[] cookies = request.getCookies();
+					if(cookies!=null&&cookies.length>0)
+					{
+						for(Cookie c:cookies)
+						{
+							if(c.getName().equals("userName")||c.getName().equals("password"))
+							{
+								c.setMaxAge(0);
+								response.addCookie(c);
+							}
+						}
+					}
+				}
+				//判断完毕
 				if(userTemp.getStatus()==0)//没有激活
 					return "user/login-success";
 				else
@@ -324,6 +360,26 @@ public class UserMailController {
 		model.addAttribute("done",done);
 		return "/user/userInfo";
 		
+	}
+	@RequestMapping(value="/logout",method=RequestMethod.GET)
+	public String logout(HttpServletRequest request,HttpServletResponse response)
+	{
+		//清除Cookie
+		Cookie[] cookies = request.getCookies();
+		if(cookies!=null&&cookies.length>0)
+		{
+			for(Cookie c:cookies)
+			{
+				if(c.getName().equals("password"))//只删除password的cookie，保留email
+				{
+					c.setValue("");
+					c.setMaxAge(0);
+					response.addCookie(c);
+				}
+			}
+		}
+		//跳转到登录页面
+		return "user/preLogin";
 	}
 }
 
