@@ -21,7 +21,7 @@
           
     </resultMap> 
     <select id="queryAllProject" resultMap="projectResultMap">
-    	select * from user_info
+    	select * from user_info 
     </select>
     <select id="queryEverything" parameterType="java.util.HashMap" resultMap="projectResultMap">
     	select * from user_info

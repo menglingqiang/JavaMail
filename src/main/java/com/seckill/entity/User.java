@@ -10,7 +10,14 @@ public class User {
 	private String email;
 	private String code;
 	private String userPic;
+	private String loginType;
 	
+	public String getLoginType() {
+		return loginType;
+	}
+	public void setLoginType(String loginType) {
+		this.loginType = loginType;
+	}
 	private Date createTime;
 	private int status;
 	

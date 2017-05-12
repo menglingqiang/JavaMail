@@ -12,5 +12,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="E:/tooljars/mybatis-generator-core-1.3.5/lib/mybatis-generator-core-1.3.5.jar"/>
 	<classpathentry kind="lib" path="E:/tooljars/mybatis-generator-core-1.3.5/lib/quartz-all-1.6.0.jar"/>
+	<classpathentry kind="lib" path="E:/SpringMVC/weibo.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

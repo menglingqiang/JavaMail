@@ -48,11 +48,37 @@
 		    </if>
 		    <if test="userPic!=null and !&quot;&quot;.equals(userPic.trim())">
 	  			user_pic=#{userPic},
-	    </if>
-
+	    	</if>
+			
         </set>
 		where email = #{email}
 	</update>
-	
+	<!-- 通过userid插入第三方登录信息 -->
+	<insert id="registerByThree" parameterType="java.util.HashMap" >
+		INSERT INTO user(name,password ,status, create_time,login_type) 
+			VALUES(#{name}, #{password},1, #{createTime},#{loginType})
+	</insert>
+	<!-- 通过userid更新第三方登录信息 -->
+	<update id="updateUserByUserIdForThree" parameterType="java.util.HashMap">
+		UPDATE user 
+		<set>
+	        <if test="password!=null and !&quot;&quot;.equals(password.trim())">
+	  			password=#{password},
+		    </if>
+		    
+		    <if test="userPic!=null and !&quot;&quot;.equals(userPic.trim())">
+	  			user_pic=#{userPic},
+	    	</if>
+			<if test="email!=null and !&quot;&quot;.equals(email.trim())">
+	  			email=#{email},
+	    	</if>
+	    	<!-- userid@testProject.com 默认插入的email后期可以改真正的email-->
+        </set>
+		where user_id = #{userId} and login_type=#{loginType}
+	</update>
+	<select id="queryUserByThree" parameterType="java.util.HashMap" resultType="main.java.com.seckill.entity.User">
+		select user_id from user
+		where user_name=#{userName} and login_type=#{login_type}
+	</select>
 </mapper>
 

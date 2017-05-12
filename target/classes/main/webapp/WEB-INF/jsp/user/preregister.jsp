@@ -69,6 +69,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			msg.innerHTML = '<font size="4px"  color="red" >email格式不正确，请重新输入</font>';
 			return ;
 		}
+  		if(!isPassword(password))
+		{
+  			msg.innerHTML = '<font size="4px"  color="red" >密码格式不正确，请输入数字和字母组合且不少于8位</font>';
+			return ;
+		}
   		if(password!= rePassword)
 		{
   			msg.innerHTML = '<font size="4px"  color="red" >两次输入的密码不一致，请重新输入</font>';
@@ -102,6 +107,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
          return reg.test(str);
      }
+  	function isPassword(str){
+        var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+        return reg.test(str);
+    }
   </script>
 </head>
 <body class="login_bj" >
@@ -124,7 +133,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input id="email" name="email" type="email" class="kuang_txt email" placeholder="邮箱"></td>
 					</tr>
 					<tr>
-						<td><input id="password" name="password" type="password" class="kuang_txt possword" placeholder="密码" autocomplete="off"/></td>
+						<td><input id="password" name="password" type="password" class="kuang_txt possword" min="8" placeholder="字母和数字的组合且不少于8位" autocomplete="off"/></td>
 					</tr>
 					<tr>
 						<td><input id="rePassword" name="rePassword" type="password" class="kuang_txt possword" placeholder="确认密码" autocomplete="off"/></td>

@@ -104,7 +104,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
         return reg.test(str);
     }
-
+	
 	<% 
 		String email = "";
 		String password = "";
@@ -164,6 +164,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			reloadImageCode();
 	}
   </script>
+  <script src="http://tjs.sjs.sinajs.cn/t35/apps/opent/js/frames/client.js" language="JavaScript"></script>
 </head>
 <body class="login_bj" >
 <div class="zhuce_body">
@@ -219,7 +220,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	<p>使用以下账号直接登录</p>
                 <a href="#" class="zhuce_qq">QQ注册</a>
                 <a href="#" class="zhuce_wb">微博注册</a>
-                <a href="#" class="zhuce_wx">微信注册</a>
+                <a href="<%=basePath %>user/loginByWeiBo" class="zhuce_wx">微信注册</a>
                 <p>已有账号？<a href="<%=basePath %>user/preRegister">立即注册</a></p>
             
             </div>

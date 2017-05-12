@@ -3,11 +3,14 @@ package main.java.com.seckill.webcontroller;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.net.URLEncoder;
+import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -34,6 +37,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import weibo4j.Oauth;
+import weibo4j.Users;
+import weibo4j.examples.oauth2.Log;
+import weibo4j.http.AccessToken;
+import weibo4j.model.WeiboException;
+import weibo4j.util.BareBonesBrowserLaunch;
+
 @Controller
 @RequestMapping("/user")
 public class UserMailController {
@@ -59,7 +69,7 @@ public class UserMailController {
 	//进入注册状态页面
 	@Transactional
 	@RequestMapping(value="/register",method=RequestMethod.POST)
-	public String register(Model model,User user)
+	public String register(HttpServletRequest request,Model model,User user)
 	{
 		if(userService.isRegister(user))//判断是否已经有注册信息
 			return "user/preLogin";//用户已经注册成功，返回登录界面
@@ -79,6 +89,42 @@ public class UserMailController {
 			model.addAttribute("user",user);
 			return "user/login-success";
 		}
+	}
+	@Transactional
+	@RequestMapping(value="/registerByThree",method=RequestMethod.POST)
+	public String registerByThree(HttpServletRequest request,Model model)
+	{
+		String loginType = request.getParameter("loginType");
+		String userName="";
+		User user=null;
+		if(loginType!=""&&loginType!=null&&userName!=""&&userName!=null)//是否传入数据
+		{
+			Map map = new HashMap<String,String>();
+			map.put("userName", userName);
+			map.put("loginType", loginType);
+			user = userService.queryUserByThree(map);//是否已经存在登录信息
+			String email=null;
+			if(user==null)//没有用户
+			{
+				map.put("password", UUIDUtil.getUUID());//随机生成一个密码
+				int init = userService.registerByThree(map);//是否插入成功
+				User temp = userService.queryUserByThree(map);//查询插入信息
+				Long userId = temp.getUserId();
+				email = userId+"@testProject.com";
+				map.put("email", email);
+				int update = userService.updateUserByUserIdForThree(map);
+				if(update!=1||init!=1)//注册第三方用户失败
+					return "user/register-error";
+				else//注册更新成功，更新用户的最新信息
+					user = userService.queryUserByThree(map);//查询最新用户的信息
+			}
+			List<Project> projectList = projectService.queryProjectByEmail(email);
+			model.addAttribute("projectList", projectList);
+			model.addAttribute("user", user);
+			return "fucktime/projectList";
+		}
+		else
+			return "user/preLogin";
 	}
 	/*
 	 * 如果是第一次注册
@@ -114,9 +160,42 @@ public class UserMailController {
 	}
 	//进入登录界面
 	@RequestMapping(value="/preLogin",method=RequestMethod.GET)
-	public String preLogIn()
+	public String preLogin(HttpServletRequest request,HttpServletResponse response)
 	{
+		String code = request.getParameter("code");
+		if(code!=""&&code!=null)
+		{
+			String userName = null;
+			String screenName = null;
+			Oauth oauth = new Oauth();
+			try {
+				AccessToken token = oauth.getAccessTokenByCode(code);
+	            String accessToken = token.getAccessToken() ;
+	            String uid = oauth.user_id;
+	            Users users = new Users(accessToken) ;
+	            weibo4j.model.User weiboUser = users.showUserById(uid) ;
+	            userName = weiboUser.getName() ;
+	            screenName = weiboUser.getScreenName() ;
+	            System.out.println(userName+":"+screenName);
+			} catch (WeiboException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return "user/preLogin";//登录界面
+	}
+	//微博登录
+	@RequestMapping(value="/loginByWeiBo",method=RequestMethod.GET)
+	public void loginByWeibo(HttpServletRequest request,HttpServletResponse response)
+	{
+		Oauth oauth = new Oauth();
+		try {
+			BareBonesBrowserLaunch.openURL(oauth.authorize("code","","all"));//打开浏览器，后边可以做一个罩层
+			
+		} catch (WeiboException e) {
+			
+			e.printStackTrace();
+		}
 	}
 	//执行登录逻辑
 	@RequestMapping(value="/login",method=RequestMethod.POST)

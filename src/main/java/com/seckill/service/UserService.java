@@ -1,6 +1,7 @@
 package main.java.com.seckill.service;
 
-import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.Map;
 
 import main.java.com.seckill.entity.User;
 
@@ -20,4 +21,10 @@ public interface UserService {
 	public boolean isRegister(User user);
 	//更改用户的的信息
 	public int updateUser(User user);
+	//通过第三方注册用户
+	public int registerByThree(Map map);
+	//通过第三方更新用户
+	public int updateUserByUserIdForThree(Map map);
+	//查询第三方用户数据
+	public User queryUserByThree(Map map);
 }

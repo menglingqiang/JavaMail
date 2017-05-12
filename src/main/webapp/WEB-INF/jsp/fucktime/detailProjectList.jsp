@@ -492,7 +492,7 @@ window.onload=function(){
 				maxYear: '2020'
 			});
 			$("#queryTime").dateDropper({
-				animate: false,
+				animate: true,
 				format: 'Y-m-d',
 				maxYear: '2020'
 			});
