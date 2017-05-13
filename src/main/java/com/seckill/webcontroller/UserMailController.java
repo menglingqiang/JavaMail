@@ -95,6 +95,7 @@ public class UserMailController {
 	{
 		String loginType = request.getParameter("loginType");
 		String userName=null;
+		String userPic =null;
 		if(loginType.equals("2"))//如果是微博登录
 		{
 			String code = request.getParameter("code");
@@ -111,11 +112,12 @@ public class UserMailController {
 					if(temp.length<2)
 						return "user/login-errot";
 					String uid = temp[1];
-					System.out.println("uid="+uid);
 					Users um = new Users(accessToken);
 				
 					weibo4j.model.User user = um.showUserById(uid);
 					userName = user.getScreenName();
+					userPic = user.getavatarLarge();
+					
 				} catch (WeiboException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -139,6 +141,12 @@ public class UserMailController {
 				email = userId+"@testProject.com";
 				map.put("email", email);
 				map.put("userId", userId);
+				map.put("userPic", userId+".jpg");
+				//下载头像
+				UUIDUtil.downloadPic(userPic,Constant.USERPICLOCALPATH,userId+".jpg");
+				UUIDUtil.downloadPic(userPic,Constant.SERVICELOCALPAHT,userId+".jpg");
+				
+				userService.updateUser(temp);//更新用户的头像，（用户头像名称）
 				int update = userService.updateUserByUserIdForThree(map);
 				if(update!=1||init!=1)//注册第三方用户失败
 					return "user/register-error";

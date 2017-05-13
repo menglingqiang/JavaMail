@@ -1,18 +1,24 @@
 package main.java.com.seckill.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import main.java.com.seckill.entity.Project;
+
+import org.springframework.web.multipart.MultipartFile;
 public class UUIDUtil {
 
 	public static String getUUID()
@@ -72,12 +78,6 @@ public class UUIDUtil {
 			return true;
 		return false;
 	}
-	public static void main(String[] str)
-	{
-		String fileName = "safde4.jpj";
-		String prefix=fileName.substring(fileName.lastIndexOf(".")+1,fileName.length());
-		System.out.print(prefix);
-	}
 	public static String getFileType(MultipartFile file)
 	{
 		String fileName = file.getOriginalFilename();
@@ -101,6 +101,60 @@ public class UUIDUtil {
 		}
 		return "";
 	}
+
+    public static InputStream getInputStreamByGet(String url) {
+        try {
+            HttpURLConnection conn = (HttpURLConnection) new URL(url)
+                    .openConnection();
+            conn.setReadTimeout(5000);
+            conn.setConnectTimeout(5000);
+            conn.setRequestMethod("GET");
+
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream inputStream = conn.getInputStream();
+                return inputStream;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // 将服务器响应的数据流存到本地文件
+    public static void saveData(InputStream is, File file) {
+        try (BufferedInputStream bis = new BufferedInputStream(is);
+                BufferedOutputStream bos = new BufferedOutputStream(
+                        new FileOutputStream(file));) {
+            byte[] buffer = new byte[1024];
+            int len = -1;
+            while ((len = bis.read(buffer)) != -1) {
+                bos.write(buffer, 0, len);
+                bos.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void downloadPic(String url,String filePath,String fileName)
+    {
+    	 File file = new File(filePath, fileName);
+
+         InputStream inputStream = UUIDUtil
+                 .getInputStreamByGet(url);
+         UUIDUtil.saveData(inputStream, file);
+    }
+    
+    public static void main(String[] args) {
+        String url = "http://tva2.sinaimg.cn/crop.0.0.640.640.180/bd5b1511jw8eyutc96bf2j20hs0hstai.jpg";
+
+        String fileName = "touxiang";
+        File file = new File("C:/Users/mlq/Desktop", fileName);
+
+        InputStream inputStream = UUIDUtil
+                .getInputStreamByGet(url);
+        UUIDUtil.saveData(inputStream, file);
+    }
 }
 
 

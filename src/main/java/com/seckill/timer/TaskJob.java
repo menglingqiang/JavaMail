@@ -127,7 +127,11 @@ public class TaskJob {
 	}
 	public static void main(String[] str)
 	{
-		String email = "324234@testProject.com";
-		System.out.println(checkEmail(email));
+		for(int i=0;i<5;i++)
+		{
+			if(i>3)
+				continue;
+			System.out.println(i);
+		}
 	}
 }  

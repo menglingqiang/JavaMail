@@ -130,6 +130,7 @@
 		WHERE
 			u.email = i.email AND
 			i.project_id = d.project_id
+			and u.email=#{email}
 	</select>
 	
 	<select id="queryAllDoneDetailProjectCountByEmail" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -142,7 +143,7 @@
 		WHERE
 			u.email = i.email AND
 			i.project_id = d.project_id
-            AND d.done=1
+            AND d.done=1 and u.email=#{email}
 	</select>
 	
 	<select id="queryMessage" parameterType="java.lang.String" resultType="java.util.HashMap">

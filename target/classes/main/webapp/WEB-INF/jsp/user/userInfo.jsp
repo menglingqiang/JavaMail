@@ -116,7 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </li>
 	        <li>
 	            <span>
-	                	总任务量 :${sum}
+	                	分任务量 :${sum}
 	            </span>
 	        </li>
 	        <li>
