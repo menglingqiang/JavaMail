@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import weibo4j.Timeline;
+import weibo4j.model.Status;
+import weibo4j.model.WeiboException;
+
 
 @Controller
 @RequestMapping("/project")
@@ -272,16 +276,31 @@ public class ProjectController {
     	model.addAttribute("messageList", messageList);
     	return "user/message";
     }
+    //微博分享
+    @RequestMapping(value="/shareWeiBo",method=RequestMethod.POST)
+    public  @ResponseBody String shareWeiBo(HttpServletRequest request)
+    {
+    	String email = request.getParameter("email");
+    	String text = request.getParameter("text");
+    	User temp = new User();
+    	temp.setEmail(email);
+    	User user = userService.queryByEmail(temp);
+    	String access_token = user.getTempToken();
+		Timeline tm = new Timeline(access_token);
+		try {
+			Status status = tm.updateStatus(text);
+		} catch (WeiboException e) {
+			e.printStackTrace();
+			return "error";
+		}	
+    	return "success";
+    }
     @RequestMapping(value="/test",method=RequestMethod.GET)
     public  String test(HttpServletRequest request,HttpServletResponse response,Model model)
     {
     	return "user/test";
     }
-    @RequestMapping(value="/testTwo",method=RequestMethod.GET)
-    public  String testTwo(HttpServletRequest request,HttpServletResponse response,Model model)
-    {
-    	return "user/testtwo";
-    }
+    
 }
 
 

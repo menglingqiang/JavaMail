@@ -19,7 +19,7 @@
     </select>
     
      <select id="queryByEmail" parameterType="main.java.com.seckill.entity.User" resultType="main.java.com.seckill.entity.User">
-    	select user_id,name,password,email,code,status,create_time,user_pic
+    	select user_id,name,password,email,code,status,create_time,user_pic,temp_token,login_type
     	from user where email = #{email}
     </select>
 	
@@ -71,6 +71,9 @@
 	    	</if>
 			<if test="email!=null and !&quot;&quot;.equals(email.trim())">
 	  			email=#{email},
+	    	</if>
+	    	<if test="tempToken!=null and !&quot;&quot;.equals(tempToken.trim())">
+	  			temp_token=#{tempToken},
 	    	</if>
         </set>
 		where user_id = #{userId} and login_type=#{loginType}

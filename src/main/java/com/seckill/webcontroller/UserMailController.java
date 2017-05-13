@@ -91,11 +91,12 @@ public class UserMailController {
 	}
 	@Transactional
 	@RequestMapping(value="/registerByThree")
-	public String registerByThree(HttpServletRequest request,Model model)
+	public String registerByThree(HttpServletRequest request,HttpServletResponse response,Model model)
 	{
 		String loginType = request.getParameter("loginType");
 		String userName=null;
 		String userPic =null;
+		String accessToken = null;
 		if(loginType.equals("2"))//如果是微博登录
 		{
 			String code = request.getParameter("code");
@@ -104,7 +105,7 @@ public class UserMailController {
 			{
 				try {
 					AccessToken token = oauth.getAccessTokenByCode(code);
-		            String accessToken = token.getAccessToken() ;
+		            accessToken = token.getAccessToken() ;
 					String uidStr = UUIDUtil.token2Uid(token.toString());
 					if(uidStr==""||uidStr==null)
 						return "user/login-error";
@@ -124,12 +125,14 @@ public class UserMailController {
 				}
 			} 
 		}
-		User user=null;
+		Map map = new HashMap<String,String>();
+		map.put("tempToken", accessToken);
+		map.put("userName", userName);
+		map.put("loginType", loginType);
+		int update =0;
 		if(loginType!=""&&loginType!=null&&userName!=""&&userName!=null)//是否传入数据
 		{
-			Map map = new HashMap<String,String>();
-			map.put("userName", userName);
-			map.put("loginType", loginType);
+			User user=null;
 			user = userService.queryUserByThree(map);//是否已经存在登录信息
 			String email=null;
 			if(user==null)//没有用户
@@ -147,7 +150,7 @@ public class UserMailController {
 				UUIDUtil.downloadPic(userPic,Constant.SERVICELOCALPAHT,userId+".jpg");
 				
 				userService.updateUser(temp);//更新用户的头像，（用户头像名称）
-				int update = userService.updateUserByUserIdForThree(map);
+				update = userService.updateUserByUserIdForThree(map);
 				if(update!=1||init!=1)//注册第三方用户失败
 					return "user/register-error";
 				else//注册更新成功，更新用户的最新信息
@@ -157,7 +160,20 @@ public class UserMailController {
 					projectService.insertProjectByUser(user, p);//第一次登陆自动添加一条总任务和邮箱注册逻辑保持一致
 				}
 			}
-			List<Project> projectList = projectService.queryProjectByEmail(email);
+			//记住cookie
+			Cookie[] cookies = request.getCookies();
+			if(cookies!=null&&cookies.length>0)
+			{
+				//如果有中文，这里可以用URLEncoder放的之后编码，取得时候解码统一用utf-8
+				Cookie emailCookie = new Cookie("email",user.getEmail());
+				Cookie passwordCookie = new Cookie("password",user.getPassword());
+				emailCookie.setMaxAge(60*60*24*10);//Cookie失效日期为十天
+				passwordCookie.setMaxAge(60*60*24*10);
+				response.addCookie(emailCookie);
+				response.addCookie(passwordCookie);
+			}
+			
+			List<Project> projectList = projectService.queryProjectByEmail(user.getEmail());
 			model.addAttribute("projectList", projectList);
 			model.addAttribute("user", user);
 			return "fucktime/projectList";

@@ -140,7 +140,7 @@ function ShowDiv(show_div,bg_div,para,type,secPara){
   document.getElementById("beforeProjectName").value=secPara;
 }
  else
- 	document.getElementById("addEmail").value=document.getElementById("projectEmail").value;
+ 	document.getElementById("addEmail").value=document.getElementById("email").value;
  document.getElementById(show_div).style.display='block';
  document.getElementById(bg_div).style.display='block' ;
  var bgdiv = document.getElementById(bg_div);
@@ -424,6 +424,25 @@ function message()
 	form.action = "<%=basePath%>project/queryMessage?email="+email;
 	form.submit();
 	}
+function shareWeiBo()
+{
+	var email = document.getElementById("email").value;
+	var text = "shareByJava";
+	$.ajax({
+        type: "POST",
+        url: "<%=basePath%>project/shareWeiBo?email="+email+"&text="+text,
+        cache: false,
+        async:false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "",
+        success: function (data) {
+        	if(data=="success")
+        		alert("分享成功");
+        	else
+        		alert("抱歉分享失败");
+        }
+	});
+}
 function userInfo()
 {
 	var email = document.getElementById("email").value;
@@ -454,6 +473,7 @@ window.onload=function(){
 					<p class="g_title fix">总任务内容列表
 				     	<a class="btn03" href="<%=basePath%>user/logout">用户注销</a>
 				     	<a class="btn03" href="javascript:ShowDiv('MyAddDiv','fade','${user.email}','add','')">增加</a>
+						<a  class="btn03" href='javascript:shareWeiBo()'>微博分享</a>
 						<img class="btn03" id="checkImage" src="<%= basePath %>resources/img/message.jpg" style="width:30px;height:30px;" title="消息" onclick="javascript:message()"/>
 						<img class="btn03" id="checkImage" src="<%= basePath %>resources/img/userpic.jpg" style="width:30px;height:30px;" title="用户信息" onclick="javascript:userInfo()"/>
 				     </p>
