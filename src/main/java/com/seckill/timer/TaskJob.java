@@ -1,11 +1,13 @@
 package main.java.com.seckill.timer;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import main.java.com.seckill.entity.DetailProject;
 import main.java.com.seckill.entity.Project;
@@ -113,6 +115,19 @@ public class TaskJob {
 	}
 	public static boolean checkEmail(String email)//是否是第三方默认邮箱
 	{
-		return true;
+		String regEx = "\\d+@testProject.com";
+	    // 编译正则表达式
+	    Pattern pattern = Pattern.compile(regEx);
+	    // 忽略大小写的写法
+	    // Pattern pat = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
+	    Matcher matcher = pattern.matcher(email);
+	    // 字符串是否与正则表达式相匹配
+	    boolean flag = matcher.matches();
+		return flag;
+	}
+	public static void main(String[] str)
+	{
+		String email = "324234@testProject.com";
+		System.out.println(checkEmail(email));
 	}
 }  

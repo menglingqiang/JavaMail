@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -88,6 +90,16 @@ public class UUIDUtil {
 			return "";
 		else
 			return obj;
+	}
+	public static String token2Uid(String token)
+	{
+		String rex="uid=\\d+";
+		Pattern p = Pattern.compile(rex);
+		Matcher m=p.matcher(token);
+		if(m.find()){
+			return m.group();
+		}
+		return "";
 	}
 }
 

@@ -159,9 +159,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         	<div class="bj_right">
             	<p>使用以下账号直接登录</p>
-                <a href="#" class="zhuce_qq">QQ注册</a>
-                <a href="#" class="zhuce_wb">微博注册</a>
-                <a href="#" class="zhuce_wx">微信注册</a>
+                <a href="#" class="zhuce_qq">QQ登陆</a>
+                <a href="<%=basePath %>user/loginByWeiBo" class="zhuce_wb">微博登陆</a>
+                <a href="#" class="zhuce_wx">微信登陆</a>
                 <p>已有账号？<a href="<%=basePath %>user/preLogin">立即登录</a></p>
             
             </div>

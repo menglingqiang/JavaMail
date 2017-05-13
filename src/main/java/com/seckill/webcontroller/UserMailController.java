@@ -39,7 +39,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import weibo4j.Oauth;
 import weibo4j.Users;
-import weibo4j.examples.oauth2.Log;
 import weibo4j.http.AccessToken;
 import weibo4j.model.WeiboException;
 import weibo4j.util.BareBonesBrowserLaunch;
@@ -91,11 +90,38 @@ public class UserMailController {
 		}
 	}
 	@Transactional
-	@RequestMapping(value="/registerByThree",method=RequestMethod.POST)
+	@RequestMapping(value="/registerByThree")
 	public String registerByThree(HttpServletRequest request,Model model)
 	{
 		String loginType = request.getParameter("loginType");
-		String userName="";
+		String userName=null;
+		if(loginType.equals("2"))//如果是微博登录
+		{
+			String code = request.getParameter("code");
+			Oauth oauth = new Oauth();
+			if(code!=""&&code!=null)
+			{
+				try {
+					AccessToken token = oauth.getAccessTokenByCode(code);
+		            String accessToken = token.getAccessToken() ;
+					String uidStr = UUIDUtil.token2Uid(token.toString());
+					if(uidStr==""||uidStr==null)
+						return "user/login-error";
+					String[] temp = uidStr.split("=");
+					if(temp.length<2)
+						return "user/login-errot";
+					String uid = temp[1];
+					System.out.println("uid="+uid);
+					Users um = new Users(accessToken);
+				
+					weibo4j.model.User user = um.showUserById(uid);
+					userName = user.getScreenName();
+				} catch (WeiboException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} 
+		}
 		User user=null;
 		if(loginType!=""&&loginType!=null&&userName!=""&&userName!=null)//是否传入数据
 		{
@@ -106,17 +132,22 @@ public class UserMailController {
 			String email=null;
 			if(user==null)//没有用户
 			{
-				map.put("password", UUIDUtil.getUUID());//随机生成一个密码
+				map.put("password", UUIDUtil.getUUID().substring(0, 15));//随机生成一个密码
 				int init = userService.registerByThree(map);//是否插入成功
 				User temp = userService.queryUserByThree(map);//查询插入信息
 				Long userId = temp.getUserId();
 				email = userId+"@testProject.com";
 				map.put("email", email);
+				map.put("userId", userId);
 				int update = userService.updateUserByUserIdForThree(map);
 				if(update!=1||init!=1)//注册第三方用户失败
 					return "user/register-error";
 				else//注册更新成功，更新用户的最新信息
+				{
 					user = userService.queryUserByThree(map);//查询最新用户的信息
+					Project p = UUIDUtil.genProject(user.getEmail());
+					projectService.insertProjectByUser(user, p);//第一次登陆自动添加一条总任务和邮箱注册逻辑保持一致
+				}
 			}
 			List<Project> projectList = projectService.queryProjectByEmail(email);
 			model.addAttribute("projectList", projectList);
@@ -162,26 +193,6 @@ public class UserMailController {
 	@RequestMapping(value="/preLogin",method=RequestMethod.GET)
 	public String preLogin(HttpServletRequest request,HttpServletResponse response)
 	{
-		String code = request.getParameter("code");
-		if(code!=""&&code!=null)
-		{
-			String userName = null;
-			String screenName = null;
-			Oauth oauth = new Oauth();
-			try {
-				AccessToken token = oauth.getAccessTokenByCode(code);
-	            String accessToken = token.getAccessToken() ;
-	            String uid = oauth.user_id;
-	            Users users = new Users(accessToken) ;
-	            weibo4j.model.User weiboUser = users.showUserById(uid) ;
-	            userName = weiboUser.getName() ;
-	            screenName = weiboUser.getScreenName() ;
-	            System.out.println(userName+":"+screenName);
-			} catch (WeiboException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		return "user/preLogin";//登录界面
 	}
 	//微博登录
@@ -191,7 +202,6 @@ public class UserMailController {
 		Oauth oauth = new Oauth();
 		try {
 			BareBonesBrowserLaunch.openURL(oauth.authorize("code","","all"));//打开浏览器，后边可以做一个罩层
-			
 		} catch (WeiboException e) {
 			
 			e.printStackTrace();
